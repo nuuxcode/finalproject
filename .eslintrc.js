@@ -3,6 +3,8 @@ module.exports = {
   extends: [
     'plugin:react/recommended',
     'plugin:@typescript-eslint/recommended',
+    'next/core-web-vitals',
+    'plugin:prettier/recommended', // Make sure this is always the last configuration in the extends array.
   ],
   parserOptions: {
     ecmaVersion: 2020,
@@ -11,13 +13,13 @@ module.exports = {
       jsx: true,
     },
   },
-  extends: ['next/core-web-vitals'],
   rules: {
     // Place to specify ESLint rules. Can be used to overwrite rules specified from the extended configs
     // e.g. "@typescript-eslint/explicit-function-return-type": "off",
     // https://eslint.org/docs/latest/rules/
     semi: ['error', 'always'],
     //quotes: ['error', 'single'],
+    'prettier/prettier': 'error', // Enables eslint-plugin-prettier and eslint-config-prettier
   },
   settings: {
     react: {
