@@ -11,7 +11,7 @@
     "postinstall": "prisma generate",
     "lint": "next lint",
     "commit": "commit",
-    "prepare": "husky",
+    "prepare": "husky install",
     "format": "next lint --fix && git update-index --again",
     "start": "next start"
   },
