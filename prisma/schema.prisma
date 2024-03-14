@@ -33,12 +33,12 @@ model Account {
     type              String
     provider          String
     providerAccountId String
-    refresh_token     String? // @db.Text
-    access_token      String? // @db.Text
+    refresh_token     String? @db.Text
+    access_token      String? @db.Text
     expires_at        Int?
     token_type        String?
     scope             String?
-    id_token          String? // @db.Text
+    id_token          String? @db.Text
     session_state     String?
     user              User    @relation(fields: [userId], references: [id], onDelete: Cascade)
 
@@ -61,7 +61,11 @@ model User {
     image         String?
     accounts      Account[]
     sessions      Session[]
+
     posts         Post[]
+
+    password       String?        @db.VarChar(256) // necessary for credentials login
+    
 }
 
 model VerificationToken {

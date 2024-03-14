@@ -7,6 +7,13 @@ import {
 import { type Adapter } from "next-auth/adapters";
 import DiscordProvider from "next-auth/providers/discord";
 
+import GoogleProvider from "next-auth/providers/google";
+import GithubProvider from "next-auth/providers/github";
+
+// additional providers: emailprovider sends email to your account to click & create session
+import EmailProvider from "next-auth/providers/email";
+import CredentialsProvider from "next-auth/providers/credentials";
+
 import { env } from "~/env";
 import { db } from "~/server/db";
 
@@ -37,14 +44,25 @@ declare module "next-auth" {
  * @see https://next-auth.js.org/configuration/options
  */
 export const authOptions: NextAuthOptions = {
+  session: {
+    strategy: 'jwt',
+    maxAge: 86400
+  },
+  secret: process.env.JWT_SECRET,
   callbacks: {
-    session: ({ session, user }) => ({
+    session: ({ session, token }) => ({
       ...session,
       user: {
         ...session.user,
-        id: user.id,
+       id: token.sub,
       },
     }),
+    async jwt(param) {
+      if (param.user) {
+        param.token.id = param.user.id
+      }
+      return param.token
+    },
   },
   adapter: PrismaAdapter(db) as Adapter,
   providers: [
@@ -52,16 +70,37 @@ export const authOptions: NextAuthOptions = {
       clientId: env.DISCORD_CLIENT_ID,
       clientSecret: env.DISCORD_CLIENT_SECRET,
     }),
-    /**
-     * ...add more providers here.
-     *
-     * Most other providers require a bit more work than the Discord provider. For example, the
-     * GitHub provider requires you to add the `refresh_token_expires_in` field to the Account
-     * model. Refer to the NextAuth.js docs for the provider you want to use. Example:
-     *
-     * @see https://next-auth.js.org/providers/github
-     */
+    GoogleProvider({
+      clientId: env.GOOGLE_CLIENT_ID,
+      clientSecret: env.GOOGLE_CLIENT_SECRET,
+      allowDangerousEmailAccountLinking: true,
+    }),
+    GithubProvider({
+      clientId: env.GITHUB_ID,
+      clientSecret: env.GITHUB_SECRET,
+      allowDangerousEmailAccountLinking: true,
+    }),
+    EmailProvider({
+      server: {
+        host: env.EMAIL_SERVER_HOST,
+        port: Number(env.EMAIL_SERVER_PORT),
+        auth: {
+          user: env.EMAIL_FROM,
+          pass: env.EMAIL_PASSWORD,
+        },
+      },
+      from: env.EMAIL_USER,
+    }),
   ],
+  //  TODO: uncomment when the signin signout register pages are ready
+    // pages: {
+    // signIn: "/",
+    // signOut: "/",
+    // error: "/",
+
+    // verifyRequest: "/auth/verify-request",
+    // register: "/auth/register",
+  // },
 };
 
 /**
