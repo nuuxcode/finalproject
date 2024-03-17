@@ -1,3 +1,5 @@
+import Header from "~/components/core/header";
+
 import "~/styles/globals.css";
 
 import { Inter } from "next/font/google";
@@ -23,7 +25,10 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={`font-sans ${inter.variable}`}>
-        <TRPCReactProvider>{children}</TRPCReactProvider>
+        <TRPCReactProvider>
+          <Header />
+          {children}
+        </TRPCReactProvider>
       </body>
     </html>
   );
