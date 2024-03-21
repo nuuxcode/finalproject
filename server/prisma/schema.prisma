@@ -1,26 +1,301 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
-// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
-// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
-
 generator client {
   provider = "prisma-client-js"
 }
 
-// datasource db {
-//   provider = "postgresql"
-//   url      = env("DATABASE_URL")
-// }
-
-
 datasource db {
-  provider = "sqlite"
+  provider = "postgres"
   url      = env("DATABASE_URL")
 }
 
 model User {
-  id    Int     @id @default(autoincrement())
-  email String  @unique
-  name  String?
+  id               String       @id @default(uuid())
+  name             String?
+  passwordHash     String?
+  salt             String?
+  email            String       @unique
+  emailVerified    DateTime?
+  image            String?
+  reputation       Int          @default(0)
+  aboutMe          String?      @db.Text
+  createdAt        DateTime     @default(now())
+  updatedAt        DateTime     @default(now())
+  lastLogin        DateTime     @default(now())
+  // if we're having forum specific moderators everyone can be user/admin
+  isAdmin          Boolean      @default(false)
+  role             Role         @default(USER)
+
+  // next-auth
+  accounts        Account[]
+  sessions        Session[]
+
+  country         String?
+  phone           String?
+
+  followers       UserFollows[]          @relation("following")
+  following       UserFollows[]          @relation("follower")
+  notified        Notification[]         @relation(name: "Receiver")
+  notifier        Notification[]         @relation(name: "Sender")
+  subscribed      ForumSubscription[]
+  forum           Forum[]
+  comments        Comment[]
+  posts           Post[]
+  votes           PostVote[]
+  bookmarks       Bookmark[]
+  moderates       Moderator[]
+  report          Report[]
+
+  // this or social link table
+  website          String?      
+   @@index([email, role])
+}
+
+// tag and forum are similar:: merge maybe?
+model Tag {
+  id               String       @id @default(cuid())
+  name             String       @unique
+  description      String       @db.Text
+  logo             String
+  backgroundImage  String
+  createdAt        DateTime     @default(now())
+  updatedAt        DateTime     @default(now()) @updatedAt
+  posts            PostTag[]
+  @@index([name])
+}
+
+model Forum {
+  id               String       @id @default(cuid())
+  name             String
+  description      String       @db.Text
+  owner            User         @relation(fields: [ownerId], references: [id])
+  ownerId         String       
+  picture          String
+  banner           String
+  createdAt       DateTime     @default(now())
+  updatedAt       DateTime     @default(now()) @updatedAt
+  posts            Post[]
+  subscribers      ForumSubscription[]
+  moderators       Moderator[]
+  @@index([name, ownerId])
+}
+
+model Post {
+  id               String       @id @default(cuid())
+  title            String
+  slug             String?
+  content          String       @db.Text
+  voteCount        Int          @default(0)
+  createdAt        DateTime     @default(now()) 
+  updatedAt        DateTime     @default(now()) @updatedAt
+
+// make mandatory after testing
+  user            User?        @relation(fields: [userId], references: [id])
+  userId          String?
+  forum           Forum?       @relation(fields: [forumId], references: [id])
+  forumId         String?      
+  isPinned        Boolean      @default(false)
+  isHidden        Boolean      @default(false)
+  comments        Comment[]   
+  tag             PostTag[]
+  votes           PostVote[]
+  bookmarkedBy    Bookmark[]
+  attachments     Attachment[]   @relation("AttachmentPost")
+  notifications   Notification[] @relation("NotifyPost")
+
+  @@index([title, userId, forumId, slug])
+}
+
+model Comment {
+  id               String       @id @default(cuid())
+  content          String       @db.Text
+  createdAt       DateTime     @default(now()) 
+  updatedAt       DateTime     @default(now()) @updatedAt 
+  likeCount       Int          @default(0)
+  is_hidden        Boolean      @default(false)
+
+  user             User         @relation(fields: [userId], references: [id])
+  userId          String       
+  post             Post         @relation(fields: [postId], references: [id])
+  postId          String 
+ 
+
+  parentId        String?
+  children        Comment[]       @relation("comment_children")
+  parent          Comment?        @relation("comment_children", fields: [parentId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  attachments     Attachment[]    @relation("AttachmentComment")
+  notifications   Notification[]  @relation("NotifyComment")
+  // notifications Notification[]
+
+  @@index([userId])
+  @@index([parentId])
+  @@index([postId])
+}
+
+model Attachment {
+  id              String   @id @default(cuid())
+  name            String
+  type            String
+  postId          String?
+  commentId       String?
+  associatedType  AssociatedType
+  url             String
+  createdAt       DateTime    @default(now())
+  updatedAt       DateTime    @updatedAt @default(now())
+  post            Post?       @relation("AttachmentPost", fields: [postId], references: [id], onDelete: Cascade)
+  comment         Comment?    @relation("AttachmentComment", fields: [commentId], references: [id], onDelete: Cascade)
+  @@index([postId, commentId])
+}
+
+model UserFollows {
+  follower        User      @relation("follower", fields: [followerId], references: [id], onDelete: Cascade)
+  followerId     String
+  following       User      @relation("following", fields: [followingId], references: [id], onDelete: Cascade)
+  followingId    String
+  createdAt      DateTime   @default(now())
+
+  @@id([followerId, followingId])
+  @@index([followerId])
+  @@index([followingId])
+}
+
+model ForumSubscription {
+  user             User         @relation(fields: [userId], references: [id])
+  userId           String       
+  forum            Forum        @relation(fields: [forumId], references: [id])
+  forumId          String      
+  createdAt        DateTime      @default(now())
+
+  @@id([userId, forumId])
+}
+
+model PostTag {
+  post             Post         @relation(fields: [postId], references: [id])
+  postId          String      
+  tag              Tag          @relation(fields: [tagId], references: [id])
+  tagId           String       
+  createdAt       DateTime      @default(now())
+
+  @@id([postId, tagId])
+}
+
+model Notification {
+  id                String       @id @default(cuid())
+  associatedId      String
+  associatedType    AssociatedType
+  notified_user_id  String   
+  notifier_user_id  String      
+  type              String
+  read              Boolean      @default(false)
+  createdAt         DateTime     @default(now())
+  title             String?
+  content           String?
+  postId            String?
+  comment_id        String?
+  notifierUser      User         @relation(name: "Sender", fields: [ notifier_user_id], references: [id])
+  notifiedUser      User         @relation(name: "Receiver", fields: [notified_user_id], references: [id], onDelete: Cascade)
+
+  post              Post?        @relation("NotifyPost", fields: [postId], references: [id])
+  comment           Comment?     @relation("NotifyComment", fields: [comment_id], references: [id])
+
+  @@index([notified_user_id])
+  @@index([notifier_user_id])
+}
+
+model PostVote {
+  post             Post         @relation(fields: [postId], references: [id])
+  postId          String       
+  user             User         @relation(fields: [userId], references: [id])
+  userId          String      
+  @@id([postId, userId])
+}
+
+model Bookmark {
+  user             User         @relation(fields: [userId], references: [id])
+  userId          String       
+  post             Post         @relation(fields: [postId], references: [id])
+  postId          String      
+
+  @@id([userId, postId])
+}
+
+model Moderator {
+  userId          String      
+  forumId         String      
+  createdAt       DateTime     @default(now())
+
+  user             User         @relation(fields: [userId], references: [id])
+  forum            Forum        @relation(fields: [forumId], references: [id])
+
+  @@id([userId, forumId])
+}
+
+model Report {
+  id                String       @id @default(uuid())
+  createdAt         DateTime     @default(now()) @map("created_at")
+  reporterId        String       
+  reason            String
+  status            String
+  actionTaken       String?
+  reporter          User         @relation(fields: [reporterId], references: [id])
+  associatedId      String 
+  associated_type  AssociatedType  
+  // post             Post?        @relation(fields: [post_id], references: [id])
+  // post_id          String?    
+  // comment          Comment?     @relation(fields: [comment_id], references: [id])
+  // comment_id       String?    
+}
+// forum creator automatically becomes owner
+// model ForumOwner {
+//   user             User         @relation(fields: [user_id], references: [id])
+//   user_id          String       
+//   forum            Forum        @relation(fields: [forum_id], references: [id])
+//   forum_id         String       
+//   created_at       DateTime     @default(now()) 
+//   updated_at       DateTime     @default(now()) @updatedAt
+// }
+
+model Account {
+  id                String  @id @default(cuid())
+  userId            String
+  type              String
+  provider          String
+  providerAccountId String
+  refresh_token     String? @db.Text
+  access_token      String? @db.Text
+  expires_at        Int?
+  token_type        String?
+  scope             String?
+  id_token          String? @db.Text
+  session_state     String?
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([provider, providerAccountId])
+  @@index([userId])
+}
+model Session {
+  id           String   @id @default(cuid())
+  sessionToken String   @unique
+  userId       String
+  expires      DateTime
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+}
+
+model VerificationToken {
+  identifier String
+  token      String   @unique
+  expires    DateTime
+
+  @@unique([identifier, token])
+}
+
+enum Role {
+  USER
+  MODERATOR
+  ADMIN
+}
+
+enum AssociatedType {
+  POST
+  COMMENT
 }
