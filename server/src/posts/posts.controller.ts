@@ -34,9 +34,9 @@ export class PostsController {
     @Query('limit') limit: number,
     @Query('skip') skip: number,
     @Query('cursor') cursor: string,
-    @Query('tagId') tagId?: string,
+    // @Query('tagId') tagId?: string,
   ) {
-    const result = await this.postsService.findAll(limit, skip, cursor, tagId);
+    const result = await this.postsService.findAll(limit, skip, cursor);
     return result;
   }
   @Get(':id')
