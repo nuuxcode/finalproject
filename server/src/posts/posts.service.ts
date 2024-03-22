@@ -33,8 +33,8 @@ export class PostsService {
     // tagId: string = null,
   ) {
     const posts = await this.prisma.post.findMany({
-      take: limit + 1,
-      skip: skip,
+      take: +limit + 1,
+      skip: +skip,
       cursor: cursor ? { id: cursor } : undefined,
       orderBy: {
         createdAt: 'desc',
