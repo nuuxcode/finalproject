@@ -1,4 +1,4 @@
-import { HttpAdapterHost, NestFactory } from '@nestjs/core';
+import { NestFactory } from '@nestjs/core';
 import { ConfigService } from '@nestjs/config';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { ValidationPipe } from '@nestjs/common';
@@ -9,8 +9,6 @@ import { AppModule } from './modules/app/app.module';
 import { API_PREFIX } from './shared/constants/global.constants';
 import { SwaggerConfig } from './configs/config.interface';
 import { GLOBAL_CONFIG } from './configs/global.config';
-import { InvalidFormExceptionFilter } from './filters/invalid.form.exception.filter';
-import { AllExceptionsFilter } from './filters/all.exceptions.filter';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule, {
@@ -18,11 +16,6 @@ async function bootstrap() {
   });
 
   app.setGlobalPrefix(API_PREFIX);
-
-  app.useGlobalFilters(
-    new AllExceptionsFilter(app.get(HttpAdapterHost)),
-    new InvalidFormExceptionFilter(),
-  );
 
   app.use(
     cors({

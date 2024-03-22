@@ -1,0 +1,245 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+// datasource db {
+//   provider = "postgresql"
+//   url      = env("DATABASE_URL")
+// }
+
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id                 String   @id @default(cuid())
+  username           String   @unique
+  password_hash      String
+  salt               String
+  avatar_url         String?
+  reputation         Int      @default(0)
+  role               ROLE
+  last_login         DateTime?
+  email              String   @unique
+  email_verified     Boolean  @default(false)
+  verification_token String?
+  country            String?
+  city               String?
+  phone              String?
+  github             String?
+  twitter            String?
+  linkedin           String?
+  website            String?
+  about_me           String?
+  created_at         DateTime @default(now())
+  updated_at         DateTime @updatedAt
+  deleted_at         DateTime?
+  ownedForums        Forum[]   @relation("UserOwnedForums")
+  posts              Post[]    @relation("UserPosts")
+  comments           Comment[] @relation("UserComments")
+
+  followers UserFollows[] @relation("followers")
+  following UserFollows[] @relation("following")
+  subscriptions ForumSubscription[]
+  notifications Notification[] @relation("NotifiedUser")
+  notifierNotifications Notification[] @relation("NotifierUser")
+  reports Report[] @relation("ReporterUser")
+  moderations ForumModerator[]
+
+
+  @@index([username, email, role])
+
+}
+
+model Forum {
+  id          String   @id @default(cuid())
+  name        String
+  description String
+  owner_id    String
+  picture     String?
+  banner      String?
+  created_at  DateTime @default(now())
+  updated_at  DateTime @updatedAt
+  owner       User     @relation("UserOwnedForums", fields: [owner_id], references: [id])
+  posts       Post[]   @relation("ForumPosts")
+  deleted_at DateTime?
+
+  subscriptions ForumSubscription[]
+  moderations ForumModerator[]
+
+  @@index([name, owner_id])
+}
+
+model Post {
+  id          String   @id @default(cuid())
+  title       String
+  content     String
+  user_id     String
+  forum_id    String
+  is_pinned   Boolean  @default(false)
+  is_hidden   Boolean  @default(false)
+  likeCount   Int      @default(0)
+  slug        String
+  created_at  DateTime @default(now())
+  updated_at  DateTime @updatedAt
+  status      String
+  user        User     @relation("UserPosts", fields: [user_id], references: [id])
+  forum       Forum    @relation("ForumPosts", fields: [forum_id], references: [id])
+  comments    Comment[] @relation("PostComments")
+
+  tags PostTag[]
+  reports Report[] @relation("ReportPost")
+  attachments Attachment[] @relation("AttachmentPost")
+
+
+  @@index([title, user_id, forum_id, slug])
+}
+
+model Comment {
+  id          String   @id @default(cuid())
+  content     String
+  user_id     String
+  post_id     String
+  is_hidden   Boolean  @default(false)
+  likeCount   Int      @default(0)
+  parentId    String?
+  created_at  DateTime @default(now())
+  updated_at  DateTime @updatedAt
+  status      String
+  user        User     @relation("UserComments", fields: [user_id], references: [id])
+  post        Post     @relation("PostComments", fields: [post_id], references: [id])
+
+  reports Report[] @relation("ReportComment")
+  attachments Attachment[] @relation("AttachmentComment")
+
+  @@index([user_id, post_id])
+}
+
+
+model UserFollows {
+  follower_id String
+  following_id String
+  created_at   DateTime @default(now())
+  follower     User     @relation("followers", fields: [follower_id], references: [id])
+  following    User     @relation("following", fields: [following_id], references: [id])
+
+  @@id([follower_id, following_id])
+}
+
+model ForumSubscription {
+  user_id    String
+  forum_id   String
+  created_at DateTime @default(now())
+  user       User     @relation(fields: [user_id], references: [id])
+  forum      Forum    @relation(fields: [forum_id], references: [id])
+
+  @@id([user_id, forum_id])
+}
+
+model Tag {
+  id              String   @id @default(cuid())
+  name            String   @unique
+  description     String?
+  logo            String?
+  backgroundImage String?
+  created_at      DateTime @default(now())
+  updated_at      DateTime @updatedAt
+  post_tags       PostTag[]
+  @@index([name])
+}
+
+model PostTag {
+  post_id    String
+  tag_id     String
+  created_at DateTime @default(now())
+  post       Post     @relation(fields: [post_id], references: [id])
+  tag        Tag      @relation(fields: [tag_id], references: [id])
+
+  @@id([post_id, tag_id])
+}
+
+model Notification {
+  id              String   @id @default(cuid())
+  associated_id   Int
+  associated_type AssociatedType
+  notified_user   String
+  notifier_user   String
+  type            NotificationType
+  read            Boolean  @default(false)
+  created_at      DateTime @default(now())
+  title           String?
+  content         String?
+  url             String?
+  user            User     @relation("NotifiedUser", fields: [notified_user], references: [id])
+  notifier        User     @relation("NotifierUser", fields: [notifier_user], references: [id])
+  @@index([notified_user, notifier_user, type])
+}
+
+
+
+model Report {
+  id           String   @id @default(cuid())
+  reporter_id  String
+  post_id      String?
+  comment_id   String?
+  reason       String
+  status       String
+  action_taken String?
+  created_at   DateTime @default(now())
+  reporter     User     @relation("ReporterUser", fields: [reporter_id], references: [id])
+  post         Post?    @relation("ReportPost", fields: [post_id], references: [id])
+  comment      Comment? @relation("ReportComment", fields: [comment_id], references: [id])
+  resolved_at DateTime?
+  resolved_by String?
+  @@index([reporter_id, post_id, comment_id])
+}
+
+model ForumModerator {
+  user_id    String
+  forum_id   String
+  created_at DateTime @default(now())
+  user       User     @relation(fields: [user_id], references: [id])
+  forum      Forum    @relation(fields: [forum_id], references: [id])
+
+  @@id([user_id, forum_id])
+}
+
+model Attachment {
+  id              String   @id @default(cuid())
+  name            String
+  type            String
+  post_id         String?
+  comment_id      String?
+  associated_type AssociatedType
+  url             String
+  created_at      DateTime @default(now())
+  updated_at      DateTime    @updatedAt
+  post            Post?    @relation("AttachmentPost", fields: [post_id], references: [id])
+  comment         Comment? @relation("AttachmentComment", fields: [comment_id], references: [id])
+  @@index([post_id, comment_id])
+}
+
+enum ROLE {
+  admin
+  user
+}
+
+enum AssociatedType {
+  post
+  comment
+  forum
+}
+
+enum NotificationType {
+  comment
+  post
+  follow
+}

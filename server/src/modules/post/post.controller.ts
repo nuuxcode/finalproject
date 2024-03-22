@@ -8,10 +8,11 @@ import {
   Put,
 } from '@nestjs/common';
 import { Post as PostModel } from '@prisma/client';
-import { ApiTags } from '@nestjs/swagger';
-
+import { ApiTags, ApiBody } from '@nestjs/swagger';
+import { UseGuards } from '@nestjs/common';
+import { AuthGuard } from '@nestjs/passport';
 import { PostService } from './post.service';
-
+import { CreatePostDTO } from './post.dto';
 @ApiTags('posts')
 @Controller('/posts')
 export class PostController {
@@ -53,6 +54,8 @@ export class PostController {
   }
 
   @Post('post')
+  @ApiBody({ type: CreatePostDTO })
+  @UseGuards(AuthGuard('jwt'))
   async createDraft(
     @Body() postData: { title: string; content?: string; authorEmail: string },
   ): Promise<PostModel> {

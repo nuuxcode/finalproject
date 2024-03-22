@@ -21,13 +21,6 @@ export interface SwaggerConfig {
   path: string;
 }
 
-export interface GraphqlConfig {
-  playgroundEnabled: boolean;
-  debug: boolean;
-  schemaDestination: string;
-  sortSchema: boolean;
-}
-
 export interface SecurityConfig {
   expiresIn: number;
   bcryptSaltOrRound: string | number;
