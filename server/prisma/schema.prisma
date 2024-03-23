@@ -13,25 +13,291 @@ generator client {
 //   url      = env("DATABASE_URL")
 // }
 
-
+//TODO: update onDelete, OnUpdate, OnCreate
+// by default ur post and ur comment is like
 datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
 }
 
-model Post {
-  id        Int      @id @default(autoincrement())
-  title     String
-  content   String?
-  published Boolean? @default(false)
-  authorId  Int?
-  User      User?    @relation(fields: [authorId], references: [id])
+model User {
+  id                    String              @id @default(cuid())
+  username              String              @unique
+  passwordHash          String
+  avatarUrl             String?
+  reputation            Int                 @default(0)
+  role                  ROLE
+  lastLogin             DateTime?
+  email                 String              @unique
+  emailVerified         Boolean             @default(false)
+  verificationToken     String? //not needed but keep it just in case
+  country               String?
+  city                  String?
+  phone                 String?
+  website               String?
+  aboutMe               String?
+  createdAt             DateTime            @default(now())
+  updatedAt             DateTime            @updatedAt
+  deletedAt             DateTime?
+  ownedForums           Forum[]             @relation("UserOwnedForums")
+  posts                 Post[]              @relation("UserPosts")
+  PostCount             Int                 @default(0)
+  comments              Comment[]           @relation("UserComments")
+  CommentCount          Int                 @default(0)
+  followers             UserFollows[]       @relation("followers")
+  following             UserFollows[]       @relation("following")
+  followersCount        Int                 @default(0)
+  followingCount        Int                 @default(0)
+  subscriptions         ForumSubscription[]
+  subscribedForumsCount Int                 @default(0)
+  notifications         Notification[]      @relation("NotifiedUser")
+  notifierNotifications Notification[]      @relation("NotifierUser")
+  reports               Report[]            @relation("ReporterUser")
+  moderations           ForumModerator[]
+  postVotes             PostVotes[]         @relation("UserPostVotes")
+  CommentVotes          CommentVotes[]      @relation("UserCommentVotes")
+  socialMedia           SocialMedia?
+
+  @@index([username, email, role]) // rethink the proper order and field to index
 }
 
-model User {
-  id        Int     @id @default(autoincrement())
-  email     String  @unique
-  password  String
-  name      String?
-  Post      Post[]
+model SocialMedia {
+  id       String  @id @default(cuid())
+  userId   String
+  github   String?
+  twitter  String?
+  linkedin String?
+  user     User    @relation(fields: [userId], references: [id])
+
+  @@unique([userId])
+}
+
+model Tag {
+  id          String    @id @default(cuid())
+  name        String    @unique
+  description String?
+  logo        String?
+  banner      String?
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+  postTags    PostTag[]
+
+  @@index([name])
+}
+
+model Forum {
+  id               String    @id @default(cuid())
+  name             String
+  slug             String
+  description      String
+  ownerUserId      String
+  logo             String?
+  banner           String?
+  created_at       DateTime  @default(now())
+  updated_at       DateTime  @updatedAt
+  owner            User      @relation("UserOwnedForums", fields: [ownerUserId], references: [id])
+  posts            Post[]    @relation("ForumPosts")
+  postsCount       Int       @default(0) //ADDED
+  viewsCount       Int       @default(0) //ADDED
+  subscribersCount Int       @default(0) //ADDED
+  deleted_at       DateTime?
+
+  subscriptions ForumSubscription[]
+  moderations   ForumModerator[]
+
+  @@index([name, ownerUserId])
+}
+
+model Post {
+  id            String           @id @default(cuid())
+  title         String
+  content       String
+  userId        String
+  forumId       String
+  isPinned      Boolean          @default(false)
+  isVisible     Boolean          @default(true)
+  slug          String
+  createdAt     DateTime         @default(now())
+  updatedAt     DateTime         @updatedAt
+  user          User             @relation("UserPosts", fields: [userId], references: [id])
+  forum         Forum            @relation("ForumPosts", fields: [forumId], references: [id])
+  comments      Comment[]        @relation("PostComments")
+  tags          PostTag[]
+  reports       Report[]         @relation("ReportPost")
+  attachments   PostAttachment[] @relation("PostAttachments")
+  commentsCount Int              @default(0) //ADDED
+  viewsCount    Int              @default(0) //ADDED
+  votesCount    Int              @default(0) //VOTE COUNT
+  votes         PostVotes[]      @relation("PostVotes")
+
+  @@index([title, userId, forumId, slug])
+}
+
+model Comment {
+  // when anyone post comment, it will send notification to the post owner and parrent post/comment
+  id          String              @id @default(cuid())
+  content     String
+  userId      String
+  postId      String
+  isVisible   Boolean             @default(true)
+  VotesCount  Int                 @default(0)
+  parentId    String?
+  createdAt   DateTime            @default(now())
+  updatedAt   DateTime            @updatedAt
+  status      String //DELETE I DONT THINK IT NEEDED
+  user        User                @relation("UserComments", fields: [userId], references: [id])
+  post        Post                @relation("PostComments", fields: [postId], references: [id])
+  parent      Comment?            @relation("CommentReplies", fields: [parentId], references: [id])
+  replies     Comment[]           @relation("CommentReplies")
+  reports     Report[]            @relation("ReportComment")
+  attachments CommentAttachment[] @relation("CommentAttachments")
+  votes       CommentVotes[]      @relation("CommentVotes")
+
+  @@index([userId, postId])
+}
+
+model PostVotes {
+  id          String @id @default(cuid())
+  userId      String
+  postId      String
+  user        User   @relation("UserPostVotes", fields: [userId], references: [id])
+  post        Post   @relation("PostVotes", fields: [postId], references: [id])
+  VotesStatus Int    @default(0) // 0 / 1 / -1
+
+  @@unique([userId, postId])
+}
+
+model CommentVotes {
+  id          String  @id @default(cuid())
+  userId      String
+  commentId   String
+  user        User    @relation("UserCommentVotes", fields: [userId], references: [id])
+  comment     Comment @relation("CommentVotes", fields: [commentId], references: [id])
+  VotesStatus Int     @default(0) // 0 / 1 / -1
+
+  @@unique([userId, commentId])
+}
+
+model Attachment {
+  id                 String              @id @default(cuid())
+  name               String
+  type               String
+  url                String
+  created_at         DateTime            @default(now())
+  updated_at         DateTime            @updatedAt
+  postAttachments    PostAttachment[]
+  commentAttachments CommentAttachment[]
+}
+
+model PostAttachment {
+  id           String     @unique @default(cuid())
+  postId       String
+  attachmentId String
+  post         Post       @relation("PostAttachments", fields: [postId], references: [id])
+  attachment   Attachment @relation(fields: [attachmentId], references: [id])
+
+  @@id([postId, attachmentId])
+}
+
+model CommentAttachment {
+  id           String     @unique @default(cuid())
+  commentId    String
+  attachmentId String
+  comment      Comment    @relation("CommentAttachments", fields: [commentId], references: [id])
+  attachment   Attachment @relation(fields: [attachmentId], references: [id])
+
+  @@id([commentId, attachmentId])
+}
+
+model UserFollows {
+  follower_id  String
+  following_id String
+  created_at   DateTime @default(now())
+  follower     User     @relation("followers", fields: [follower_id], references: [id])
+  following    User     @relation("following", fields: [following_id], references: [id])
+
+  @@id([follower_id, following_id])
+}
+
+model ForumSubscription {
+  user_id    String
+  forum_id   String
+  created_at DateTime @default(now())
+  user       User     @relation(fields: [user_id], references: [id])
+  forum      Forum    @relation(fields: [forum_id], references: [id])
+
+  @@id([user_id, forum_id])
+}
+
+model PostTag {
+  post_id    String
+  tag_id     String
+  created_at DateTime @default(now())
+  post       Post     @relation(fields: [post_id], references: [id])
+  tag        Tag      @relation(fields: [tag_id], references: [id])
+
+  @@id([post_id, tag_id])
+}
+
+model Notification {
+  id              String           @id @default(cuid())
+  associated_id   String
+  associated_type AssociatedType
+  recieverId     String
+  senderId       String
+  type            NotificationType
+  read            Boolean          @default(false)
+  createdAt      DateTime         @default(now())
+  title           String?
+  content         String?
+  url             String?
+  receiver        User             @relation("NotifiedUser", fields: [recieverId], references: [id])
+  sender          User             @relation("NotifierUser", fields: [senderId], references: [id])
+
+  @@index([recieverId, senderId, type])
+}
+
+model ForumModerator {
+  userId    String
+  forumId   String
+  created_at DateTime @default(now())
+  user       User     @relation(fields: [userId], references: [id])
+  forum      Forum    @relation(fields: [forumId], references: [id])
+
+  @@id([userId, forumId])
+}
+
+model Report {
+  id           String    @id @default(cuid())
+  reporterId  String
+  postId      String?
+  commentId   String?
+  reason       String
+  status       String
+  actionTaken String?
+  createdAt   DateTime  @default(now())
+  reporter     User      @relation("ReporterUser", fields: [reporterId], references: [id])
+  post         Post?     @relation("ReportPost", fields: [postId], references: [id])
+  comment      Comment?  @relation("ReportComment", fields: [commentId], references: [id])
+  resolvedAt  DateTime?
+  resolvedBy  String?
+
+  @@index([reporterId, postId, commentId])
+}
+
+enum ROLE {
+  admin
+  user
+}
+
+enum AssociatedType {
+  post
+  comment
+  forum
+}
+
+enum NotificationType {
+  comment
+  post
+  follow
 }
