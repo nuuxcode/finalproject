@@ -56,13 +56,13 @@ model User {
   moderations           ForumModerator[]
   postVotes             PostVotes[]         @relation("UserPostVotes")
   CommentVotes          CommentVotes[]      @relation("UserCommentVotes")
-  socialMedia SocialMedia? @relation(fields: [id], references: [userId])
+  socialMedia           SocialMedia?
 
   @@index([username, email, role]) // rethink the proper order and field to index
 }
 
 model SocialMedia {
-  id       String @id @default(cuid())
+  id       String  @id @default(cuid())
   userId   String
   github   String?
   twitter  String?
@@ -88,13 +88,14 @@ model Tag {
 model Forum {
   id               String    @id @default(cuid())
   name             String
+  slug             String
   description      String
-  ownerId          String
+  ownerUserId      String
   logo             String?
   banner           String?
   created_at       DateTime  @default(now())
   updated_at       DateTime  @updatedAt
-  owner            User      @relation("UserOwnedForums", fields: [ownerId], references: [id])
+  owner            User      @relation("UserOwnedForums", fields: [ownerUserId], references: [id])
   posts            Post[]    @relation("ForumPosts")
   postsCount       Int       @default(0) //ADDED
   viewsCount       Int       @default(0) //ADDED
@@ -104,53 +105,53 @@ model Forum {
   subscriptions ForumSubscription[]
   moderations   ForumModerator[]
 
-  @@index([name, ownerId])
+  @@index([name, ownerUserId])
 }
 
 model Post {
-  id            String       @id @default(cuid())
+  id            String           @id @default(cuid())
   title         String
   content       String
   userId        String
   forumId       String
-  isPinned      Boolean      @default(false)
-  isHidden      Boolean      @default(false)
+  isPinned      Boolean          @default(false)
+  isVisible     Boolean          @default(true)
   slug          String
-  createdAt     DateTime     @default(now())
-  updatedAt     DateTime     @updatedAt
-  user          User         @relation("UserPosts", fields: [userId], references: [id])
-  forum         Forum        @relation("ForumPosts", fields: [forumId], references: [id])
-  comments      Comment[]    @relation("PostComments")
+  createdAt     DateTime         @default(now())
+  updatedAt     DateTime         @updatedAt
+  user          User             @relation("UserPosts", fields: [userId], references: [id])
+  forum         Forum            @relation("ForumPosts", fields: [forumId], references: [id])
+  comments      Comment[]        @relation("PostComments")
   tags          PostTag[]
-  reports       Report[]     @relation("ReportPost")
-  attachments   Attachment[] @relation("AttachmentPost")
-  commentsCount Int          @default(0) //ADDED
-  viewsCount    Int          @default(0) //ADDED
-  votesCount    Int          @default(0) //VOTE COUNT
-  votes         PostVotes[]  @relation("PostVotes")
+  reports       Report[]         @relation("ReportPost")
+  attachments   PostAttachment[] @relation("PostAttachments")
+  commentsCount Int              @default(0) //ADDED
+  viewsCount    Int              @default(0) //ADDED
+  votesCount    Int              @default(0) //VOTE COUNT
+  votes         PostVotes[]      @relation("PostVotes")
 
   @@index([title, userId, forumId, slug])
 }
 
 model Comment {
   // when anyone post comment, it will send notification to the post owner and parrent post/comment
-  id          String         @id @default(cuid())
+  id          String              @id @default(cuid())
   content     String
   userId      String
   postId      String
-  isHidden    Boolean        @default(false)
-  VotesCount  Int            @default(0)
+  isVisible   Boolean             @default(true)
+  VotesCount  Int                 @default(0)
   parentId    String?
-  createdAt   DateTime       @default(now())
-  updatedAt   DateTime       @updatedAt
+  createdAt   DateTime            @default(now())
+  updatedAt   DateTime            @updatedAt
   status      String //DELETE I DONT THINK IT NEEDED
-  user        User           @relation("UserComments", fields: [userId], references: [id])
-  post        Post           @relation("PostComments", fields: [postId], references: [id])
-  parent      Comment?       @relation("CommentReplies", fields: [parentId], references: [id])
-  replies     Comment[]      @relation("CommentReplies")
-  reports     Report[]       @relation("ReportComment")
-  attachments Attachment[]   @relation("AttachmentComment")
-  votes       CommentVotes[] @relation("CommentVotes")
+  user        User                @relation("UserComments", fields: [userId], references: [id])
+  post        Post                @relation("PostComments", fields: [postId], references: [id])
+  parent      Comment?            @relation("CommentReplies", fields: [parentId], references: [id])
+  replies     Comment[]           @relation("CommentReplies")
+  reports     Report[]            @relation("ReportComment")
+  attachments CommentAttachment[] @relation("CommentAttachments")
+  votes       CommentVotes[]      @relation("CommentVotes")
 
   @@index([userId, postId])
 }
@@ -178,19 +179,34 @@ model CommentVotes {
 }
 
 model Attachment {
-  id              String         @id @default(cuid())
-  name            String
-  type            String
-  postId          String?
-  commentId       String?
-  associated_type AssociatedType
-  url             String
-  created_at      DateTime       @default(now())
-  updated_at      DateTime       @updatedAt
-  post            Post?          @relation("AttachmentPost", fields: [postId], references: [id])
-  comment         Comment?       @relation("AttachmentComment", fields: [commentId], references: [id])
+  id                 String              @id @default(cuid())
+  name               String
+  type               String
+  url                String
+  created_at         DateTime            @default(now())
+  updated_at         DateTime            @updatedAt
+  postAttachments    PostAttachment[]
+  commentAttachments CommentAttachment[]
+}
 
-  @@index([postId, commentId, associated_type])
+model PostAttachment {
+  id           String     @unique @default(cuid())
+  postId       String
+  attachmentId String
+  post         Post       @relation("PostAttachments", fields: [postId], references: [id])
+  attachment   Attachment @relation(fields: [attachmentId], references: [id])
+
+  @@id([postId, attachmentId])
+}
+
+model CommentAttachment {
+  id           String     @unique @default(cuid())
+  commentId    String
+  attachmentId String
+  comment      Comment    @relation("CommentAttachments", fields: [commentId], references: [id])
+  attachment   Attachment @relation(fields: [attachmentId], references: [id])
+
+  @@id([commentId, attachmentId])
 }
 
 model UserFollows {
@@ -241,7 +257,6 @@ model Notification {
   @@index([notified_user, notifier_user, type])
 }
 
-
 model ForumModerator {
   user_id    String
   forum_id   String
@@ -286,4 +301,3 @@ enum NotificationType {
   post
   follow
 }
-
