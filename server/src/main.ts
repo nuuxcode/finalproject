@@ -1,18 +1,53 @@
 import { NestFactory } from '@nestjs/core';
-import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
-import { AppModule } from './app.module';
+import { ConfigService } from '@nestjs/config';
+import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
+import { ValidationPipe } from '@nestjs/common';
+import cors from 'cors';
+import cookieParser from 'cookie-parser';
+
+import { AppModule } from './modules/app/app.module';
+import { API_PREFIX } from './shared/constants/global.constants';
+import { SwaggerConfig } from './configs/config.interface';
+import { GLOBAL_CONFIG } from './configs/global.config';
 
 async function bootstrap() {
-  const app = await NestFactory.create(AppModule);
+  const app = await NestFactory.create(AppModule, {
+    logger: ['error', 'error', 'warn'],
+  });
 
-  const config = new DocumentBuilder()
-    .setTitle('My API')
-    .setDescription('My API description')
-    .setVersion('1.0')
-    .build();
-  const document = SwaggerModule.createDocument(app, config);
-  SwaggerModule.setup('api', app, document);
+  app.setGlobalPrefix(API_PREFIX);
 
-  await app.listen(4000);
+  app.use(
+    cors({
+      origin: true, //TODO: process.env.FRONTEND_URL, list of allow origins
+      methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
+      credentials: true,
+    }),
+  );
+
+  app.use(cookieParser());
+
+  app.useGlobalPipes(new ValidationPipe());
+
+  const configService = app.get<ConfigService>(ConfigService);
+  const swaggerConfig = configService.get<SwaggerConfig>('swagger');
+
+  // Swagger Api
+  if (swaggerConfig.enabled) {
+    const options = new DocumentBuilder()
+      .setTitle(swaggerConfig.title || 'Nestjs')
+      .setDescription(swaggerConfig.description || 'The nestjs API description')
+      .setVersion(swaggerConfig.version || '1.0')
+      .addBearerAuth()
+      .build();
+    const document = SwaggerModule.createDocument(app, options);
+
+    SwaggerModule.setup(swaggerConfig.path || 'api', app, document);
+  }
+
+  const PORT = process.env.PORT || GLOBAL_CONFIG.nest.port;
+  await app.listen(PORT, () => {
+    console.log(`Server started listening: ${PORT}`);
+  });
 }
 bootstrap();
