@@ -23,10 +23,10 @@ datasource db {
 model User {
   id                    String              @id @default(cuid())
   username              String              @unique
-  passwordHash          String
+  password              String
   avatarUrl             String?
   reputation            Int                 @default(0)
-  role                  ROLE
+  role                  ROLE                @default(user)
   lastLogin             DateTime?
   email                 String              @unique
   emailVerified         Boolean             @default(false)
