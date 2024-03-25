@@ -47,27 +47,27 @@ interface Post {
 
 const prisma = new PrismaClient();
 export async function seedComments(users: User[], posts: Post[]) {
-  for (let i = 0; i < posts.length; i++) {
-    const post = posts[i];
-    for (let j = 0; j < 3; j++) {
-      const comment = await prisma.comment.create({
-        data: {
-          content: faker.lorem.paragraphs(2),
-          userId: users[j % users.length].id, // Cycle through users
-          postId: post.id,
-        },
-      });
+  // for (let i = 0; i < posts.length; i++) {
+  //   const post = posts[i];
+  //   for (let j = 0; j < 3; j++) {
+  //     const comment = await prisma.comment.create({
+  //       data: {
+  //         content: faker.lorem.paragraphs(2),
+  //         userId: users[j % users.length].id, // Cycle through users
+  //         postId: post.id,
+  //       },
+  //     });
 
-      for (let k = 0; k < 2; k++) {
-        await prisma.comment.create({
-          data: {
-            content: faker.lorem.paragraphs(1),
-            userId: users[(j + k + 1) % users.length].id, // Cycle through users
-            postId: post.id,
-            parentId: comment.id, // Set the parent comment id for replies
-          },
-        });
-      }
-    }
-  }
+  //     for (let k = 0; k < 2; k++) {
+  //       await prisma.comment.create({
+  //         data: {
+  //           content: faker.lorem.paragraphs(1),
+  //           userId: users[(j + k + 1) % users.length].id, // Cycle through users
+  //           postId: post.id,
+  //           parentId: comment.id, // Set the parent comment id for replies
+  //         },
+  //       });
+  //     }
+  //   }
+  // }
 }
