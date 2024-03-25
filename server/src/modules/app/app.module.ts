@@ -10,6 +10,7 @@ import { AppService } from './app.service';
 import { AppController } from './app.controller';
 import { ClerkModule } from '../clerk/clerk.module';
 import { WebhookModule } from '../webhook/webhook.module';
+import { ForumModule } from '../forum/forum.module'; // Import the ForumModule
 
 @Module({
   imports: [
@@ -27,6 +28,7 @@ import { WebhookModule } from '../webhook/webhook.module';
       }),
       inject: [ConfigService],
     }),
+    ForumModule,
   ],
   controllers: [AppController],
   providers: [AppService],
