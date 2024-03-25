@@ -23,10 +23,10 @@ datasource db {
 model User {
   id                    String              @id @default(cuid())
   username              String              @unique
-  passwordHash          String
+  password              String
   avatarUrl             String?
   reputation            Int                 @default(0)
-  role                  ROLE
+  role                  ROLE                @default(user)
   lastLogin             DateTime?
   email                 String              @unique
   emailVerified         Boolean             @default(false)
@@ -133,6 +133,37 @@ model Post {
   @@index([title, userId, forumId, slug])
 }
 
+model Attachment {
+  id                 String              @id @default(cuid())
+  name               String
+  type               String
+  url                String
+  created_at         DateTime            @default(now())
+  updated_at         DateTime            @updatedAt
+  postAttachments    PostAttachment[]
+  commentAttachments CommentAttachment[]
+}
+
+model PostAttachment {
+  id           String     @unique @default(cuid())
+  postId       String
+  attachmentId String
+  post         Post       @relation("PostAttachments", fields: [postId], references: [id])
+  attachment   Attachment @relation(fields: [attachmentId], references: [id])
+
+  @@id([postId, attachmentId])
+}
+
+model CommentAttachment {
+  id           String     @unique @default(cuid())
+  commentId    String
+  attachmentId String
+  comment      Comment    @relation("CommentAttachments", fields: [commentId], references: [id])
+  attachment   Attachment @relation(fields: [attachmentId], references: [id])
+
+  @@id([commentId, attachmentId])
+}
+
 model Comment {
   // when anyone post comment, it will send notification to the post owner and parrent post/comment
   id          String              @id @default(cuid())
@@ -176,37 +207,6 @@ model CommentVotes {
   VotesStatus Int     @default(0) // 0 / 1 / -1
 
   @@unique([userId, commentId])
-}
-
-model Attachment {
-  id                 String              @id @default(cuid())
-  name               String
-  type               String
-  url                String
-  created_at         DateTime            @default(now())
-  updated_at         DateTime            @updatedAt
-  postAttachments    PostAttachment[]
-  commentAttachments CommentAttachment[]
-}
-
-model PostAttachment {
-  id           String     @unique @default(cuid())
-  postId       String
-  attachmentId String
-  post         Post       @relation("PostAttachments", fields: [postId], references: [id])
-  attachment   Attachment @relation(fields: [attachmentId], references: [id])
-
-  @@id([postId, attachmentId])
-}
-
-model CommentAttachment {
-  id           String     @unique @default(cuid())
-  commentId    String
-  attachmentId String
-  comment      Comment    @relation("CommentAttachments", fields: [commentId], references: [id])
-  attachment   Attachment @relation(fields: [attachmentId], references: [id])
-
-  @@id([commentId, attachmentId])
 }
 
 model UserFollows {
@@ -276,6 +276,7 @@ model Report {
   status       String
   actionTaken String?
   createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
   reporter     User      @relation("ReporterUser", fields: [reporterId], references: [id])
   post         Post?     @relation("ReportPost", fields: [postId], references: [id])
   comment      Comment?  @relation("ReportComment", fields: [commentId], references: [id])

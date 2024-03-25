@@ -3,19 +3,21 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
 
 import { UserModule } from '../user/user.module';
 import { PostModule } from '../post/post.module';
-import { AuthModule } from '../auth/auth.module';
+//import { AuthModule } from '../auth/auth.module';
 import { PrismaModule } from '../prisma/prisma.module';
 import { GLOBAL_CONFIG } from '../../configs/global.config';
 import { AppService } from './app.service';
 import { AppController } from './app.controller';
 import { ClerkModule } from '../clerk/clerk.module';
+import { WebhookModule } from '../webhook/webhook.module';
 
 @Module({
   imports: [
     PrismaModule,
-    AuthModule,
+    //AuthModule,
     UserModule,
     PostModule,
+    WebhookModule,
     ConfigModule.forRoot({ isGlobal: true, load: [() => GLOBAL_CONFIG] }),
     ClerkModule.forRootAsync({
       imports: [ConfigModule],

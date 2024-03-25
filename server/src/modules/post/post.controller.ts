@@ -1,18 +1,18 @@
 import {
-  Body,
+  //Body,
   Controller,
-  Delete,
+  //Delete,
   Get,
-  Param,
-  Post,
-  Put,
+  //Param,
+  //Post,
+  //Put,
 } from '@nestjs/common';
 import { Post as PostModel } from '@prisma/client';
-import { ApiTags, ApiBody } from '@nestjs/swagger';
-import { UseGuards } from '@nestjs/common';
-import { AuthGuard } from '@nestjs/passport';
+import { ApiTags /*, ApiBody*/ } from '@nestjs/swagger';
+//import { UseGuards } from '@nestjs/common';
+//import { AuthGuard } from '@nestjs/passport';
 import { PostService } from './post.service';
-import { CreatePostDTO } from './post.dto';
+//import { CreatePostDTO } from './post.dto';
 @ApiTags('posts')
 @Controller('/posts')
 export class PostController {
@@ -23,15 +23,15 @@ export class PostController {
     return this.postService.findAll({});
   }
 
-  @Get('post/:id')
+  /*@Get('post/:id')
   async getPostById(@Param('id') id: string): Promise<PostModel> {
-    return this.postService.findOne({ id: Number(id) });
+    return this.postService.findOne({ id: id });
   }
 
   @Get('feed')
   async getPublishedPosts(): Promise<PostModel[]> {
     return this.postService.findAll({
-      where: { published: true },
+      where: { isVisible: true },
     });
   }
 
@@ -80,5 +80,5 @@ export class PostController {
   @Delete('post/:id')
   async deletePost(@Param('id') id: string): Promise<PostModel> {
     return this.postService.delete({ id: Number(id) });
-  }
+  }*/
 }

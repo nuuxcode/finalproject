@@ -6,7 +6,7 @@ import { UserService } from '../user/user.service';
 import { PrismaService } from '../prisma/prisma.service';
 import { AuthHelpers } from '../../shared/helpers/auth.helpers';
 import { GLOBAL_CONFIG } from '../../configs/global.config';
-
+import { ROLES_ENUM } from '../../shared/constants/global.constants';
 import { AuthResponseDTO, LoginUserDTO, RegisterUserDTO } from './auth.dto';
 
 @Injectable()
@@ -37,7 +37,7 @@ export class AuthService {
 
     const payload = {
       id: userData.id,
-      name: userData.name,
+      username: userData.username,
       email: userData.email,
       password: null,
       // role: userData.role,
@@ -53,6 +53,10 @@ export class AuthService {
     };
   }
   public async register(user: RegisterUserDTO): Promise<User> {
-    return this.userService.createUser(user);
+    const newUser = {
+      ...user,
+      role: ROLES_ENUM.USER,
+    };
+    return this.userService.createUser(newUser);
   }
 }

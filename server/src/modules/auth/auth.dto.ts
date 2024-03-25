@@ -1,11 +1,18 @@
-import { User } from '@prisma/client';
+//import { User } from '@prisma/client';
 import { IsEmail, IsNotEmpty, IsString } from 'class-validator';
 import { ApiProperty } from '@nestjs/swagger';
 
 import { INVALID_EMAIL } from '../../shared/constants/strings';
 
+export class UserResponseDTO {
+  id: string;
+  username: string;
+  email: string;
+  password?: string;
+}
+
 export class AuthResponseDTO {
-  user: User;
+  user: UserResponseDTO;
   accessToken: string;
 }
 
@@ -16,7 +23,7 @@ export class RegisterUserDTO {
 
   @IsString()
   @ApiProperty()
-  name: string;
+  username: string;
 
   @IsString()
   @ApiProperty()
