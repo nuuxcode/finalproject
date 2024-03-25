@@ -93,14 +93,14 @@ model Forum {
   ownerUserId      String
   logo             String?
   banner           String?
-  created_at       DateTime  @default(now())
-  updated_at       DateTime  @updatedAt
+  createdAt       DateTime  @default(now())
+  updatedAt       DateTime  @updatedAt
   owner            User      @relation("UserOwnedForums", fields: [ownerUserId], references: [id])
   posts            Post[]    @relation("ForumPosts")
   postsCount       Int       @default(0) //ADDED
   viewsCount       Int       @default(0) //ADDED
   subscribersCount Int       @default(0) //ADDED
-  deleted_at       DateTime?
+  deletedAt       DateTime?
 
   subscriptions ForumSubscription[]
   moderations   ForumModerator[]
@@ -138,8 +138,8 @@ model Attachment {
   name               String
   type               String
   url                String
-  created_at         DateTime            @default(now())
-  updated_at         DateTime            @updatedAt
+  createdAt         DateTime            @default(now())
+  updatedAt         DateTime            @updatedAt
   postAttachments    PostAttachment[]
   commentAttachments CommentAttachment[]
 }
@@ -210,39 +210,39 @@ model CommentVotes {
 }
 
 model UserFollows {
-  follower_id  String
-  following_id String
-  created_at   DateTime @default(now())
-  follower     User     @relation("followers", fields: [follower_id], references: [id])
-  following    User     @relation("following", fields: [following_id], references: [id])
+  followerId  String
+  followingId String
+  createdAt   DateTime @default(now())
+  follower     User     @relation("followers", fields: [followerId], references: [id])
+  following    User     @relation("following", fields: [followingId], references: [id])
 
-  @@id([follower_id, following_id])
+  @@id([followerId, followingId])
 }
 
 model ForumSubscription {
-  user_id    String
-  forum_id   String
-  created_at DateTime @default(now())
-  user       User     @relation(fields: [user_id], references: [id])
-  forum      Forum    @relation(fields: [forum_id], references: [id])
+  userId    String
+  forumId   String
+  createdAt DateTime @default(now())
+  user       User     @relation(fields: [userId], references: [id])
+  forum      Forum    @relation(fields: [forumId], references: [id])
 
-  @@id([user_id, forum_id])
+  @@id([userId, forumId])
 }
 
 model PostTag {
-  post_id    String
-  tag_id     String
-  created_at DateTime @default(now())
-  post       Post     @relation(fields: [post_id], references: [id])
-  tag        Tag      @relation(fields: [tag_id], references: [id])
+  postId    String
+  tagId     String
+  createdAt DateTime @default(now())
+  post       Post     @relation(fields: [postId], references: [id])
+  tag        Tag      @relation(fields: [tagId], references: [id])
 
-  @@id([post_id, tag_id])
+  @@id([postId, tagId])
 }
 
 model Notification {
   id              String           @id @default(cuid())
-  associated_id   String
-  associated_type AssociatedType
+  associatedId   String
+  associatedType AssociatedType
   recieverId     String
   senderId       String
   type            NotificationType
@@ -260,7 +260,7 @@ model Notification {
 model ForumModerator {
   userId    String
   forumId   String
-  created_at DateTime @default(now())
+  createdAt DateTime @default(now())
   user       User     @relation(fields: [userId], references: [id])
   forum      Forum    @relation(fields: [forumId], references: [id])
 
