@@ -19,6 +19,13 @@ export class ForumService {
       skip: page * limit,
       take: Number(limit),
       include: {
+        user: {
+          select: {
+            username: true,
+            avatarUrl: true,
+            reputation: true,
+          },
+        },
         attachments: {
           include: {
             attachment: true,
