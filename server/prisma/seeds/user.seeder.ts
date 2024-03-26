@@ -13,7 +13,7 @@ export async function seedUsers() {
         username: faker.internet.userName(),
         email: faker.internet.email(),
         password: faker.internet.password(),
-        avatarUrl: faker.image.avatar(),
+        avatarUrl: `https://i.pravatar.cc/300?u=${faker.string.uuid()}`,
         reputation: faker.number.int({ min: 0, max: 100 }),
         role: 'user',
         lastLogin: faker.date.past(),
