@@ -58,14 +58,25 @@ export class PostController {
   @ApiBody({ type: CreatePostDTO })
   //@UseGuards(AuthGuard('jwt')) disable it temporarily
   async createDraft(
-    @Body() postData: { title: string; content?: string; authorEmail: string },
+    @Body()
+    postData: {
+      title: string;
+      content?: string;
+      authorEmail: string;
+      slug: string;
+      forumId: string;
+    },
   ): Promise<PostModel> {
-    const { title, content, authorEmail } = postData;
+    const { title, content, authorEmail, slug, forumId } = postData;
     return this.postService.create({
       title,
       content,
+      slug,
       user: {
         connect: { email: authorEmail },
+      },
+      forum: {
+        connect: { id: forumId },
       },
     });
   }
