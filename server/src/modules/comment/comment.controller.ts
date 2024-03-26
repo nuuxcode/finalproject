@@ -21,12 +21,32 @@ import {
   ApiUnauthorizedResponse,
 } from '@nestjs/swagger';
 import { Comment } from './comment.entity';
+import { commentAttachDto } from './dto/comment-attach.dto';
 
-@ApiTags('comment')
+@ApiTags('comments')
 @Controller('comment')
 export class CommentController {
   constructor(private readonly commentService: CommentService) {}
 
+  @Post('/attach')
+  @ApiResponse({
+    status: 201,
+    description: 'Created successfully.',
+    type: Comment,
+  })
+  @ApiBadRequestResponse({ description: 'Failed to create comment.' })
+  async create_attach(
+    @Body() commentAttachment: commentAttachDto,
+    @Req() req: any,
+  ): Promise<Comment> {
+    try {
+      const user = req.user;
+      return await this.commentService.create_attach(commentAttachment, user);
+    } catch (error) {
+      console.error(error);
+      throw new BadRequestException('Failed to create comment.');
+    }
+  }
   @Post()
   @ApiResponse({
     status: 201,

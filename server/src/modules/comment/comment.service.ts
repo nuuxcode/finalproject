@@ -7,12 +7,16 @@ import { CreateCommentDto } from './dto/create-comment.dto';
 import { UpdateCommentDto } from './dto/update-comment.dto';
 import { PrismaService } from '../prisma/prisma.service';
 import { Comment } from './comment.entity';
+// import { AttachmentMetadataDto } from '../attachment/attachment.dto';
+// import { AttachmentMetadataDto } from './dto/add-attachment.dto';
+import { commentAttachDto } from './dto/comment-attach.dto';
 
 @Injectable()
 export class CommentService {
   constructor(private readonly prisma: PrismaService) {}
   async create(addCommentDto: CreateCommentDto, user: any): Promise<Comment> {
     const { content, postId, parentId } = addCommentDto;
+    // const userId = user.id;
     const userId = user.id;
 
     if (!content.trim()) {
@@ -24,6 +28,57 @@ export class CommentService {
         data: {
           content,
           status: null,
+          post: {
+            connect: {
+              id: postId,
+            },
+          },
+          user: {
+            connect: {
+              id: userId, // update for clerkauth 💡
+            },
+          },
+          ...(parentId && {
+            parent: {
+              connect: {
+                id: parentId,
+              },
+            },
+          }),
+        },
+      });
+      return comment;
+    } catch (error) {
+      console.error(error);
+      throw new BadRequestException();
+    }
+  }
+
+  async create_attach(
+    commentAttachment: commentAttachDto,
+    user: any,
+  ): Promise<Comment> {
+    const { createCommentDto, attachmentMetadataDto } = commentAttachment;
+
+    const { content, postId, parentId } = createCommentDto;
+    const userId = user.id;
+
+    if (!content.trim()) {
+      throw new BadRequestException("Comment can't be empty");
+    }
+
+    try {
+      const comment = await this.prisma.comment.create({
+        data: {
+          content,
+          status: 'active',
+          attachments: {
+            create: {
+              attachment: {
+                connect: { ...attachmentMetadataDto },
+              },
+            },
+          },
           post: {
             connect: {
               id: postId,
@@ -52,7 +107,7 @@ export class CommentService {
 
   async findAll(postId: string): Promise<Comment[]> {
     try {
-      // Retrieve top-level comments for the post
+      // Retrieve comments at the top level
       const topLevelComments = await this.prisma.comment.findMany({
         where: {
           postId,
@@ -67,7 +122,6 @@ export class CommentService {
             },
           },
           replies: {
-            // get the comment and its replies
             include: {
               user: true,
             },
@@ -85,7 +139,6 @@ export class CommentService {
   }
 
   async update(id: string, updateCommentDto: UpdateCommentDto, user: any) {
-    // return `This action updates a #${id} comment`;
     if (!user) {
       throw new UnauthorizedException('Unauthorized: User not authenticated');
     }
@@ -135,13 +188,14 @@ export class CommentService {
       const userId = user.id;
       const isAdmin = user.isAdmin;
 
-      const comment = await this.prisma.comment.findFirst({
+      const comment = await this.prisma.comment.findUnique({
         where: {
           id,
         },
-        include: {
-          replies: true, // Include child comments (true/false)
-        },
+        // to also delete nested comments if needed
+        // include: {
+        //   replies: true,
+        // },
       });
 
       if (!comment) {
@@ -152,13 +206,14 @@ export class CommentService {
         throw new Error("Unauthorized: Cannot delete another user's comment");
       }
 
-      if (comment.replies && comment.replies.length > 0) {
-        await this.deleteChildComments(comment.replies);
-      }
-
-      await this.prisma.comment.delete({
+      // Soft deleting the comment by setting its status to 'deleted': comment and children kept but not displayed
+      // deletedAt field in database can be added to alsmo mark deleted comments
+      await this.prisma.comment.update({
         where: {
           id,
+        },
+        data: {
+          status: 'deleted',
         },
       });
 
@@ -166,20 +221,6 @@ export class CommentService {
     } catch (error) {
       console.error(error);
       throw new BadRequestException('Failed to delete comment');
-    }
-  }
-
-  // Helper to delete child comments recursively
-  private async deleteChildComments(comments: any[]): Promise<void> {
-    for (const comment of comments) {
-      if (comment.replies && comment.replies.length > 0) {
-        await this.deleteChildComments(comment.replies);
-      }
-      await this.prisma.comment.delete({
-        where: {
-          id: comment.id,
-        },
-      });
     }
   }
 }
