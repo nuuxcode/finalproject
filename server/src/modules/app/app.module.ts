@@ -9,8 +9,9 @@ import { GLOBAL_CONFIG } from '../../configs/global.config';
 import { AppService } from './app.service';
 import { AppController } from './app.controller';
 import { ClerkModule } from '../clerk/clerk.module';
-import { WebhookModule } from '../webhook/webhook.module';
 import { ForumModule } from '../forum/forum.module'; // Import the ForumModule
+import { CommentModule } from '../comment/comment.module';
+// import { WebhookModule } from '../webhook/webhook.module';
 
 @Module({
   imports: [
@@ -18,7 +19,8 @@ import { ForumModule } from '../forum/forum.module'; // Import the ForumModule
     //AuthModule,
     UserModule,
     PostModule,
-    WebhookModule,
+    CommentModule,
+    // WebhookModule,
     ConfigModule.forRoot({ isGlobal: true, load: [() => GLOBAL_CONFIG] }),
     ClerkModule.forRootAsync({
       imports: [ConfigModule],
