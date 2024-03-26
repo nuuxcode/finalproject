@@ -18,6 +18,13 @@ export class ForumService {
       where: { forumId: forumId },
       skip: page * limit,
       take: Number(limit),
+      include: {
+        attachments: {
+          include: {
+            attachment: true,
+          },
+        },
+      },
     });
   }
 
