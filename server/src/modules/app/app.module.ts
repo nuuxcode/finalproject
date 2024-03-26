@@ -11,7 +11,7 @@ import { AppController } from './app.controller';
 import { ClerkModule } from '../clerk/clerk.module';
 import { ForumModule } from '../forum/forum.module'; // Import the ForumModule
 import { CommentModule } from '../comment/comment.module';
-// import { WebhookModule } from '../webhook/webhook.module';
+import { WebhookModule } from '../webhook/webhook.module';
 
 @Module({
   imports: [
@@ -20,7 +20,7 @@ import { CommentModule } from '../comment/comment.module';
     UserModule,
     PostModule,
     CommentModule,
-    // WebhookModule,
+    WebhookModule,
     ConfigModule.forRoot({ isGlobal: true, load: [() => GLOBAL_CONFIG] }),
     ClerkModule.forRootAsync({
       imports: [ConfigModule],

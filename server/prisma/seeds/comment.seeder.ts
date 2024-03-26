@@ -1,4 +1,3 @@
-// comment.seeder.ts
 import { PrismaClient } from '@prisma/client';
 import { faker } from '@faker-js/faker';
 
@@ -44,30 +43,54 @@ interface Post {
   votesCount: number;
 }
 
-
 const prisma = new PrismaClient();
-export async function seedComments(users: User[], posts: Post[]) {
-  // for (let i = 0; i < posts.length; i++) {
-  //   const post = posts[i];
-  //   for (let j = 0; j < 3; j++) {
-  //     const comment = await prisma.comment.create({
-  //       data: {
-  //         content: faker.lorem.paragraphs(2),
-  //         userId: users[j % users.length].id, // Cycle through users
-  //         postId: post.id,
-  //       },
-  //     });
 
-  //     for (let k = 0; k < 2; k++) {
-  //       await prisma.comment.create({
-  //         data: {
-  //           content: faker.lorem.paragraphs(1),
-  //           userId: users[(j + k + 1) % users.length].id, // Cycle through users
-  //           postId: post.id,
-  //           parentId: comment.id, // Set the parent comment id for replies
-  //         },
-  //       });
-  //     }
-  //   }
-  // }
+export async function seedComments(users: User[], posts: Post[]) {
+  for (let i = 0; i < posts.length; i++) {
+    const post = posts[i];
+    for (let j = 0; j < 3; j++) {
+      const comment = await prisma.comment.create({
+        data: {
+          content: faker.lorem.paragraphs(2),
+          status: 'active',
+          user: {
+            connect: {
+              id: users[j % users.length].id,
+            },
+          },
+            post: {
+              connect: {
+                id: post.id,
+            },
+        },
+      },
+      });
+
+      for (let k = 0; k < 2; k++) {
+        // const userId = users[(j + k + 1) % users.length].id;
+        await prisma.comment.create({
+          data: {
+            content: faker.lorem.paragraphs(1),
+            status: 'active',
+            user: {
+              connect: {
+                id: users[(j + k + 1) % users.length].id, // Cycle through users
+              },
+            },
+            post: {
+              connect: {
+                id: post.id,
+            },
+        },
+        parent: {
+          connect: {
+            id: comment.id,
+          },
+          },
+        },
+        });
+      }
+    }
+  }  
+  console.log("------------ Finished seeding forums.");
 }
