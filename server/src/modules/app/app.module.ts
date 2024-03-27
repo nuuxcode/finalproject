@@ -10,9 +10,11 @@ import { AppService } from './app.service';
 import { AppController } from './app.controller';
 import { ClerkModule } from '../clerk/clerk.module';
 import { WebhookModule } from '../webhook/webhook.module';
+import { AdminModule } from '../admin/admin.module';
 
 @Module({
   imports: [
+    AdminModule,
     PrismaModule,
     //AuthModule,
     UserModule,
