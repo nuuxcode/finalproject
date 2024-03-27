@@ -1,4 +1,4 @@
-import { Module } from '@nestjs/common';
+import { MiddlewareConsumer, Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 
 import { UserModule } from '../user/user.module';
@@ -6,14 +6,18 @@ import { PostModule } from '../post/post.module';
 //import { AuthModule } from '../auth/auth.module';
 import { PrismaModule } from '../prisma/prisma.module';
 import { GLOBAL_CONFIG } from '../../configs/global.config';
-import { AppService } from './app.service';
+import { AppService, CustomMetricsMiddleware } from './app.service';
 import { AppController } from './app.controller';
 import { ClerkModule } from '../clerk/clerk.module';
 import { WebhookModule } from '../webhook/webhook.module';
 import { ForumModule } from '../forum/forum.module'; // Import the ForumModule
+import { PrometheusModule, makeCounterProvider, makeGaugeProvider } from '@willsoto/nestjs-prometheus';
 
 @Module({
   imports: [
+    PrometheusModule.register({
+      path: '/app-metrics',
+      }),
     PrismaModule,
     //AuthModule,
     UserModule,
@@ -31,7 +35,22 @@ import { ForumModule } from '../forum/forum.module'; // Import the ForumModule
     ForumModule,
   ],
   controllers: [AppController],
-  providers: [AppService],
+  providers: [
+    AppService,
+    makeCounterProvider({
+      name: 'count',
+      help: 'metric_help',
+      labelNames: ['method', 'origin'] as string[],
+    }),
+ makeGaugeProvider({
+      name: 'gauge',
+      help: 'metric_help',
+    }),
+  ],
   exports: [],
 })
-export class AppModule {}
+export class AppModule {
+  configure(consumer: MiddlewareConsumer) {
+     consumer.apply(CustomMetricsMiddleware).forRoutes('*');
+   }
+}
