@@ -1,24 +1,24 @@
 # 🚀 WGTCommunity " we got this " 💗
 
-Welcome to our community-driven platform project! This platform is designed to facilitate discussions, questions, and collaboration among users on various topics, similar to StackOverflow and Reddit.
+Welcome to our community-driven platform project! This platform facilitates discussions, questions, and collaboration among users on various topics, similar to StackOverflow and Reddit.
 
 
 ## Team Members
 
-- **UI/UX Designer:** Oumayma 
-- **Frontend Developers:** Nick & Ouma
-- **Backend Developers:** Victor & Nuux
+
+![Example Image]( https://github.com/nuuxcode/finalproject/blob/README.md/TEAM.jpeg
+)
  
 ## Github  Accounts
 
-Mounssif BOUHLAOUI "https://github.com/nuuxcode"
+- **Mounssif BOUHLAOUI** "https://github.com/nuuxcode"
 - **Oumayma MAZOZ:** "https://github.com/omazoz"
 - **Victor LANGAT:** "https://github.com/viictoo"
 - **Nicholas SIAW:** "https://github.com/ayequill"
 
 ## Features
 
-- ✅ User Authentication: Allow users to register, login, and manage their accounts securely.
+- ✅ User Authentication: Users can register, login, and manage their accounts securely.
 - ✅ Forum Creation: Users can create forums on different topics to initiate discussions.
 - ✅ Posting & Answering: Users can post questions in forums and provide answers to existing questions.
 - ✅ Upvoting: Enable users to upvote questions or answers they find useful.
