@@ -36,18 +36,25 @@ export class PostController {
     });
   }
 
+  @Get('full-text-search/:searchString')
+  async getFullTextSearchPosts(
+    @Param('searchString') searchString: string,
+  ): Promise<PostModel[]> {
+    return this.postService.searchPosts(searchString);
+  }
+
   @Get('filtered-posts/:searchString')
-  async getFilteredPosts(
+  async getFilteredSearchPosts(
     @Param('searchString') searchString: string,
   ): Promise<PostModel[]> {
     return this.postService.findAll({
       where: {
         OR: [
           {
-            title: { contains: searchString },
+            title: { contains: searchString, mode: 'insensitive' },
           },
           {
-            content: { contains: searchString },
+            content: { contains: searchString, mode: 'insensitive' },
           },
         ],
       },
