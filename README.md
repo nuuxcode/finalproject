@@ -12,20 +12,20 @@ Welcome to our community-driven platform project! This platform is designed to f
 ## Github  Accounts
 
 Mounssif BOUHLAOUI "https://github.com/nuuxcode"
-Oumayma MAZOZ "https://github.com/omazoz"
-Victor LANGAT "https://github.com/viictoo"
-Nicholas SIAW "https://github.com/ayequill"
+- **Oumayma MAZOZ:** "https://github.com/omazoz"
+- **Victor LANGAT:** "https://github.com/viictoo"
+- **Nicholas SIAW:** "https://github.com/ayequill"
 
 ## Features
 
-✅ User Authentication: Allow users to register, login, and manage their accounts securely.
-✅ Forum Creation: Users can create forums on different topics to initiate discussions.
-✅ Posting & Answering: Users can post questions in forums and provide answers to existing questions.
-✅ Upvoting: Enable users to upvote questions or answers they find useful.
-✅ Subscriptions: Users can subscribe to forums or follow other users for updates.
-✅ Moderation: Forum owners can assign moderators to manage posts and replies.
-✅ Admin Dashboard: Admins have access to a special dashboard to manage users, forums, and reports.
-✅ Notifications: Users receive notifications for subscriptions, activities, and system updates.
+- ✅ User Authentication: Allow users to register, login, and manage their accounts securely.
+- ✅ Forum Creation: Users can create forums on different topics to initiate discussions.
+- ✅ Posting & Answering: Users can post questions in forums and provide answers to existing questions.
+- ✅ Upvoting: Enable users to upvote questions or answers they find useful.
+- ✅ Subscriptions: Users can subscribe to forums or follow other users for updates.
+- ✅ Moderation: Forum owners can assign moderators to manage posts and replies.
+- ✅ Admin Dashboard: Admins have access to a special dashboard to manage users, forums, and reports.
+- ✅ Notifications: Users receive notifications for subscriptions, activities, and system updates.
 
 ## Technologies Used
 
