@@ -51,24 +51,21 @@ To get started with the project, follow these steps:
 
 1. **Clone the repository:**
    ```bash
-   git clone <repository-url>
+   git clone "https://github.com/nuuxcode/finalproject.git"
    ```
 
 2. **Install dependencies:**
    ```bash
-   cd community-driven-platform
+   cd finalproject
    npm install
    ```
 
-3. **Set up environment variables:**
-   - Create a `.env.local` file and add necessary environment variables.
-
-4. **Start the development server:**
+3. **Start the development server:**
    ```bash
    npm run dev
    ```
 
-5. **Open the application:**
+4. **Open the application:**
    - Open your browser and navigate to www.wgtcommunity.live
 
 ## Contribution Guidelines
