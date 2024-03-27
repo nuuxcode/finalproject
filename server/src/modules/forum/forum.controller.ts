@@ -16,8 +16,20 @@ export class ForumController {
 
   @Get()
   @ApiOperation({ summary: 'Get all forums' })
-  getAllForums() {
-    return this.forumService.getAllForums();
+  @ApiQuery({
+    name: 'page',
+    required: false,
+    type: Number,
+    description: 'Page number (default is 0)',
+  })
+  @ApiQuery({
+    name: 'limit',
+    required: false,
+    type: Number,
+    description: 'Number of forums per page (default is 10)',
+  })
+  getAllForums(@Query('page') page: number, @Query('limit') limit: number) {
+    return this.forumService.getAllForums(page, limit);
   }
 
   @Get(':id')
@@ -30,8 +42,18 @@ export class ForumController {
   @Get(':id/posts')
   @ApiOperation({ summary: 'Get posts for a specific forum' })
   @ApiParam({ name: 'id', description: 'Forum ID' })
-  @ApiQuery({ name: 'page', description: 'Page number' })
-  @ApiQuery({ name: 'limit', description: 'Limit number of posts' })
+  @ApiQuery({
+    name: 'page',
+    required: false,
+    type: Number,
+    description: 'Page number (default is 0)',
+  })
+  @ApiQuery({
+    name: 'limit',
+    required: false,
+    type: Number,
+    description: 'Number of posts per page (default is 10)',
+  })
   getPostsForForum(
     @Param('id') forumId: string,
     @Query('page') page: number,

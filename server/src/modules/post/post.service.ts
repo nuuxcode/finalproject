@@ -58,15 +58,15 @@ export class PostService {
   }
 
   async findAll(params: {
-    skip?: number;
+    page?: number;
     take?: number;
     cursor?: Prisma.PostWhereUniqueInput;
     where?: Prisma.PostWhereInput;
     orderBy?: Prisma.PostOrderByWithRelationInput;
   }): Promise<Post[]> {
-    const { skip, take, cursor, where, orderBy } = params;
+    const { page = 0, take = 10, cursor, where, orderBy } = params;
     return this.prisma.post.findMany({
-      skip,
+      skip: page * take,
       take,
       cursor,
       where,

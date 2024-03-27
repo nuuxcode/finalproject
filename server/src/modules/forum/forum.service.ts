@@ -5,15 +5,18 @@ import { PrismaService } from '../prisma/prisma.service';
 export class ForumService {
   constructor(private prisma: PrismaService) {}
 
-  getAllForums() {
-    return this.prisma.forum.findMany();
+  getAllForums(page: number = 0, limit: number = 10) {
+    return this.prisma.forum.findMany({
+      skip: page * limit,
+      take: Number(limit),
+    });
   }
 
   getForumForUser(userId: string) {
     return this.prisma.forum.findMany({ where: { ownerUserId: userId } });
   }
 
-  getPostsForForum(forumId: string, page: number, limit: number) {
+  getPostsForForum(forumId: string, page: number = 0, limit: number = 10) {
     return this.prisma.post.findMany({
       where: { forumId: forumId },
       skip: page * limit,
