@@ -31,7 +31,7 @@ export class CommentController {
   @Post('/attach')
   @ApiResponse({
     status: 201,
-    description: 'Created successfully.',
+    description: 'Comment with attachment Created successfully.',
     type: Comment,
   })
   @ApiBadRequestResponse({ description: 'Failed to create comment.' })
@@ -44,7 +44,7 @@ export class CommentController {
       return await this.commentService.create_attach(commentAttachment, user);
     } catch (error) {
       console.error(error);
-      throw new BadRequestException('Failed to create comment.');
+      throw new BadRequestException('Failed to create comment with attachment.');
     }
   }
   @Post()
@@ -53,6 +53,7 @@ export class CommentController {
     description: 'Created successfully.',
     type: Comment,
   })
+  // @UseGuards(AuthGuard('jwt')) disable it temporarily
   async create(
     @Body() createCommentDto: CreateCommentDto,
     @Req() req: any,
@@ -89,6 +90,7 @@ export class CommentController {
       'Unauthorized: Only the post owner or admin can update comments.',
   })
   async update(
+    // @UseGuards(AuthGuard('jwt')) //disable it temporarily
     @Param('id') id: string,
     @Body() updateCommentDto: UpdateCommentDto,
     @Req() req: any,
@@ -112,6 +114,7 @@ export class CommentController {
   }
 
   @Delete(':id')
+    //@UseGuards(AuthGuard('jwt')) disable it temporarily
   @ApiParam({ name: 'id', description: 'ID of the comment to delete' })
   @ApiResponse({ status: 200, description: 'Successfully deleted comment.' })
   @ApiBadRequestResponse({ description: 'Failed to delete comment.' })
