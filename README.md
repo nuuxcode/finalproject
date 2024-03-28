@@ -2,13 +2,14 @@
 
 Welcome to our community-driven platform project! This platform facilitates discussions, questions, and collaboration among users on various topics, similar to StackOverflow and Reddit.
 
+![image](https://github.com/nuuxcode/finalproject/assets/24565896/a58af52c-3bd5-420b-95cd-aeb2c9a1212c)
 
 ## Team Members
 
 
-![Example Image]( https://github.com/nuuxcode/finalproject/blob/README.md/TEAM.jpeg
-)
- 
+![Example Image]( https://github.com/nuuxcode/finalproject/blob/README.md/TEAM.jpeg)
+
+
 ## Github  Accounts
 
 - **Mounssif BOUHLAOUI** "https://github.com/nuuxcode"
