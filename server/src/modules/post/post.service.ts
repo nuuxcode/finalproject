@@ -31,6 +31,8 @@ export class PostService {
         commentsCount: post.commentsCount,
         viewsCount: post.viewsCount,
         votesCount: post.votesCount,
+        upvotesCount: post.upvotesCount,
+        downvotesCount: post.downvotesCount,
       } as PostModel;
     });
   }
@@ -62,10 +64,11 @@ export class PostService {
     take?: number;
     cursor?: Prisma.PostWhereUniqueInput;
     where?: Prisma.PostWhereInput;
-    orderBy?: Prisma.PostOrderByWithRelationInput;
+    orderBy?: Prisma.PostOrderByWithAggregationInput;
   }): Promise<Post[]> {
     const { page = 0, take = 10, cursor, where, orderBy } = params;
-    return this.prisma.post.findMany({
+
+    const posts = await this.prisma.post.findMany({
       skip: page * take,
       take,
       cursor,
@@ -84,8 +87,32 @@ export class PostService {
             attachment: true,
           },
         },
+        forum: {
+          select: {
+            name: true,
+            slug: true,
+          },
+        },
       },
     });
+
+    return posts.map((post) => ({
+      ...post,
+      forum: {
+        name: post.forum.name,
+        slug: post.forum.slug,
+      },
+      attachments: post.attachments.map((attachment) => ({
+        id: attachment.id,
+        postId: attachment.postId,
+        attachmentId: attachment.attachmentId,
+        name: attachment.attachment.name,
+        type: attachment.attachment.type,
+        url: attachment.attachment.url,
+        createdAt: attachment.attachment.createdAt,
+        updatedAt: attachment.attachment.updatedAt,
+      })),
+    }));
   }
 
   async create(data: Prisma.PostCreateInput): Promise<Post> {

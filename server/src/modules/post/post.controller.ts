@@ -35,10 +35,15 @@ export class PostController {
   })
   @ApiResponse({ status: 200, description: 'Return all posts with pagination' })
   async getAllPosts(
-    @Query('page') page: number,
-    @Query('take') take: number,
+    @Query('page') page: string,
+    @Query('take') take: string,
   ): Promise<PostModel[]> {
-    return this.postService.findAll({ page, take });
+    console.log('//console log type of take and take value');
+    console.log(typeof take, take);
+    const pageNumber = parseInt(page, 10) || 0;
+    const takeNumber = parseInt(take, 10) || 10;
+
+    return this.postService.findAll({ page: pageNumber, take: takeNumber });
   }
 
   @Get('post/:id')
