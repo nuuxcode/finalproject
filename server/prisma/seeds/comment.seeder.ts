@@ -42,6 +42,8 @@ interface Post {
   commentsCount: number;
   viewsCount: number;
   votesCount: number;
+  upvotesCount: number;
+  downvotesCount: number;
 }
 
 

@@ -129,6 +129,7 @@ model Post {
   attachments       PostAttachment[] @relation("PostAttachments")
   commentsCount     Int              @default(0) //ADDED
   viewsCount        Int              @default(0) //ADDED
+  votesCount        Int              @default(0) //ADDED
   upvotesCount      Int              @default(0)
   downvotesCount    Int              @default(0)
   votes             PostVotes[]      @relation("PostVotes")
@@ -156,6 +157,7 @@ model Comment {
   reports        Report[]            @relation("ReportComment")
   attachments    CommentAttachment[] @relation("CommentAttachments")
   votes          CommentVotes[]      @relation("CommentVotes")
+  votesCount     Int                 @default(0)
   upvotesCount   Int                 @default(0)
   downvotesCount Int                 @default(0)
   postAsAccepted Post?               @relation("AcceptedAnswer")
