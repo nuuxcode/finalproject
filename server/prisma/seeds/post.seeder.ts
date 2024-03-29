@@ -178,7 +178,7 @@ export async function seedPosts(users, forums) {
       data: {
         name: `${faker.system.fileName()}.jpg`,
         type: 'image/jpeg',
-        url: 'https://picsum.photos/200/300',
+        url: `https://picsum.photos/200/300?random=${Math.floor(Math.random() * 1000)}`,
       },
     });
 
@@ -212,7 +212,7 @@ export async function seedPosts(users, forums) {
         data: {
           name: faker.system.fileName(),
           type: faker.system.commonFileType(),
-          url: faker.internet.url(),
+          url: `https://picsum.photos/200/300?random=${Math.floor(Math.random() * 1000)}`,
         },
       });
 
