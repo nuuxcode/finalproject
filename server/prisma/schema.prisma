@@ -90,7 +90,7 @@ model Tag {
 model Forum {
   id               String    @id @default(cuid())
   name             String
-  slug             String
+  slug             String    @unique
   description      String
   ownerUserId      String
   logo             String?
@@ -198,24 +198,25 @@ model CommentAttachment {
 }
 
 model PostVotes {
-  id          String   @id @default(cuid())
-  userId      String
-  postId      String
-  user        User     @relation("UserPostVotes", fields: [userId], references: [id])
-  post        Post     @relation("PostVotes", fields: [postId], references: [id])
-  VotesStatus Int      @default(0) // 0 / 1 / -1
-  createdAt   DateTime @default(now())
+  id         String   @id @default(cuid())
+  userId     String
+  postId     String
+  user       User     @relation("UserPostVotes", fields: [userId], references: [id])
+  post       Post     @relation("PostVotes", fields: [postId], references: [id])
+  voteStatus Int      @default(0) // 0 / 1 / -1
+  createdAt  DateTime @default(now())
 
   @@unique([userId, postId])
 }
 
 model CommentVotes {
-  id          String  @id @default(cuid())
-  userId      String
-  commentId   String
-  user        User    @relation("UserCommentVotes", fields: [userId], references: [id])
-  comment     Comment @relation("CommentVotes", fields: [commentId], references: [id])
-  VotesStatus Int     @default(0) // 0 / 1 / -1
+  id         String   @id @default(cuid())
+  userId     String
+  commentId  String
+  user       User     @relation("UserCommentVotes", fields: [userId], references: [id])
+  comment    Comment  @relation("CommentVotes", fields: [commentId], references: [id])
+  voteStatus Int      @default(0) // 0 / 1 / -1
+  createdAt  DateTime @default(now())
 
   @@unique([userId, commentId])
 }
