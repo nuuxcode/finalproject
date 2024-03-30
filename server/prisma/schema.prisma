@@ -5,7 +5,8 @@
 // Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
 
 generator client {
-  provider = "prisma-client-js"
+  provider        = "prisma-client-js"
+  previewFeatures = ["fullTextSearch"]
 }
 
 // datasource db {
@@ -50,6 +51,7 @@ model User {
   followingCount        Int                 @default(0)
   subscriptions         ForumSubscription[]
   subscribedForumsCount Int                 @default(0)
+  ownedForumsCount      Int                 @default(0)
   notifications         Notification[]      @relation("NotifiedUser")
   notifierNotifications Notification[]      @relation("NotifierUser")
   reports               Report[]            @relation("ReporterUser")
@@ -88,19 +90,19 @@ model Tag {
 model Forum {
   id               String    @id @default(cuid())
   name             String
-  slug             String
+  slug             String    @unique
   description      String
   ownerUserId      String
   logo             String?
   banner           String?
-  created_at       DateTime  @default(now())
-  updated_at       DateTime  @updatedAt
+  createdAt        DateTime  @default(now())
+  updatedAt        DateTime  @updatedAt
   owner            User      @relation("UserOwnedForums", fields: [ownerUserId], references: [id])
   posts            Post[]    @relation("ForumPosts")
   postsCount       Int       @default(0) //ADDED
   viewsCount       Int       @default(0) //ADDED
   subscribersCount Int       @default(0) //ADDED
-  deleted_at       DateTime?
+  deletedAt        DateTime?
 
   subscriptions ForumSubscription[]
   moderations   ForumModerator[]
@@ -109,28 +111,59 @@ model Forum {
 }
 
 model Post {
-  id            String           @id @default(cuid())
-  title         String
-  content       String
-  userId        String
-  forumId       String
-  isPinned      Boolean          @default(false)
-  isVisible     Boolean          @default(true)
-  slug          String
-  createdAt     DateTime         @default(now())
-  updatedAt     DateTime         @updatedAt
-  user          User             @relation("UserPosts", fields: [userId], references: [id])
-  forum         Forum            @relation("ForumPosts", fields: [forumId], references: [id])
-  comments      Comment[]        @relation("PostComments")
-  tags          PostTag[]
-  reports       Report[]         @relation("ReportPost")
-  attachments   PostAttachment[] @relation("PostAttachments")
-  commentsCount Int              @default(0) //ADDED
-  viewsCount    Int              @default(0) //ADDED
-  votesCount    Int              @default(0) //VOTE COUNT
-  votes         PostVotes[]      @relation("PostVotes")
+  id                String           @id @default(cuid())
+  title             String
+  content           String
+  userId            String
+  forumId           String
+  isPinned          Boolean          @default(false)
+  isVisible         Boolean          @default(true)
+  slug              String
+  createdAt         DateTime         @default(now())
+  updatedAt         DateTime         @updatedAt
+  user              User             @relation("UserPosts", fields: [userId], references: [id])
+  forum             Forum            @relation("ForumPosts", fields: [forumId], references: [id])
+  comments          Comment[]        @relation("PostComments")
+  tags              PostTag[]
+  reports           Report[]         @relation("ReportPost")
+  attachments       PostAttachment[] @relation("PostAttachments")
+  commentsCount     Int              @default(0) //ADDED
+  viewsCount        Int              @default(0) //ADDED
+  votesCount        Int              @default(0) //ADDED
+  upvotesCount      Int              @default(0)
+  downvotesCount    Int              @default(0)
+  votes             PostVotes[]      @relation("PostVotes")
+  acceptedCommentId String?          @unique
+  acceptedComment   Comment?         @relation("AcceptedAnswer", fields: [acceptedCommentId], references: [id])
 
   @@index([title, userId, forumId, slug])
+}
+
+model Comment {
+  // when anyone post comment, it will send notification to the post owner and parrent post/comment
+  id             String              @id @default(cuid())
+  content        String
+  userId         String
+  postId         String
+  isVisible      Boolean             @default(true)
+  parentId       String?
+  createdAt      DateTime            @default(now())
+  updatedAt      DateTime            @updatedAt
+  status         String //DELETE I DONT THINK IT NEEDED
+  user           User                @relation("UserComments", fields: [userId], references: [id])
+  post           Post                @relation("PostComments", fields: [postId], references: [id])
+  parent         Comment?            @relation("CommentReplies", fields: [parentId], references: [id])
+  replies        Comment[]           @relation("CommentReplies")
+  reports        Report[]            @relation("ReportComment")
+  attachments    CommentAttachment[] @relation("CommentAttachments")
+  votes          CommentVotes[]      @relation("CommentVotes")
+  votesCount     Int                 @default(0)
+  upvotesCount   Int                 @default(0)
+  downvotesCount Int                 @default(0)
+  postAsAccepted Post?               @relation("AcceptedAnswer")
+  isAccepted     Boolean             @default(false)
+
+  @@index([userId, postId])
 }
 
 model Attachment {
@@ -138,8 +171,8 @@ model Attachment {
   name               String
   type               String
   url                String
-  created_at         DateTime            @default(now())
-  updated_at         DateTime            @updatedAt
+  createdAt          DateTime            @default(now())
+  updatedAt          DateTime            @updatedAt
   postAttachments    PostAttachment[]
   commentAttachments CommentAttachment[]
 }
@@ -164,95 +197,74 @@ model CommentAttachment {
   @@id([commentId, attachmentId])
 }
 
-model Comment {
-  // when anyone post comment, it will send notification to the post owner and parrent post/comment
-  id          String              @id @default(cuid())
-  content     String
-  userId      String
-  postId      String
-  isVisible   Boolean             @default(true)
-  VotesCount  Int                 @default(0)
-  parentId    String?
-  createdAt   DateTime            @default(now())
-  updatedAt   DateTime            @updatedAt
-  status      String //DELETE I DONT THINK IT NEEDED
-  user        User                @relation("UserComments", fields: [userId], references: [id])
-  post        Post                @relation("PostComments", fields: [postId], references: [id])
-  parent      Comment?            @relation("CommentReplies", fields: [parentId], references: [id])
-  replies     Comment[]           @relation("CommentReplies")
-  reports     Report[]            @relation("ReportComment")
-  attachments CommentAttachment[] @relation("CommentAttachments")
-  votes       CommentVotes[]      @relation("CommentVotes")
-
-  @@index([userId, postId])
-}
-
 model PostVotes {
-  id          String @id @default(cuid())
-  userId      String
-  postId      String
-  user        User   @relation("UserPostVotes", fields: [userId], references: [id])
-  post        Post   @relation("PostVotes", fields: [postId], references: [id])
-  VotesStatus Int    @default(0) // 0 / 1 / -1
+  id         String   @id @default(cuid())
+  userId     String
+  postId     String
+  user       User     @relation("UserPostVotes", fields: [userId], references: [id])
+  post       Post     @relation("PostVotes", fields: [postId], references: [id])
+  voteStatus Int      @default(0) // 0 / 1 / -1
+  createdAt  DateTime @default(now())
 
   @@unique([userId, postId])
 }
 
 model CommentVotes {
-  id          String  @id @default(cuid())
-  userId      String
-  commentId   String
-  user        User    @relation("UserCommentVotes", fields: [userId], references: [id])
-  comment     Comment @relation("CommentVotes", fields: [commentId], references: [id])
-  VotesStatus Int     @default(0) // 0 / 1 / -1
+  id         String   @id @default(cuid())
+  userId     String
+  commentId  String
+  user       User     @relation("UserCommentVotes", fields: [userId], references: [id])
+  comment    Comment  @relation("CommentVotes", fields: [commentId], references: [id])
+  voteStatus Int      @default(0) // 0 / 1 / -1
+  createdAt  DateTime @default(now())
 
   @@unique([userId, commentId])
 }
 
 model UserFollows {
-  follower_id  String
-  following_id String
-  created_at   DateTime @default(now())
-  follower     User     @relation("followers", fields: [follower_id], references: [id])
-  following    User     @relation("following", fields: [following_id], references: [id])
+  followerId  String
+  followingId String
+  createdAt   DateTime @default(now())
+  follower    User     @relation("followers", fields: [followerId], references: [id])
+  following   User     @relation("following", fields: [followingId], references: [id])
 
-  @@id([follower_id, following_id])
+  @@id([followerId, followingId])
 }
 
 model ForumSubscription {
-  user_id    String
-  forum_id   String
-  created_at DateTime @default(now())
-  user       User     @relation(fields: [user_id], references: [id])
-  forum      Forum    @relation(fields: [forum_id], references: [id])
+  userId    String
+  forumId   String
+  createdAt DateTime @default(now())
+  user      User     @relation(fields: [userId], references: [id])
+  forum     Forum    @relation(fields: [forumId], references: [id])
 
-  @@id([user_id, forum_id])
+  @@id([userId, forumId])
 }
 
 model PostTag {
-  post_id    String
-  tag_id     String
-  created_at DateTime @default(now())
-  post       Post     @relation(fields: [post_id], references: [id])
-  tag        Tag      @relation(fields: [tag_id], references: [id])
+  postId    String
+  tagId     String
+  createdAt DateTime @default(now())
+  post      Post     @relation(fields: [postId], references: [id])
+  tag       Tag      @relation(fields: [tagId], references: [id])
 
-  @@id([post_id, tag_id])
+  @@id([postId, tagId])
 }
 
 model Notification {
-  id              String           @id @default(cuid())
-  associated_id   String
-  associated_type AssociatedType
+  id             String           @id @default(cuid())
+  associatedId   String
+  associatedType AssociatedType
   recieverId     String
   senderId       String
-  type            NotificationType
-  read            Boolean          @default(false)
+  type           NotificationType
+  read           Boolean          @default(false)
   createdAt      DateTime         @default(now())
-  title           String?
-  content         String?
-  url             String?
-  receiver        User             @relation("NotifiedUser", fields: [recieverId], references: [id])
-  sender          User             @relation("NotifierUser", fields: [senderId], references: [id])
+  title          String?
+  content        String?
+  url            String?
+  receiver       User             @relation("NotifiedUser", fields: [recieverId], references: [id])
+  sender         User             @relation("NotifierUser", fields: [senderId], references: [id])
 
   @@index([recieverId, senderId, type])
 }
@@ -260,26 +272,26 @@ model Notification {
 model ForumModerator {
   userId    String
   forumId   String
-  created_at DateTime @default(now())
-  user       User     @relation(fields: [userId], references: [id])
-  forum      Forum    @relation(fields: [forumId], references: [id])
+  createdAt DateTime @default(now())
+  user      User     @relation(fields: [userId], references: [id])
+  forum     Forum    @relation(fields: [forumId], references: [id])
 
   @@id([userId, forumId])
 }
 
 model Report {
-  id           String    @id @default(cuid())
+  id          String    @id @default(cuid())
   reporterId  String
   postId      String?
   commentId   String?
-  reason       String
-  status       String
+  reason      String
+  status      String
   actionTaken String?
   createdAt   DateTime  @default(now())
   updatedAt   DateTime  @updatedAt
-  reporter     User      @relation("ReporterUser", fields: [reporterId], references: [id])
-  post         Post?     @relation("ReportPost", fields: [postId], references: [id])
-  comment      Comment?  @relation("ReportComment", fields: [commentId], references: [id])
+  reporter    User      @relation("ReporterUser", fields: [reporterId], references: [id])
+  post        Post?     @relation("ReportPost", fields: [postId], references: [id])
+  comment     Comment?  @relation("ReportComment", fields: [commentId], references: [id])
   resolvedAt  DateTime?
   resolvedBy  String?
 

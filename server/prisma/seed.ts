@@ -1,10 +1,10 @@
 // seed.ts
 import { PrismaClient } from '@prisma/client';
-import { seedUsers } from './user.seeder';
-import { seedForums } from './forum.seeder';
-import { seedPosts } from './post.seeder';
-import { seedComments } from './comment.seeder';
-import { seedNotifications } from './notification.seeder';
+import { seedUsers } from './seeds/user.seeder';
+import { seedForums } from './seeds/forum.seeder';
+import { seedPosts } from './seeds/post.seeder';
+import { seedComments } from './seeds/comment.seeder';
+import { seedNotifications } from './seeds/notification.seeder';
 
 const prisma = new PrismaClient();
 
@@ -27,10 +27,9 @@ async function main() {
   const users = await seedUsers();
   const forums = await seedForums(users);
   const posts = await seedPosts(users, forums);
-  //await seedComments(users, posts);
+  await seedComments();
   //await seedNotifications(users);
 
-  // Add code to seed other entities here
 }
 
 main()
