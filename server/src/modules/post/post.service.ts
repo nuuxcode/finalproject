@@ -3,10 +3,33 @@ import { Post, Prisma } from '@prisma/client';
 
 import { PrismaService } from '../prisma/prisma.service';
 import { Post as PostModel } from '@prisma/client';
+import { CreatePostDTO } from './post.dto';
+import slugify from 'slugify';
 
 @Injectable()
 export class PostService {
   constructor(private prisma: PrismaService) {}
+
+  async create(userId: string, postData: CreatePostDTO): Promise<PostModel> {
+    const { title, content, forumId } = postData;
+    const slug = slugify(title, { lower: true, strict: true }).substring(
+      0,
+      100,
+    );
+    return this.prisma.post.create({
+      data: {
+        title,
+        content,
+        slug,
+        user: {
+          connect: { id: userId },
+        },
+        forum: {
+          connect: { id: forumId },
+        },
+      },
+    });
+  }
 
   async searchPosts(searchTerm: string): Promise<PostModel[]> {
     const posts = await this.prisma.$queryRaw`
@@ -115,11 +138,11 @@ export class PostService {
     }));
   }
 
-  async create(data: Prisma.PostCreateInput): Promise<Post> {
-    return this.prisma.post.create({
-      data,
-    });
-  }
+  // async create(data: Prisma.PostCreateInput): Promise<Post> {
+  //   return this.prisma.post.create({
+  //     data,
+  //   });
+  // }
 
   async update(params: {
     where: Prisma.PostWhereUniqueInput;
