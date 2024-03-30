@@ -1,14 +1,18 @@
-import { Controller, Get, Post, Param, Query, Body } from '@nestjs/common';
+import { Controller, Get, Post, Param, Query, Body, Put } from '@nestjs/common';
 import { ForumService } from './forum.service';
 import {
   ApiTags,
+  ApiBody,
+  ApiQuery,
+  ApiResponse,
   ApiOperation,
   ApiParam,
-  ApiQuery,
-  ApiBody,
 } from '@nestjs/swagger';
-import { CreateForumDto } from './forum.dto';
-
+import { Forum as ForumModel } from '@prisma/client';
+import { CreateForumDTO } from './forum.dto';
+import { HttpException, HttpStatus } from '@nestjs/common';
+import { UseGuards, Req } from '@nestjs/common';
+import { AuthGuard } from '@nestjs/passport';
 @ApiTags('forums')
 @Controller('forums')
 export class ForumController {
@@ -32,11 +36,53 @@ export class ForumController {
     return this.forumService.getAllForums(page, limit);
   }
 
-  @Get(':id')
-  @ApiOperation({ summary: 'Get forum for a specific user' })
-  @ApiParam({ name: 'id', description: 'User ID' })
-  getForumForUser(@Param('id') userId: string) {
-    return this.forumService.getForumForUser(userId);
+  @Post()
+  @ApiBody({ type: CreateForumDTO })
+  @UseGuards(AuthGuard('jwt'))
+  @ApiOperation({ summary: 'Create a new forum' })
+  @ApiResponse({
+    status: 201,
+    description: 'The forum has been successfully created.',
+  })
+  @ApiResponse({ status: 500, description: 'Internal server error.' })
+  async createForum(
+    @Req() request: any,
+    @Body() forumData: CreateForumDTO,
+  ): Promise<ForumModel> {
+    const userId = request.user.id;
+    try {
+      return await this.forumService.create(userId, forumData);
+    } catch (error) {
+      throw new HttpException(error.message, HttpStatus.BAD_REQUEST);
+    }
+  }
+
+  @Get(':idOrSlug')
+  @ApiOperation({ summary: 'Get a specific forum by ID or slug' })
+  @ApiParam({ name: 'idOrSlug', description: 'Forum ID or slug' })
+  getForumByIdOrSlug(@Param('idOrSlug') idOrSlug: string) {
+    return this.forumService.getForumByIdOrSlug(idOrSlug);
+  }
+
+  @Put(':idOrSlug')
+  @ApiBody({ type: CreateForumDTO })
+  @UseGuards(AuthGuard('jwt'))
+  @ApiOperation({ summary: 'Update a forum' })
+  @ApiParam({ name: 'idOrSlug', description: 'Forum ID or slug' })
+  @ApiResponse({
+    status: 200,
+    description: 'The forum has been successfully updated.',
+  })
+  @ApiResponse({ status: 500, description: 'Internal server error.' })
+  async updateForum(
+    @Param('idOrSlug') idOrSlug: string,
+    @Body() forumData: CreateForumDTO,
+  ): Promise<ForumModel> {
+    try {
+      return await this.forumService.updateForum(idOrSlug, forumData);
+    } catch (error) {
+      throw new HttpException(error.message, HttpStatus.BAD_REQUEST);
+    }
   }
 
   @Get(':id/posts')
@@ -62,24 +108,10 @@ export class ForumController {
     return this.forumService.getPostsForForum(forumId, page, limit);
   }
 
-  @Get(':id/moderator')
-  @ApiOperation({ summary: 'Get moderator for a specific forum' })
-  @ApiParam({ name: 'id', description: 'Forum ID' })
-  getModeratorForForum(@Param('id') forumId: string) {
-    return this.forumService.getModeratorForForum(forumId);
-  }
-
   @Get(':id/subscribers')
   @ApiOperation({ summary: 'Get subscribers for a specific forum' })
   @ApiParam({ name: 'id', description: 'Forum ID' })
   getSubscribersForForum(@Param('id') forumId: string) {
     return this.forumService.getSubscribersForForum(forumId);
-  }
-
-  @Post()
-  @ApiOperation({ summary: 'Create a new forum' })
-  @ApiBody({ description: 'Forum data', type: CreateForumDto })
-  createForum(@Body() forumData: CreateForumDto) {
-    return this.forumService.createForum(forumData);
   }
 }
