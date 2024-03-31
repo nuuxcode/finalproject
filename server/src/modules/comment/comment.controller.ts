@@ -181,6 +181,7 @@ export class CommentController {
   ): Promise<Comment[]> {
     return this.commentService.getCommentsReplies(commentId);
   }
+
   @ApiCookieAuth()
   @Post(':commentId/replies')
   @ApiBody({ type: CreateNewCommentDto })

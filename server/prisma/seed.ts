@@ -30,6 +30,7 @@ async function main() {
   const forums = await seedForums(users);
   const posts = await seedPosts(users, forums);
   await seedComments();
+
   //await seedNotifications(users);
 
 }
