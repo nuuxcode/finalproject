@@ -112,6 +112,7 @@ export class PostService {
         },
         forum: {
           select: {
+            id: true,
             name: true,
             slug: true,
           },
