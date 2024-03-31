@@ -128,8 +128,8 @@ export default function SideBar({ open, handleDrawerClose }) {
         src="/src/logo.png"
       />
       <Typography align="center" sx={{ fontSize: open ? 17 : 0 , transition : "0.25s"}}>
-admin      </Typography>
-      <Typography align="center" sx={{ fontSize: open ? 19 : 0, transition : "0.25s", color: theme.palette.info.main }}>
+oumayma mazoz      </Typography>
+      <Typography align="center" sx={{ fontSize: open ? 19 : 0, transition : "0.25s", color: "#FFFF00" }}>
         Admin
       </Typography>
       <Divider />
