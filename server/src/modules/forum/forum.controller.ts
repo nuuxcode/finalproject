@@ -7,6 +7,7 @@ import {
   ApiResponse,
   ApiOperation,
   ApiParam,
+  ApiCookieAuth,
 } from '@nestjs/swagger';
 import { Forum as ForumModel } from '@prisma/client';
 import { CreateForumDTO } from './forum.dto';
@@ -36,6 +37,7 @@ export class ForumController {
     return this.forumService.getAllForums(page, limit);
   }
 
+  @ApiCookieAuth()
   @Post()
   @ApiBody({ type: CreateForumDTO })
   @UseGuards(AuthGuard('jwt'))
@@ -64,6 +66,7 @@ export class ForumController {
     return this.forumService.getForumByIdOrSlug(idOrSlug);
   }
 
+  @ApiCookieAuth()
   @Put(':idOrSlug')
   @ApiBody({ type: CreateForumDTO })
   @UseGuards(AuthGuard('jwt'))
