@@ -1,5 +1,11 @@
 import { Controller, Get, Post, Delete, Param, Body } from '@nestjs/common';
-import { ApiTags, ApiOperation, ApiParam, ApiBody } from '@nestjs/swagger';
+import {
+  ApiTags,
+  ApiOperation,
+  ApiParam,
+  ApiBody,
+  ApiCookieAuth,
+} from '@nestjs/swagger';
 import { ModeratorService } from './moderator.service';
 import { HttpException, HttpStatus } from '@nestjs/common';
 import { Roles } from '../roles/roles.decorator';
@@ -31,6 +37,7 @@ export class ModeratorController {
     return this.moderatorService.getForumModerators(forumId);
   }
 
+  @ApiCookieAuth()
   @Post('forums/:forumId/moderators')
   @ApiOperation({
     summary: 'Assign moderator role to a user for a specific forum',
@@ -55,6 +62,7 @@ export class ModeratorController {
     }
   }
 
+  @ApiCookieAuth()
   @Delete('forums/:forumId/moderators/:userId')
   @Roles('admin', 'forumowner')
   @UseGuards(RolesGuard)
