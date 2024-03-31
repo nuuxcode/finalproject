@@ -2,6 +2,7 @@ import { Injectable, NotFoundException } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
 import { Forum as ForumModel } from '@prisma/client';
 import { CreateForumDTO } from './forum.dto';
+import { Prisma } from '@prisma/client';
 
 @Injectable()
 export class ForumService {
@@ -14,11 +15,41 @@ export class ForumService {
     });
   }
 
+  async findForum(whereClause: Prisma.ForumWhereUniqueInput) {
+    return this.prisma.forum.findUnique({
+      where: whereClause,
+      include: {
+        posts: {
+          take: 10,
+          orderBy: {
+            createdAt: 'desc',
+          },
+          include: {
+            user: {
+              select: {
+                username: true,
+                avatarUrl: true,
+                reputation: true,
+              },
+            },
+            attachments: {
+              include: {
+                attachment: true,
+              },
+            },
+          },
+        },
+      },
+    });
+  }
+
   async getForumByIdOrSlug(idOrSlug: string) {
-    let forum = await this.prisma.forum.findUnique({ where: { id: idOrSlug } });
+    let forum = await this.findForum({ id: idOrSlug });
+
     if (!forum) {
-      forum = await this.prisma.forum.findUnique({ where: { slug: idOrSlug } });
+      forum = await this.findForum({ slug: idOrSlug });
     }
+
     return forum;
   }
 
