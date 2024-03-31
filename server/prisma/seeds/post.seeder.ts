@@ -163,6 +163,8 @@ export async function seedPosts(users, forums) {
         commentsCount: faker.number.int({ min: 0, max: 100 }),
         viewsCount: faker.number.int({ min: 0, max: 1000 }),
         votesCount: faker.number.int({ min: 0, max: 500 }),
+        upvotesCount: faker.number.int({ min: 0, max: 500 }),
+        downvotesCount: faker.number.int({ min: 0, max: 500 }),
       },
     });
     console.log(`------------ Post with id ${ownerPost.id} created by owner.`);
@@ -178,7 +180,7 @@ export async function seedPosts(users, forums) {
       data: {
         name: `${faker.system.fileName()}.jpg`,
         type: 'image/jpeg',
-        url: 'https://picsum.photos/200/300',
+        url: `https://picsum.photos/200/300?random=${Math.floor(Math.random() * 1000)}`,
       },
     });
 
@@ -196,6 +198,8 @@ export async function seedPosts(users, forums) {
         commentsCount: faker.number.int({ min: 0, max: 100 }),
         viewsCount: faker.number.int({ min: 0, max: 1000 }),
         votesCount: faker.number.int({ min: 0, max: 500 }),
+        upvotesCount: faker.number.int({ min: 0, max: 500 }),
+        downvotesCount: faker.number.int({ min: 0, max: 500 }),
       },
     });
     console.log(`------------ Post with id ${moderatorPost.id} created by moderator.`);
@@ -212,7 +216,7 @@ export async function seedPosts(users, forums) {
         data: {
           name: faker.system.fileName(),
           type: faker.system.commonFileType(),
-          url: faker.internet.url(),
+        url: `https://picsum.photos/200/300?random=${Math.floor(Math.random() * 1000)}`,
         },
       });
 
@@ -231,6 +235,8 @@ export async function seedPosts(users, forums) {
           commentsCount: faker.number.int({ min: 0, max: 100 }),
           viewsCount: faker.number.int({ min: 0, max: 1000 }),
           votesCount: faker.number.int({ min: 0, max: 500 }),
+          upvotesCount: faker.number.int({ min: 0, max: 500 }),
+          downvotesCount: faker.number.int({ min: 0, max: 500 }),
         },
       });
       console.log(`------------ Post with id ${userPost.id} created by user.`);

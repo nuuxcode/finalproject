@@ -6,20 +6,19 @@ import {FaArrowDown, FaBars, FaPlus} from "react-icons/fa6";
 import {FaHome, FaSearch} from "react-icons/fa";
 import {FaRocket} from "react-icons/fa";
 import {Separator} from "~/components/ui/separator"
-import { UserButton, useClerk } from "@clerk/nextjs";
-
-// import {Button} from "~/components/ui/button";
+import { UserButton, useClerk, useUser } from "@clerk/nextjs";
+import { useTheme } from "next-themes"
+import LogoLight from '../../../public/logo light.png'
+import LogoDark from '../../../public/logo dark.png'
 import {
     Sheet,
     SheetContent,
 } from "~/components/ui/sheet"
-
 import {
     Collapsible,
     CollapsibleContent,
     CollapsibleTrigger,
 } from "~/components/ui/collapsible"
-
 import Link from "next/link";
 import {Button} from "~/components/ui/button";
 import Image from "next/image";
@@ -28,7 +27,9 @@ import Image from "next/image";
 export default function Header() {
     const [searchValue, setSearchValue] = useState<string>('');
     const [open, setOpen] = useState<boolean>(false)
-    const {openSignIn, openSignUp} = useClerk()
+    const {openSignIn} = useClerk()
+    const {isSignedIn} = useUser()
+    const {theme} = useTheme()
 
     const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         setSearchValue(event.target.value)
@@ -44,19 +45,18 @@ export default function Header() {
     const handleShow = () => {
         setOpen(!open)
     }
+    console.log(isSignedIn)
     return (
-        <nav className={'flex items-center gap-8 text-secondary px-8 py-2 bg-[#010409'}>
+        <nav className={'flex items-center gap-8 dark:text-[#d8dce0] px-4 py-2 bg-[#010409'}>
             <div className={'flex items-center py-2 gap-3 justify-between w-full'}>
-                <div className={'text-secondary'}>
-                    Logo
-                </div>
+                <Image className={''} src={theme === 'dark' ? LogoDark : LogoLight} width={80} height={80} alt='logo' />
                 <label className={'relative block md:min-w-[600px]'}>
                     <span className={'sr-only'}>Search</span>
                     <span className="absolute inset-y-0 left-2 flex items-center pl-2">
                         <FaSearch/>
                     </span>
                     <Input
-                        className={'place-self-center border-[#2E2B24] bg-[#2E2B24] text-[#CBD5E1] focus-visible:ring-offset-primary ring-offset-0 rounded-[20px] px-12 placeholder:italic'}
+                        className={'place-self-center border-[#a37f2a] dark:bg-[#2E2B24] text-[#CBD5E1] focus-visible:ring-offset-0 ring-offset-0 rounded-[20px] px-12 placeholder:italic'}
                         placeholder={'Search posts'}
                         onChange={handleChange} onKeyUp={handleSearch} value={searchValue}/>
                 </label>
@@ -66,13 +66,12 @@ export default function Header() {
                     </button>
                 </div>
                 <div className={'hidden lg:flex justify-end gap-4'}>
-                    {/*<Image className={'rounded-full'} src={'https://ui-avatars.com/api/?name=jd&background=facc15'}*/}
-                    {/*       alt={'avatar'} width={48} height={48}/>*/}
                     <UserButton />
-                    <Button className={'bg-primary'} variant={'ghost'} onClick={() => openSignIn({
-                        afterSignInUrl: '/'
-                    })}>Sign In</Button>
-                    <Button className={'bg-primary'} variant={'ghost'} onClick={() => openSignUp({})}>Sign Up</Button>
+                    {(!isSignedIn && isSignedIn !== undefined) && (
+                        <Button className={'bg-primary text-white'} variant={'ghost'} onClick={() => openSignIn({
+                            afterSignInUrl: '/'
+                        })}>Sign In</Button>
+                    )}
 
                 </div>
             </div>
@@ -101,7 +100,7 @@ export default function Header() {
 
                         <div className={'py-2 place-self-center'}>
                             <Button className={'bg-primary'} variant={'ghost'}>
-                                <FaPlus className={'mr-2'}/> Create Channel
+                                <FaPlus className={'mr-2'}/> Create post
                             </Button>
                         </div>
                         <Separator className={'bg-[#403A3A]'}/>

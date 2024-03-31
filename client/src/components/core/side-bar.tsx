@@ -9,10 +9,10 @@ import {Collapsible, CollapsibleContent, CollapsibleTrigger} from "~/components/
 
 export default function SideBar() {
     return (
-        <div className={'hidden md:flex text-secondary items-start justify-stretch min-h-screen'}>
+        <div className={'hidden md:flex dark:text-[#d8dce0] items-start justify-stretch min-h-screen'}>
             <div className={'flex flex-col items-start gap-4 py-10 px-4 w-full'}>
                 <ul className={'flex flex-col gap-1 w-full'}>
-                    <li className={'flex gap-2 items-center text-xl text-secondary p-4 rounded-lg hover:text-primary cursor-pointer'}>
+                    <li className={'flex gap-2 items-center text-xl p-4 rounded-lg hover:text-primary cursor-pointer'}>
                         <FaHome/>
                         <Link className={''} href={'/dashboard'}>Home</Link>
                     </li>
@@ -44,7 +44,7 @@ export default function SideBar() {
                     </Collapsible>
                 </div>
             </div>
-            <Separator orientation={'vertical'} className={'bg-[#403A3A]'}/>
+            <Separator orientation={'vertical'} className={''}/>
 
         </div>
 

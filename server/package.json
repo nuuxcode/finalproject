@@ -20,7 +20,8 @@
     "test:cov": "jest --coverage",
     "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
     "test:e2e": "jest --config ./test/jest-e2e.json",
-    "prisma:seed": "ts-node prisma/seed"
+    "prisma:seed": "ts-node prisma/seed",
+    "seed": "npx prisma db seed"
   },
   "prisma": {
     "seed": "ts-node prisma/seed.ts"
@@ -45,6 +46,7 @@
     "prom-client": "^15.1.1",
     "reflect-metadata": "^0.2.0",
     "rxjs": "^7.8.1",
+    "slugify": "^1.6.6",
     "svix": "^1.21.0",
     "swagger-ui-express": "^5.0.0"
   },

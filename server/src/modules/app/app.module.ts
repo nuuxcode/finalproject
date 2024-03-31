@@ -3,7 +3,7 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
 
 import { UserModule } from '../user/user.module';
 import { PostModule } from '../post/post.module';
-//import { AuthModule } from '../auth/auth.module';
+import { AuthModule } from '../auth/auth.module';
 import { PrismaModule } from '../prisma/prisma.module';
 import { GLOBAL_CONFIG } from '../../configs/global.config';
 import { AppService, CustomMetricsMiddleware } from './app.service';
@@ -20,7 +20,7 @@ import { WebhookModule } from '../webhook/webhook.module';
       path: '/app-metrics',
       }),
     PrismaModule,
-    //AuthModule,
+    AuthModule,
     UserModule,
     PostModule,
     CommentModule,

@@ -3,10 +3,33 @@ import { Post, Prisma } from '@prisma/client';
 
 import { PrismaService } from '../prisma/prisma.service';
 import { Post as PostModel } from '@prisma/client';
+import { CreatePostDTO } from './post.dto';
+import slugify from 'slugify';
 
 @Injectable()
 export class PostService {
   constructor(private prisma: PrismaService) {}
+
+  async create(userId: string, postData: CreatePostDTO): Promise<PostModel> {
+    const { title, content, forumId } = postData;
+    const slug = slugify(title, { lower: true, strict: true }).substring(
+      0,
+      100,
+    );
+    return this.prisma.post.create({
+      data: {
+        title,
+        content,
+        slug,
+        user: {
+          connect: { id: userId },
+        },
+        forum: {
+          connect: { id: forumId },
+        },
+      },
+    });
+  }
 
   async searchPosts(searchTerm: string): Promise<PostModel[]> {
     const posts = await this.prisma.$queryRaw`
@@ -31,6 +54,8 @@ export class PostService {
         commentsCount: post.commentsCount,
         viewsCount: post.viewsCount,
         votesCount: post.votesCount,
+        upvotesCount: post.upvotesCount,
+        downvotesCount: post.downvotesCount,
       } as PostModel;
     });
   }
@@ -62,10 +87,11 @@ export class PostService {
     take?: number;
     cursor?: Prisma.PostWhereUniqueInput;
     where?: Prisma.PostWhereInput;
-    orderBy?: Prisma.PostOrderByWithRelationInput;
+    orderBy?: Prisma.PostOrderByWithAggregationInput;
   }): Promise<Post[]> {
     const { page = 0, take = 10, cursor, where, orderBy } = params;
-    return this.prisma.post.findMany({
+
+    const posts = await this.prisma.post.findMany({
       skip: page * take,
       take,
       cursor,
@@ -84,15 +110,39 @@ export class PostService {
             attachment: true,
           },
         },
+        forum: {
+          select: {
+            name: true,
+            slug: true,
+          },
+        },
       },
     });
+
+    return posts.map((post) => ({
+      ...post,
+      forum: {
+        name: post.forum.name,
+        slug: post.forum.slug,
+      },
+      attachments: post.attachments.map((attachment) => ({
+        id: attachment.id,
+        postId: attachment.postId,
+        attachmentId: attachment.attachmentId,
+        name: attachment.attachment.name,
+        type: attachment.attachment.type,
+        url: attachment.attachment.url,
+        createdAt: attachment.attachment.createdAt,
+        updatedAt: attachment.attachment.updatedAt,
+      })),
+    }));
   }
 
-  async create(data: Prisma.PostCreateInput): Promise<Post> {
-    return this.prisma.post.create({
-      data,
-    });
-  }
+  // async create(data: Prisma.PostCreateInput): Promise<Post> {
+  //   return this.prisma.post.create({
+  //     data,
+  //   });
+  // }
 
   async update(params: {
     where: Prisma.PostWhereUniqueInput;

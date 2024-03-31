@@ -29,10 +29,10 @@ async function main() {
   const users = await seedUsers();
   const forums = await seedForums(users);
   const posts = await seedPosts(users, forums);
-  await seedComments(users, posts);
+  await seedComments();
+
   //await seedNotifications(users);
 
-  // Add code to seed other entities here
 }
 
 main()

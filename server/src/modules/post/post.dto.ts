@@ -1,19 +1,39 @@
-import { IsString, IsNotEmpty, IsOptional } from 'class-validator';
+import { IsNotEmpty, IsString } from 'class-validator';
 import { ApiProperty } from '@nestjs/swagger';
 
 export class CreatePostDTO {
-  @IsString()
+  @ApiProperty({ description: 'The title of the post' })
   @IsNotEmpty()
-  @ApiProperty()
+  @IsString()
   title: string;
 
-  @IsString()
-  @IsOptional()
-  @ApiProperty()
-  content?: string;
-
-  @IsString()
+  @ApiProperty({ description: 'The content of the post' })
   @IsNotEmpty()
-  @ApiProperty()
-  authorEmail: string;
+  @IsString()
+  content: string;
+
+  @ApiProperty({ description: 'The ID of the forum where the post is created' })
+  @IsNotEmpty()
+  @IsString()
+  forumId: string;
+
+  // @ApiProperty({ description: 'The ID of the user creating the post' })
+  // @IsNotEmpty()
+  // @IsString()
+  // userId: string;
+
+  // @ApiProperty({ description: 'Whether the post is pinned or not', required: false })
+  // @IsOptional()
+  // @IsBoolean()
+  // isPinned?: boolean;
+
+  // @ApiProperty({ description: 'Whether the post is visible or not', required: false })
+  // @IsOptional()
+  // @IsBoolean()
+  // isVisible?: boolean;
+
+  // @ApiProperty({ description: 'The slug of the post' })
+  // @IsNotEmpty()
+  // @IsString()
+  // slug: string;
 }
