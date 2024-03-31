@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
 import { Forum as ForumModel } from '@prisma/client';
 import { CreateForumDTO } from './forum.dto';
@@ -119,9 +119,57 @@ export class ForumService {
       where: { ownerUserId },
     });
   }
+
+  async getForumsByOwnerIdOrUsername(
+    idOrUsername: string,
+  ): Promise<ForumModel[]> {
+    let user = await this.prisma.user.findUnique({
+      where: { id: idOrUsername },
+    });
+    if (!user) {
+      user = await this.prisma.user.findUnique({
+        where: { username: idOrUsername },
+      });
+    }
+
+    if (!user) {
+      throw new NotFoundException(
+        `User with ID or username ${idOrUsername} not found`,
+      );
+    }
+
+    return this.prisma.forum.findMany({
+      where: { ownerUserId: user.id },
+    });
+  }
+
   async getModeratorForums(userId: string) {
     const forumModerators = await this.prisma.forumModerator.findMany({
       where: { userId },
+      include: { forum: true },
+    });
+
+    return forumModerators.map((moderator) => moderator.forum);
+  }
+
+  async getModeratorForumsByUserIdOrUsername(idOrUsername: string) {
+    let user = await this.prisma.user.findUnique({
+      where: { id: idOrUsername },
+    });
+    if (!user) {
+      user = await this.prisma.user.findUnique({
+        where: { username: idOrUsername },
+      });
+    }
+
+    if (!user) {
+      throw new NotFoundException(
+        `User with ID or username ${idOrUsername} not found`,
+      );
+    }
+
+    const forumModerators = await this.prisma.forumModerator.findMany({
+      where: { userId: user.id },
       include: { forum: true },
     });
 

@@ -7,7 +7,6 @@ export class Comment {
   parentId?: string;
   createdAt: Date;
   updatedAt: Date;
-  status: string;
   parent?: Comment;
   replies?: Comment[];
 }

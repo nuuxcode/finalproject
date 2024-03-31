@@ -14,6 +14,7 @@ import {
   ApiQuery,
   ApiResponse,
   ApiOperation,
+  ApiCookieAuth,
 } from '@nestjs/swagger';
 import { UseGuards, Req } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
@@ -60,6 +61,7 @@ export class PostController {
     return this.postService.findOne({ id: id });
   }
 
+  @ApiCookieAuth()
   @Post('post')
   @ApiBody({ type: CreatePostDTO })
   @UseGuards(AuthGuard('jwt'))
@@ -84,6 +86,7 @@ export class PostController {
     }
   }
 
+  @ApiCookieAuth()
   @Roles('admin', 'moderator')
   @UseGuards(RolesGuard)
   @UseGuards(AuthGuard('jwt'))

@@ -2,17 +2,23 @@ import { Controller, Put, Param, Body, Req, UseGuards } from '@nestjs/common';
 import { Request } from 'express';
 import { VoteService } from './vote.service';
 import { JwtAuthGuard } from '../auth/auth.jwt.guard';
-import { ApiTags, ApiOperation, ApiBody, ApiParam } from '@nestjs/swagger';
+import {
+  ApiTags,
+  ApiOperation,
+  ApiBody,
+  ApiParam,
+  ApiCookieAuth,
+} from '@nestjs/swagger';
 import { VoteDto } from './vote.dto';
 import { HttpException, HttpStatus } from '@nestjs/common';
 
-@ApiTags('posts')
-@Controller('posts')
+@Controller('')
 export class VoteController {
   constructor(private readonly voteService: VoteService) {}
-
+  @ApiTags('posts')
+  @ApiCookieAuth()
   @UseGuards(JwtAuthGuard)
-  @Put(':id/vote')
+  @Put('/posts/:id/vote')
   @ApiOperation({ summary: 'Vote on a post' })
   @ApiParam({ name: 'id', description: 'The ID of the post' })
   @ApiBody({ type: VoteDto })
@@ -34,8 +40,10 @@ export class VoteController {
     }
   }
 
+  @ApiTags('comments')
+  @ApiCookieAuth()
   @UseGuards(JwtAuthGuard)
-  @Put(':id/voteComment')
+  @Put('/comments/:id/vote')
   @ApiOperation({ summary: 'Vote on a comment' })
   @ApiParam({ name: 'id', description: 'The ID of the comment' })
   @ApiBody({ type: VoteDto })

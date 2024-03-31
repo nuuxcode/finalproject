@@ -35,6 +35,9 @@ dependencies:
   '@prisma/client':
     specifier: 5.11.0
     version: 5.11.0(prisma@5.11.0)
+  '@willsoto/nestjs-prometheus':
+    specifier: ^6.0.0
+    version: 6.0.0(@nestjs/common@10.3.4)(prom-client@15.1.1)
   class-transformer:
     specifier: ^0.5.1
     version: 0.5.1
@@ -50,6 +53,9 @@ dependencies:
   passport-jwt:
     specifier: ^4.0.1
     version: 4.0.1
+  prom-client:
+    specifier: ^15.1.1
+    version: 15.1.1
   reflect-metadata:
     specifier: ^0.2.0
     version: 0.2.1
@@ -1233,6 +1239,11 @@ packages:
     transitivePeerDependencies:
       - encoding
 
+  /@opentelemetry/api@1.8.0:
+    resolution: {integrity: sha512-I/s6F7yKUDdtMsoBWXJe8Qz40Tui5vsuKCWJEWVL+5q9sSWRzzx6v2KeNsOBEwd94j0eWkpWCH4yB6rZg9Mf0w==}
+    engines: {node: '>=8.0.0'}
+    dev: false
+
   /@peculiar/asn1-schema@2.3.8:
     resolution: {integrity: sha512-ULB1XqHKx1WBU/tTFIA+uARuRoBVZ4pNdOA878RDrRbBfBGcSzi5HBkdScC6ZbHn8z7L8gmKCgPC1LHRrP46tA==}
     dependencies:
@@ -1812,6 +1823,16 @@ packages:
       '@xtuc/long': 4.2.2
     dev: true
 
+  /@willsoto/nestjs-prometheus@6.0.0(@nestjs/common@10.3.4)(prom-client@15.1.1):
+    resolution: {integrity: sha512-Krmda5CT9xDPjab8Eqdqiwi7xkZSX60A5rEGVLEDjUG6J6Rw5SCZ/BPaRk+MxNGWzUrRkM7K5FtTg38vWIOt1Q==}
+    peerDependencies:
+      '@nestjs/common': ^7.0.0 || ^8.0.0 || ^9.0.0 || ^10.0.0
+      prom-client: ^15.0.0
+    dependencies:
+      '@nestjs/common': 10.3.4(class-transformer@0.5.1)(class-validator@0.14.1)(reflect-metadata@0.2.1)(rxjs@7.8.1)
+      prom-client: 15.1.1
+    dev: false
+
   /@xtuc/ieee754@1.2.0:
     resolution: {integrity: sha512-DX8nKgqcGwsc0eJSqYt5lwP4DH5FlHnmuWWBRy7X0NcaGR0ZtuyeESgMwTYVEtxmsNGY+qit4QYT/MIYTOTPeA==}
     dev: true
@@ -2072,6 +2093,10 @@ packages:
     resolution: {integrity: sha512-Ceh+7ox5qe7LJuLHoY0feh3pHuUDHAcRUeyL2VYghZwfpkNIy/+8Ocg0a3UuSoYzavmylwuLWQOf3hl0jjMMIw==}
     engines: {node: '>=8'}
     dev: true
+
+  /bintrees@1.0.2:
+    resolution: {integrity: sha512-VOMgTMwjAaUG580SXn3LacVgjurrbMme7ZZNYGSSV7mmtY6QQRh0Eg3pwIcntQ77DErK1L0NxkbetjcoXzVwKw==}
+    dev: false
 
   /bl@4.1.0:
     resolution: {integrity: sha512-1W07cM9gS6DcLperZfFSj+bWLtaPGSOHWhPiGzXmvVJbRLdG82sH/Kn8EtW1VqWVA54AKf2h5k5BbnIbwF3h6w==}
@@ -4688,6 +4713,14 @@ packages:
   /process-nextick-args@2.0.1:
     resolution: {integrity: sha512-3ouUOpQhtgrbOa17J7+uxOTpITYWaGP7/AhoR3+A+/1e9skrzelGi/dXzEYyvbxubEF6Wn2ypscTKiKJFFn1ag==}
 
+  /prom-client@15.1.1:
+    resolution: {integrity: sha512-GVA2H96QCg2q71rjc3VYvSrVG7OpnJxyryC7dMzvfJfpJJHzQVwF3TJLfHzKORcwJpElWs1TwXLthlJAFJxq2A==}
+    engines: {node: ^16 || ^18 || >=20}
+    dependencies:
+      '@opentelemetry/api': 1.8.0
+      tdigest: 0.1.2
+    dev: false
+
   /prompts@2.4.2:
     resolution: {integrity: sha512-NxNv/kLguCA7p3jE8oL2aEBsrJWgAakBpgmgK6lpPWV+WuOmY6r2/zbAVnP+T8bQlA0nzHXSJSJW0Hq7ylaD2Q==}
     engines: {node: '>= 6'}
@@ -5306,6 +5339,12 @@ packages:
     resolution: {integrity: sha512-GNzQvQTOIP6RyTfE2Qxb8ZVlNmw0n88vp1szwWRimP02mnTsx3Wtn5qRdqY9w2XduFNUgvOwhNnQsjwCp+kqaQ==}
     engines: {node: '>=6'}
     dev: true
+
+  /tdigest@0.1.2:
+    resolution: {integrity: sha512-+G0LLgjjo9BZX2MfdvPfH+MKLCrxlXSYec5DaPYP1fe6Iyhf0/fSmJ0bFiZ1F8BT6cGXl2LpltQptzjXKWEkKA==}
+    dependencies:
+      bintrees: 1.0.2
+    dev: false
 
   /terser-webpack-plugin@5.3.10(webpack@5.90.1):
     resolution: {integrity: sha512-BKFPWlPDndPs+NGGCr1U59t0XScL5317Y0UReNrHaw9/FwhPENlq6bfgs+4yPfyP51vqC1bQ4rp1EfXW5ZSH9w==}

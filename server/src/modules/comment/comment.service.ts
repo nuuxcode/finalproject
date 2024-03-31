@@ -140,18 +140,31 @@ export class CommentService {
         parentId: comment.parentId,
         createdAt: comment.createdAt,
         updatedAt: comment.updatedAt,
-        VotesCount: comment.VotesCount,
-        status: comment.status,
+        votesCount: comment.votesCount,
       } as CommentModel;
     });
   }
 
   async createNewComment(
-    data: Prisma.CommentCreateInput,
+    userId: string,
+    CommentData: {
+      content: string;
+      postId: string;
+      parentId: string;
+    },
   ): Promise<CommentModel> {
+    const { content, postId } = CommentData;
     try {
       const comment = await this.prisma.comment.create({
-        data,
+        data: {
+          content,
+          user: {
+            connect: { id: userId },
+          },
+          post: {
+            connect: { id: postId },
+          },
+        },
       });
       return comment;
     } catch (error) {
@@ -190,7 +203,7 @@ export class CommentService {
           id: commentId,
         },
         data: {
-          VotesCount: {
+          votesCount: {
             increment: voteStatus,
           },
         },
@@ -267,7 +280,6 @@ export class CommentService {
       const comment = await this.prisma.comment.create({
         data: {
           content,
-          status: null,
           post: {
             connect: {
               id: postId,
@@ -311,7 +323,6 @@ export class CommentService {
       const comment = await this.prisma.comment.create({
         data: {
           content,
-          status: 'active',
           attachments: {
             create: {
               attachment: {

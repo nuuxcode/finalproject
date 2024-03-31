@@ -5,7 +5,7 @@ export class CreateNewCommentDto {
   content: string;
 
   @ApiProperty()
-  authorEmail: string;
+  userId: string;
 }
 
 export class CreateCommentDto {
@@ -16,7 +16,7 @@ export class CreateCommentDto {
   postId: string;
 
   @ApiProperty()
-  authorEmail: string;
+  userId: string;
 
   @ApiProperty()
   parentId?: string;
