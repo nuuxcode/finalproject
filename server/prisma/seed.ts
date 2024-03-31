@@ -13,7 +13,9 @@ async function cleanDatabase() {
 
   // Delete all records from your tables
   await prisma.postAttachment.deleteMany();
+  await prisma.commentAttachment.deleteMany();
   await prisma.attachment.deleteMany();
+  await prisma.comment.deleteMany();
   await prisma.post.deleteMany();
   await prisma.forumModerator.deleteMany();
   await prisma.forum.deleteMany();
