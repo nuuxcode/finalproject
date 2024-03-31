@@ -22,6 +22,46 @@ export class ForumService {
     return forum;
   }
 
+  async getPostsForForumByIdOrSlug(
+    idOrSlug: string,
+    page: number = 0,
+    limit: number = 10,
+  ) {
+    // Try to get the forum by ID first
+    let forum = await this.prisma.forum.findUnique({ where: { id: idOrSlug } });
+
+    // If no forum is found, try to get it by slug
+    if (!forum) {
+      forum = await this.prisma.forum.findUnique({ where: { slug: idOrSlug } });
+    }
+
+    // If still no forum is found, return an empty array
+    if (!forum) {
+      return [];
+    }
+
+    // If a forum is found, get its posts
+    return this.prisma.post.findMany({
+      where: { forumId: forum.id },
+      skip: page * limit,
+      take: Number(limit),
+      include: {
+        user: {
+          select: {
+            username: true,
+            avatarUrl: true,
+            reputation: true,
+          },
+        },
+        attachments: {
+          include: {
+            attachment: true,
+          },
+        },
+      },
+    });
+  }
+
   getPostsForForum(forumId: string, page: number = 0, limit: number = 10) {
     return this.prisma.post.findMany({
       where: { forumId: forumId },

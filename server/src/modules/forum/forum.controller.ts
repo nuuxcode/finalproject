@@ -88,9 +88,9 @@ export class ForumController {
     }
   }
 
-  @Get(':id/posts')
+  @Get(':idOrSlug/posts')
   @ApiOperation({ summary: 'Get posts for a specific forum' })
-  @ApiParam({ name: 'id', description: 'Forum ID' })
+  @ApiParam({ name: 'idOrSlug', description: 'Forum ID or slug' })
   @ApiQuery({
     name: 'page',
     required: false,
@@ -104,11 +104,11 @@ export class ForumController {
     description: 'Number of posts per page (default is 10)',
   })
   getPostsForForum(
-    @Param('id') forumId: string,
+    @Param('idOrSlug') idOrSlug: string,
     @Query('page') page: number,
     @Query('limit') limit: number,
   ) {
-    return this.forumService.getPostsForForum(forumId, page, limit);
+    return this.forumService.getPostsForForumByIdOrSlug(idOrSlug, page, limit);
   }
 
   @Get(':id/subscribers')

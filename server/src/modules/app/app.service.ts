@@ -4,7 +4,6 @@ import { Counter, Gauge } from 'prom-client';
 import { InjectMetric } from '@willsoto/nestjs-prometheus';
 import { NextFunction, Response, Request } from 'express';
 
-
 @Injectable()
 export class AppService {
   constructor(@Inject(CLERK) private readonly clerk: ClerkService) {}
@@ -26,7 +25,6 @@ export class AppService {
 
 @Injectable()
 export class CustomMetricsMiddleware implements NestMiddleware {
-
   public customDurationGauge: Gauge<string>;
   public customErrorsCounter: Counter<string>;
 

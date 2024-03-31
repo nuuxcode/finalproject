@@ -10,7 +10,11 @@ import { AppService, CustomMetricsMiddleware } from './app.service';
 import { AppController } from './app.controller';
 import { ClerkModule } from '../clerk/clerk.module';
 import { ForumModule } from '../forum/forum.module'; // Import the ForumModul
-import { PrometheusModule, makeCounterProvider, makeGaugeProvider } from '@willsoto/nestjs-prometheus';
+import {
+  PrometheusModule,
+  makeCounterProvider,
+  makeGaugeProvider,
+} from '@willsoto/nestjs-prometheus';
 import { CommentModule } from '../comment/comment.module';
 import { WebhookModule } from '../webhook/webhook.module';
 
