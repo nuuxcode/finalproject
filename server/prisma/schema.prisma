@@ -135,6 +135,7 @@ model Post {
   votes             PostVotes[]      @relation("PostVotes")
   acceptedCommentId String?          @unique
   acceptedComment   Comment?         @relation("AcceptedAnswer", fields: [acceptedCommentId], references: [id])
+  deletedAt         DateTime?
 
   @@index([title, userId, forumId, slug])
 }
@@ -149,7 +150,6 @@ model Comment {
   parentId       String?
   createdAt      DateTime            @default(now())
   updatedAt      DateTime            @updatedAt
-  status         String //DELETE I DONT THINK IT NEEDED
   user           User                @relation("UserComments", fields: [userId], references: [id])
   post           Post                @relation("PostComments", fields: [postId], references: [id])
   parent         Comment?            @relation("CommentReplies", fields: [parentId], references: [id])
@@ -162,6 +162,7 @@ model Comment {
   downvotesCount Int                 @default(0)
   postAsAccepted Post?               @relation("AcceptedAnswer")
   isAccepted     Boolean             @default(false)
+  deletedAt      DateTime?
 
   @@index([userId, postId])
 }

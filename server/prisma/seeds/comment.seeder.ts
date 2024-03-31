@@ -22,7 +22,6 @@ export async function seedComments() {
       const comment = await prisma.comment.create({
         data: {
           content: `Comment ${i + 1} on post ${post.id}`,
-          status: 'default_status',
           user: {
             connect: {
               id: randomUser.id,
@@ -43,7 +42,6 @@ export async function seedComments() {
     await prisma.comment.create({
       data: {
         content: `Reply to comment 2 on post ${post.id}`,
-        status: 'default_status',
         user: {
           connect: {
             id: randomUserForReplyToSecondComment.id,
@@ -68,7 +66,6 @@ export async function seedComments() {
       await prisma.comment.create({
         data: {
           content: `Reply ${i + 1} to comment 3 on post ${post.id}`,
-          status: 'default_status',
           user: {
             connect: {
               id: randomUserForReplyToThirdComment.id,
@@ -95,7 +92,6 @@ export async function seedComments() {
       const reply = await prisma.comment.create({
         data: {
           content: `Reply ${i + 1} to comment 5 on post ${post.id}`,
-          status: 'default_status',
           user: {
             connect: {
               id: randomUserForReplyToFifthComment.id,
@@ -121,7 +117,6 @@ export async function seedComments() {
     await prisma.comment.create({
       data: {
         content: `Reply to reply 1 of comment 5 on post ${post.id}`,
-        status: 'default_status',
         user: {
           connect: {
             id: randomUserForReplyToReplyOfFifthComment.id,
