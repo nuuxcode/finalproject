@@ -25,7 +25,6 @@ export class ForumService {
             createdAt: 'desc',
           },
           include: {
-            comments: true,
             user: {
               select: {
                 username: true,
@@ -45,6 +44,7 @@ export class ForumService {
                 name: true,
               },
             },
+            comments: true,
           },
         },
       },
@@ -53,16 +53,9 @@ export class ForumService {
     if (forum) {
       forum.posts = forum.posts.map((post) => ({
         ...post,
-        attachments: post.attachments.map((attachment) => ({
-          id: attachment.id,
-          postId: attachment.postId,
-          attachmentId: attachment.attachmentId,
-          name: attachment.attachment.name,
-          type: attachment.attachment.type,
-          url: attachment.attachment.url,
-          createdAt: attachment.attachment.createdAt,
-          updatedAt: attachment.attachment.updatedAt,
-        })),
+        attachments: post.attachments.map(
+          (attachment) => attachment.attachment,
+        ),
       })) as any;
     }
 
@@ -104,7 +97,6 @@ export class ForumService {
       skip: page * limit,
       take: Number(limit),
       include: {
-        comments: true,
         user: {
           select: {
             username: true,
@@ -117,25 +109,14 @@ export class ForumService {
             attachment: true,
           },
         },
+        comments: true,
       },
     });
 
     posts = posts.map((post) => ({
       ...post,
-      attachments: post.attachments.map((attachment) => ({
-        id: attachment.id,
-        postId: attachment.postId,
-        attachmentId: attachment.attachmentId,
-        attachment: {
-          id: attachment.attachment.id,
-          name: attachment.attachment.name,
-          type: attachment.attachment.type,
-          url: attachment.attachment.url,
-          createdAt: attachment.attachment.createdAt,
-          updatedAt: attachment.attachment.updatedAt,
-        },
-      })),
-    }));
+      attachments: post.attachments.map((attachment) => attachment.attachment),
+    })) as any;
 
     return posts;
   }
@@ -150,7 +131,6 @@ export class ForumService {
       skip: page * limit,
       take: Number(limit),
       include: {
-        comments: true,
         user: {
           select: {
             username: true,
@@ -163,25 +143,14 @@ export class ForumService {
             attachment: true,
           },
         },
+        comments: true,
       },
     });
 
     posts = posts.map((post) => ({
       ...post,
-      attachments: post.attachments.map((attachment) => ({
-        id: attachment.id,
-        postId: attachment.postId,
-        attachmentId: attachment.attachmentId,
-        attachment: {
-          id: attachment.attachment.id,
-          name: attachment.attachment.name,
-          type: attachment.attachment.type,
-          url: attachment.attachment.url,
-          createdAt: attachment.attachment.createdAt,
-          updatedAt: attachment.attachment.updatedAt,
-        },
-      })),
-    }));
+      attachments: post.attachments.map((attachment) => attachment.attachment),
+    })) as any;
 
     return posts;
   }

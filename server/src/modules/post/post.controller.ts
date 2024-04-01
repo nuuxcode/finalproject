@@ -57,7 +57,7 @@ export class PostController {
   }
 
   @Get('post/:id')
-  async getPostById(@Param('id') id: string): Promise<PostModel> {
+  async getPostById(@Param('id') id: string): Promise<any> {
     return this.postService.findOne({ id: id });
   }
 

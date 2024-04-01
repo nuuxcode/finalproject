@@ -62,11 +62,10 @@ export class PostService {
 
   async findOne(
     postWhereUniqueInput: Prisma.PostWhereUniqueInput,
-  ): Promise<Post | null> {
-    let post = await this.prisma.post.findUnique({
+  ): Promise<any> {
+    let post: any = await this.prisma.post.findUnique({
       where: postWhereUniqueInput,
       include: {
-        comments: true,
         user: {
           select: {
             username: true,
@@ -79,25 +78,16 @@ export class PostService {
             attachment: true,
           },
         },
+        comments: true,
       },
     });
 
     if (post) {
       post = {
         ...post,
-        attachments: post.attachments.map((attachment) => ({
-          id: attachment.id,
-          postId: attachment.postId,
-          attachmentId: attachment.attachmentId,
-          attachment: {
-            id: attachment.attachment.id,
-            name: attachment.attachment.name,
-            type: attachment.attachment.type,
-            url: attachment.attachment.url,
-            createdAt: attachment.attachment.createdAt,
-            updatedAt: attachment.attachment.updatedAt,
-          },
-        })),
+        attachments: post.attachments.map(
+          (attachment) => attachment.attachment,
+        ),
       };
     }
 
@@ -120,7 +110,6 @@ export class PostService {
       where,
       orderBy,
       include: {
-        comments: true,
         user: {
           select: {
             username: true,
@@ -140,25 +129,14 @@ export class PostService {
             slug: true,
           },
         },
+        comments: true,
       },
     });
 
     posts = posts.map((post) => ({
       ...post,
-      attachments: post.attachments.map((attachment) => ({
-        id: attachment.id,
-        postId: attachment.postId,
-        attachmentId: attachment.attachmentId,
-        attachment: {
-          id: attachment.attachment.id,
-          name: attachment.attachment.name,
-          type: attachment.attachment.type,
-          url: attachment.attachment.url,
-          createdAt: attachment.attachment.createdAt,
-          updatedAt: attachment.attachment.updatedAt,
-        },
-      })),
-    }));
+      attachments: post.attachments.map((attachment) => attachment.attachment),
+    })) as any;
 
     return posts;
   }
