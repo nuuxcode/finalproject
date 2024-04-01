@@ -6,8 +6,9 @@ import {
   useNotificationProvider,
   RefineSnackbarProvider,
   ThemedLayoutV2,
+  RefineThemes
 } from "@refinedev/mui";
-
+import { ThemeProvider } from "@mui/material/styles";
 import CssBaseline from "@mui/material/CssBaseline";
 import GlobalStyles from "@mui/material/GlobalStyles";
 import routerBindings, {
@@ -17,6 +18,8 @@ import routerBindings, {
   UnsavedChangesNotifier,
 } from "@refinedev/react-router-v6";
 import dataProvider from "@refinedev/simple-rest";
+// import { DashboardPage } from "./pages/dashboard";
+import Dashboard from "@mui/icons-material/Dashboard";
 import { useTranslation } from "react-i18next";
 import { BrowserRouter, Outlet, Route, Routes } from "react-router-dom";
 import { authProvider } from "./authProvider";
@@ -40,9 +43,14 @@ import { Login } from "./pages/login";
 import { Register } from "./pages/register";
 import { CommentList, CommentCreate, CommentEdit, CommentShow } from "./pages/comments";
 import { ForumList, ForumCreate, ForumEdit, ForumShow } from "./pages/forums";
+import { DashboardOutlined } from "@mui/icons-material";
+// import { Dashboard } from "./pages/dashboard";
 // import { ReportList, ReportCreate, ReportEdit, ReportShow } from "./pages/reports";
-
+import jsonServerDataProvider from "@refinedev/simple-rest";
 function App() {
+  // const API_URL = "https://api.finefoods.refine.dev";
+  const API_URL = "http://104.248.142.226:4000/api/v1";
+  const dataProvider = jsonServerDataProvider(API_URL);
   const { t, i18n } = useTranslation();
 
   const i18nProvider = {
@@ -50,7 +58,7 @@ function App() {
     changeLocale: (lang: string) => i18n.changeLanguage(lang),
     getLocale: () => i18n.language,
   };
-
+  
   return (
     <BrowserRouter>
       <GitHubBanner />
@@ -59,22 +67,34 @@ function App() {
           <CssBaseline />
           <GlobalStyles styles={{ html: { WebkitFontSmoothing: "auto" } }} />
           <RefineSnackbarProvider>
+          <ThemeProvider theme={RefineThemes.YellowDark}>
             <Refine
-              dataProvider={dataProvider("http://104.248.142.226:4000/api/v1")}
+              // dataProvider={dataProvider("http://104.248.142.226:4000/api/v1")}
+              dataProvider={dataProvider}
+              // dataProvider={customDataProvider}
               notificationProvider={useNotificationProvider}
               routerProvider={routerBindings}
               authProvider={authProvider}
               i18nProvider={i18nProvider}
               resources={[
                 {
+                  name: "dashboard",
+                  list: "/",
+                  meta: {
+                    label: "Dashboard",
+                    icon: <Dashboard />,
+                  },
+                },
+                {
                   name: "posts",
                   list: "/posts",
                   create: "/posts/create",
                   edit: "/posts/edit/:id",
-                  show: "/posts/show/:id",
+                  show: PostShow,
                   meta: {
                     canDelete: true,
                   },
+                  // showPath: (id: string) => `/posts/post/${id}`,
                 },
                 {
                   name: "users",
@@ -117,11 +137,11 @@ function App() {
                 //   },
                 // },
                 {
-                  name: "categories",
-                  list: "/categories",
-                  create: "/categories/create",
-                  edit: "/categories/edit/:id",
-                  show: "/categories/show/:id",
+                  name: "tags",
+                  list: "/tags",
+                  create: "/tags/create",
+                  edit: "/tags/edit/:id",
+                  show: "/tags/show/:id",
                   meta: {
                     canDelete: true,
                   },
@@ -147,8 +167,11 @@ function App() {
                 >
                   <Route
                     index
-                    element={<NavigateToResource resource="posts" />}
+                    element={<NavigateToResource resource="dashboard" />}
                   />
+                  <Route path="/">
+                      <Route index element={<Dashboard />} />
+                  </Route>
                   <Route path="/posts">
                     <Route index element={<PostList />} />
                     <Route path="create" element={<PostCreate />} />
@@ -172,7 +195,7 @@ function App() {
                     <Route index element={< CommentList />} />
                     <Route path="create" element={< CommentCreate />} />
                     <Route path="edit/:id" element={< CommentEdit />} />
-                    <Route path="show/:id" element={< CommentShow />} />
+                    <Route path="post/:id" element={< CommentShow />} />
                   </Route>
                   <Route path="/forums">
                     <Route index element={< ForumList />} />
@@ -180,7 +203,6 @@ function App() {
                     <Route path="edit/:id" element={< ForumEdit />} />
                     <Route path="show/:id" element={< ForumShow />} />
                   </Route>
-
                   <Route path="*" element={<ErrorComponent />} />
                 </Route>
                 <Route
@@ -200,6 +222,7 @@ function App() {
               <UnsavedChangesNotifier />
               <DocumentTitleHandler />
             </Refine>
+            </ThemeProvider>
           </RefineSnackbarProvider>
         </ColorModeContextProvider>
       </RefineKbarProvider>
