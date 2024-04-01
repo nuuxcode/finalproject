@@ -63,9 +63,10 @@ export class PostService {
   async findOne(
     postWhereUniqueInput: Prisma.PostWhereUniqueInput,
   ): Promise<Post | null> {
-    return this.prisma.post.findUnique({
+    let post = await this.prisma.post.findUnique({
       where: postWhereUniqueInput,
       include: {
+        comments: true,
         user: {
           select: {
             username: true,
@@ -80,6 +81,27 @@ export class PostService {
         },
       },
     });
+
+    if (post) {
+      post = {
+        ...post,
+        attachments: post.attachments.map((attachment) => ({
+          id: attachment.id,
+          postId: attachment.postId,
+          attachmentId: attachment.attachmentId,
+          attachment: {
+            id: attachment.attachment.id,
+            name: attachment.attachment.name,
+            type: attachment.attachment.type,
+            url: attachment.attachment.url,
+            createdAt: attachment.attachment.createdAt,
+            updatedAt: attachment.attachment.updatedAt,
+          },
+        })),
+      };
+    }
+
+    return post;
   }
 
   async findAll(params: {
@@ -91,13 +113,14 @@ export class PostService {
   }): Promise<Post[]> {
     const { page = 0, take = 10, cursor, where, orderBy } = params;
 
-    const posts = await this.prisma.post.findMany({
+    let posts = await this.prisma.post.findMany({
       skip: page * take,
       take,
       cursor,
       where,
       orderBy,
       include: {
+        comments: true,
         user: {
           select: {
             username: true,
@@ -120,23 +143,24 @@ export class PostService {
       },
     });
 
-    return posts.map((post) => ({
+    posts = posts.map((post) => ({
       ...post,
-      forum: {
-        name: post.forum.name,
-        slug: post.forum.slug,
-      },
       attachments: post.attachments.map((attachment) => ({
         id: attachment.id,
         postId: attachment.postId,
         attachmentId: attachment.attachmentId,
-        name: attachment.attachment.name,
-        type: attachment.attachment.type,
-        url: attachment.attachment.url,
-        createdAt: attachment.attachment.createdAt,
-        updatedAt: attachment.attachment.updatedAt,
+        attachment: {
+          id: attachment.attachment.id,
+          name: attachment.attachment.name,
+          type: attachment.attachment.type,
+          url: attachment.attachment.url,
+          createdAt: attachment.attachment.createdAt,
+          updatedAt: attachment.attachment.updatedAt,
+        },
       })),
     }));
+
+    return posts;
   }
 
   // async create(data: Prisma.PostCreateInput): Promise<Post> {
