@@ -34,7 +34,7 @@ const Array1 = [
 
 const Array2 = [
   { text: "Bar Chart", icon: <BarChartOutlinedIcon />, path: "/bar" },
-  { text: "Pie Chart", icon: <PieChartOutlineOutlinedIcon />, path: "/pie" },
+  { text: "Reports and likes", icon: <PieChartOutlineOutlinedIcon />, path: "/reports" },
   {
     text: "Line Chart",
     icon: <TimelineOutlinedIcon />,

@@ -25,7 +25,7 @@ const router = createBrowserRouter(
 
 
       <Route path='bar' element={<Bar />} />
-      <Route path='pie' element={<Pie />} />
+      <Route path='reports' element={<Pie />} />
       <Route path='line' element={<Line />} />
     </Route>
   )
