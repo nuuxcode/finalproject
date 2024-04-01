@@ -12,6 +12,22 @@ export class ForumService {
     return this.prisma.forum.findMany({
       skip: page * limit,
       take: Number(limit),
+      include: {
+        owner: {
+          select: {
+            id: true,
+            username: true,
+            avatarUrl: true,
+            reputation: true,
+            email: true,
+            country: true,
+            city: true,
+            phone: true,
+            website: true,
+            aboutMe: true,
+          },
+        },
+      },
     });
   }
 
@@ -19,6 +35,20 @@ export class ForumService {
     const forum = await this.prisma.forum.findUnique({
       where: whereClause,
       include: {
+        owner: {
+          select: {
+            id: true,
+            username: true,
+            avatarUrl: true,
+            reputation: true,
+            email: true,
+            country: true,
+            city: true,
+            phone: true,
+            website: true,
+            aboutMe: true,
+          },
+        },
         posts: {
           take: 10,
           orderBy: {
