@@ -40,7 +40,7 @@ import { Login } from "./pages/login";
 import { Register } from "./pages/register";
 import { CommentList, CommentCreate, CommentEdit, CommentShow } from "./pages/comments";
 import { ForumList, ForumCreate, ForumEdit, ForumShow } from "./pages/forums";
-import { ReportList, ReportCreate, ReportEdit, ReportShow } from "./pages/reports";
+// import { ReportList, ReportCreate, ReportEdit, ReportShow } from "./pages/reports";
 
 function App() {
   const { t, i18n } = useTranslation();
@@ -106,16 +106,16 @@ function App() {
                     canDelete: true,
                   },
                 },
-                {
-                  name: "reports",
-                  list: "/reports",
-                  create: "/reports/create",
-                  edit: "/reports/edit/:id",
-                  show: "/reports/show/:id",
-                  meta: {
-                    canDelete: true,
-                  },
-                },
+                // {
+                //   name: "reports",
+                //   list: "/reports",
+                //   create: "/reports/create",
+                //   edit: "/reports/edit/:id",
+                //   show: "/reports/show/:id",
+                //   meta: {
+                //     canDelete: true,
+                //   },
+                // },
                 {
                   name: "categories",
                   list: "/categories",
@@ -161,12 +161,13 @@ function App() {
                     <Route path="edit/:id" element={< UsersEdit />} />
                     <Route path="show/:id" element={< UsersShow />} />
                   </Route>
-                  <Route path="/reports">
+                  {/* <Route path="/reports">
                     <Route index element={< ReportList />} />
                     <Route path="create" element={< ReportCreate />} />
                     <Route path="edit/:id" element={< ReportEdit />} />
                     <Route path="show/:id" element={< ReportShow />} />
-                  </Route>
+                  </Route> */}
+          
                   <Route path="/comments">
                     <Route index element={< CommentList />} />
                     <Route path="create" element={< CommentCreate />} />
