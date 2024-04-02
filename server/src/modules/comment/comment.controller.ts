@@ -33,9 +33,9 @@ import {
 } from '@nestjs/swagger';
 import { Comment } from './comment.entity';
 //import { commentAttachDto } from './dto/comment-attach.dto';
-import { AuthGuard } from '@nestjs/passport';
+//import { AuthGuard } from '@nestjs/passport';
 import { HttpException, HttpStatus } from '@nestjs/common';
-
+import { ClerkRequiredGuard } from '../clerk/clerk.module';
 @ApiTags('comments')
 @Controller('/comments')
 export class CommentController {
@@ -86,7 +86,8 @@ export class CommentController {
 
   @Post('comment')
   @ApiBody({ type: CreateCommentDto })
-  @UseGuards(AuthGuard('jwt'))
+  //@UseGuards(AuthGuard('jwt'))
+  @UseGuards(ClerkRequiredGuard)
   @ApiCookieAuth()
   @ApiOperation({ summary: 'Create a new comment' })
   @ApiResponse({ status: 201, description: 'Return the created comment' })
@@ -128,7 +129,8 @@ export class CommentController {
     description:
       'Unauthorized: Only the post owner or admin can update comments',
   })
-  @UseGuards(AuthGuard('jwt'))
+  //@UseGuards(AuthGuard('jwt'))
+  @UseGuards(ClerkRequiredGuard)
   async update(
     @Param('commentId') id: string,
     @Body() updateCommentDto: UpdateCommentDto,

@@ -22,8 +22,8 @@ export class WebhookController {
   @Post()
   @HttpCode(200)
   async handleWebhook(@Req() req: RawBodyRequest<Request>) {
-    const rawBody = req.rawBody;
-
+    const rawBody = req.body;
+    console.log('Webhook received controller');
     try {
       await this.webhookService.handleWebhook(rawBody);
       return { success: true, message: 'Webhook received' };

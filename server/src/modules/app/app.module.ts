@@ -4,13 +4,18 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
 import { UserModule } from '../user/user.module';
 import { PostModule } from '../post/post.module';
 import { AuthModule } from '../auth/auth.module';
+import { ReportModule } from '../report/report.module';
 import { PrismaModule } from '../prisma/prisma.module';
 import { GLOBAL_CONFIG } from '../../configs/global.config';
 import { AppService, CustomMetricsMiddleware } from './app.service';
 import { AppController } from './app.controller';
 import { ClerkModule } from '../clerk/clerk.module';
 import { ForumModule } from '../forum/forum.module'; // Import the ForumModul
-import { PrometheusModule, makeCounterProvider, makeGaugeProvider } from '@willsoto/nestjs-prometheus';
+import {
+  PrometheusModule,
+  makeCounterProvider,
+  makeGaugeProvider,
+} from '@willsoto/nestjs-prometheus';
 import { CommentModule } from '../comment/comment.module';
 import { WebhookModule } from '../webhook/webhook.module';
 
@@ -35,6 +40,7 @@ import { WebhookModule } from '../webhook/webhook.module';
       inject: [ConfigService],
     }),
     ForumModule,
+    ReportModule,
   ],
   controllers: [AppController],
   providers: [

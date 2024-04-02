@@ -11,7 +11,8 @@ import { HttpException, HttpStatus } from '@nestjs/common';
 import { Roles } from '../roles/roles.decorator';
 import { RolesGuard } from '../roles/roles.guard';
 import { UseGuards } from '@nestjs/common';
-import { AuthGuard } from '@nestjs/passport';
+//import { AuthGuard } from '@nestjs/passport';
+import { ClerkRequiredGuard } from '../clerk/clerk.module';
 
 @ApiTags('Moderators')
 @Controller()
@@ -66,7 +67,8 @@ export class ModeratorController {
   @Delete('forums/:forumId/moderators/:userId')
   @Roles('admin', 'forumowner')
   @UseGuards(RolesGuard)
-  @UseGuards(AuthGuard('jwt'))
+  //@UseGuards(AuthGuard('jwt'))
+  @UseGuards(ClerkRequiredGuard)
   @ApiOperation({
     summary: 'Remove moderator role from a user for a specific forum',
   })

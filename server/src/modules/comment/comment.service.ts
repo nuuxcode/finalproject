@@ -364,7 +364,7 @@ export class CommentService {
     orderBy?: Prisma.CommentOrderByWithAggregationInput;
   }): Promise<CommentModel[]> {
     const { page = 0, take = 10, cursor, where, orderBy } = params;
-    return this.prisma.comment.findMany({
+    let comments = await this.prisma.comment.findMany({
       skip: page * take,
       take,
       cursor,
@@ -385,6 +385,25 @@ export class CommentService {
         },
       },
     });
+
+    comments = comments.map((comment) => ({
+      ...comment,
+      attachments: comment.attachments.map((attachment) => ({
+        id: attachment.id,
+        commentId: attachment.commentId,
+        attachmentId: attachment.attachmentId,
+        attachment: {
+          id: attachment.attachment.id,
+          name: attachment.attachment.name,
+          type: attachment.attachment.type,
+          url: attachment.attachment.url,
+          createdAt: attachment.attachment.createdAt,
+          updatedAt: attachment.attachment.updatedAt,
+        },
+      })),
+    }));
+
+    return comments;
   }
 
   async update(id: string, updateCommentDto: UpdateCommentDto, user: any) {

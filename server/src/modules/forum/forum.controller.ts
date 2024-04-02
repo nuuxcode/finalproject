@@ -13,7 +13,9 @@ import { Forum as ForumModel } from '@prisma/client';
 import { CreateForumDTO } from './forum.dto';
 import { HttpException, HttpStatus } from '@nestjs/common';
 import { UseGuards, Req } from '@nestjs/common';
-import { AuthGuard } from '@nestjs/passport';
+//import { AuthGuard } from '@nestjs/passport';
+import { ClerkRequiredGuard } from '../clerk/clerk.module';
+
 @ApiTags('forums')
 @Controller('forums')
 export class ForumController {
@@ -40,7 +42,8 @@ export class ForumController {
   @ApiCookieAuth()
   @Post()
   @ApiBody({ type: CreateForumDTO })
-  @UseGuards(AuthGuard('jwt'))
+  //@UseGuards(AuthGuard('jwt'))
+  @UseGuards(ClerkRequiredGuard)
   @ApiOperation({ summary: 'Create a new forum' })
   @ApiResponse({
     status: 201,
@@ -69,7 +72,8 @@ export class ForumController {
   @ApiCookieAuth()
   @Put(':idOrSlug')
   @ApiBody({ type: CreateForumDTO })
-  @UseGuards(AuthGuard('jwt'))
+  //@UseGuards(AuthGuard('jwt'))
+  @UseGuards(ClerkRequiredGuard)
   @ApiOperation({ summary: 'Update a forum' })
   @ApiParam({ name: 'idOrSlug', description: 'Forum ID or slug' })
   @ApiResponse({
@@ -88,9 +92,9 @@ export class ForumController {
     }
   }
 
-  @Get(':id/posts')
+  @Get(':idOrSlug/posts')
   @ApiOperation({ summary: 'Get posts for a specific forum' })
-  @ApiParam({ name: 'id', description: 'Forum ID' })
+  @ApiParam({ name: 'idOrSlug', description: 'Forum ID or slug' })
   @ApiQuery({
     name: 'page',
     required: false,
@@ -104,11 +108,11 @@ export class ForumController {
     description: 'Number of posts per page (default is 10)',
   })
   getPostsForForum(
-    @Param('id') forumId: string,
+    @Param('idOrSlug') idOrSlug: string,
     @Query('page') page: number,
     @Query('limit') limit: number,
   ) {
-    return this.forumService.getPostsForForum(forumId, page, limit);
+    return this.forumService.getPostsForForumByIdOrSlug(idOrSlug, page, limit);
   }
 
   @Get(':id/subscribers')

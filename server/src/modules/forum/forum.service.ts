@@ -2,6 +2,7 @@ import { Injectable, NotFoundException } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
 import { Forum as ForumModel } from '@prisma/client';
 import { CreateForumDTO } from './forum.dto';
+import { Prisma } from '@prisma/client';
 
 @Injectable()
 export class ForumService {
@@ -11,19 +12,151 @@ export class ForumService {
     return this.prisma.forum.findMany({
       skip: page * limit,
       take: Number(limit),
+      include: {
+        owner: {
+          select: {
+            id: true,
+            username: true,
+            avatarUrl: true,
+            reputation: true,
+            email: true,
+            country: true,
+            city: true,
+            phone: true,
+            website: true,
+            aboutMe: true,
+          },
+        },
+      },
     });
   }
 
-  async getForumByIdOrSlug(idOrSlug: string) {
-    let forum = await this.prisma.forum.findUnique({ where: { id: idOrSlug } });
-    if (!forum) {
-      forum = await this.prisma.forum.findUnique({ where: { slug: idOrSlug } });
+  async findForum(whereClause: Prisma.ForumWhereUniqueInput) {
+    const forum = await this.prisma.forum.findUnique({
+      where: whereClause,
+      include: {
+        owner: {
+          select: {
+            id: true,
+            username: true,
+            avatarUrl: true,
+            reputation: true,
+            email: true,
+            country: true,
+            city: true,
+            phone: true,
+            website: true,
+            aboutMe: true,
+          },
+        },
+        posts: {
+          take: 10,
+          orderBy: {
+            createdAt: 'desc',
+          },
+          include: {
+            user: {
+              select: {
+                username: true,
+                avatarUrl: true,
+                reputation: true,
+              },
+            },
+            attachments: {
+              include: {
+                attachment: true,
+              },
+            },
+            forum: {
+              select: {
+                id: true,
+                slug: true,
+                name: true,
+              },
+            },
+            comments: true,
+          },
+        },
+      },
+    });
+
+    if (forum) {
+      forum.posts = forum.posts.map((post) => ({
+        ...post,
+        attachments: post.attachments.map(
+          (attachment) => attachment.attachment,
+        ),
+      })) as any;
     }
+
     return forum;
   }
 
-  getPostsForForum(forumId: string, page: number = 0, limit: number = 10) {
-    return this.prisma.post.findMany({
+  async getForumByIdOrSlug(idOrSlug: string) {
+    console.log('idOrSlug', idOrSlug);
+    let forum = await this.findForum({ id: idOrSlug });
+
+    if (!forum) {
+      forum = await this.findForum({ slug: idOrSlug });
+    }
+
+    return forum;
+  }
+
+  async getPostsForForumByIdOrSlug(
+    idOrSlug: string,
+    page: number = 0,
+    limit: number = 10,
+  ) {
+    // Try to get the forum by ID first
+    let forum = await this.prisma.forum.findUnique({ where: { id: idOrSlug } });
+
+    // If no forum is found, try to get it by slug
+    if (!forum) {
+      forum = await this.prisma.forum.findUnique({ where: { slug: idOrSlug } });
+    }
+
+    // If still no forum is found, return an empty array
+    if (!forum) {
+      return [];
+    }
+
+    // If a forum is found, get its posts
+    let posts = await this.prisma.post.findMany({
+      where: { forumId: forum.id },
+      skip: page * limit,
+      take: Number(limit),
+      include: {
+        user: {
+          select: {
+            username: true,
+            avatarUrl: true,
+            reputation: true,
+          },
+        },
+        attachments: {
+          include: {
+            attachment: true,
+          },
+        },
+        comments: true,
+      },
+    });
+
+    posts = posts.map((post) => ({
+      ...post,
+      attachments: post.attachments.map((attachment) => attachment.attachment),
+    })) as any;
+
+    return posts;
+  }
+
+  async getPostsForForum(
+    forumId: string,
+    page: number = 0,
+    limit: number = 10,
+  ) {
+    let posts = await this.prisma.post.findMany({
       where: { forumId: forumId },
       skip: page * limit,
       take: Number(limit),
@@ -40,8 +173,16 @@ export class ForumService {
             attachment: true,
           },
         },
+        comments: true,
       },
     });
+
+    posts = posts.map((post) => ({
+      ...post,
+      attachments: post.attachments.map((attachment) => attachment.attachment),
+    })) as any;
+
+    return posts;
   }
 
   getSubscribersForForum(forumId: string) {

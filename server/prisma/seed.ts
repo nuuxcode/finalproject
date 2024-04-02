@@ -7,7 +7,6 @@ import { seedComments } from './seeds/comment.seeder';
 import { seedNotifications } from './seeds/notification.seeder';
 
 const prisma = new PrismaClient();
-
 async function cleanDatabase() {
   console.log("Cleaning database...");
 
