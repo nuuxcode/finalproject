@@ -75,6 +75,13 @@ export class PostService {
     let post: any = await this.prisma.post.findUnique({
       where: postWhereUniqueInput,
       include: {
+        forum: {
+          select: {
+            id: true,
+            name: true,
+            slug: true,
+          },
+        },
         user: {
           select: {
             username: true,
