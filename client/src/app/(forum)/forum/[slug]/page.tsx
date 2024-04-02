@@ -12,7 +12,6 @@ import { FaPlus } from "react-icons/fa6";
 function Page({ params }: { params: { slug: string } }) {
   const { getForum } = useFetcher();
   const { data, error } = useSWR(params.slug, getForum);
-  console.log("data", data);
   return (
     <div className="w-full p-2">
       {data && (

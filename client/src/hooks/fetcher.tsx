@@ -44,10 +44,28 @@ export const useFetcher = (filter= 'hot') => {
         }
     }
 
+    const createPost = async (data: any, token: string): Promise<ForumPost> => {
+        try {
+            const response = await axios.post('/posts/post', {
+                ...data
+            }, {
+                headers: {
+                    Authorization: `Bearer ${token}`
+                }
+            
+            });
+            return response.data;
+        } catch (error) {
+            // @ts-ignore
+            throw new Error(error);
+        }
+    }
+
     return {
         allPosts,
         allForums,
         getForumPosts,
-        getForum
+        getForum,
+        createPost
     }
 }

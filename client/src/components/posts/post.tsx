@@ -24,8 +24,6 @@ export default function Post({post}: PostProps) {
   const { isSignedIn } = useUser();
   const {openSignIn} = useClerk()
 
-  console.log(post)
-
 
     return (
         <div className="dark:bg-secondary dark:text-[#d8dce0] bg-white w-full py-3 px-4 shadow border rounded-md">

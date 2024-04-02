@@ -5,6 +5,7 @@ import Header from "~/components/core/header";
 import SideBar from "~/components/core/side-bar";
 import RecentPosts from "~/components/core/recent-posts";
 import "./globals.css";
+import 'react-quill/dist/quill.snow.css';
 import { Separator } from "~/components/ui/separator";
 import { ClerkProvider } from "@clerk/nextjs";
 import ThemeToggle from "~/components/core/dark-mode-toggle";
