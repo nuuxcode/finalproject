@@ -117,7 +117,7 @@ export default function BarsDataset() {
         { dataKey: 'seoul', label: 'Seoul', valueFormatter },
       ]}
       {...chartSetting}
-      width={500}
+      width={900}
       height={400}/>
   );
 }
