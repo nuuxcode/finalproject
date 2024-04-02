@@ -6,7 +6,7 @@ const Reports = () => {
   return (
     <div>
       <Typography sx={{ color: "#FFCA28" }}>
-        <h1>liked and repported posts</h1>
+        <h1>Liked and repported posts</h1>
       </Typography>
       <Card variant="outlined">
         <PieChart
