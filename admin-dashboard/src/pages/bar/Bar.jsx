@@ -1,14 +1,20 @@
 import * as React from 'react';
 import { BarChart } from '@mui/x-charts/BarChart';
-import { Typography } from '@mui/material';
+import { axisClasses } from '@mui/x-charts';
+
 const chartSetting = {
-  xAxis: [
+  yAxis: [
     {
       label: 'rainfall (mm)',
     },
   ],
   width: 500,
-  height: 400,
+  height: 300,
+  sx: {
+    [`.${axisClasses.left} .${axisClasses.label}`]: {
+      transform: 'translate(-20px, 0)',
+    },
+  },
 };
 const dataset = [
   {
@@ -99,20 +105,21 @@ const dataset = [
 
 const valueFormatter = (value) => `${value}mm`;
 
-export default function HorizontalBars() {
+export default function BarsDataset() {
   return (
-    <div>
-    <Typography sx={{  color: "#FFFF00", }}>
-    <h1>Comments by months</h1>
-     </Typography >
     <BarChart
       dataset={dataset}
-      yAxis={[{ scaleType: 'band', dataKey: 'month' }]}
-      series={[{ dataKey: 'seoul', label: 'Seoul rainfall', valueFormatter }]}
-      layout="horizontal"
+      xAxis={[{ scaleType: 'band', dataKey: 'month' }]}
+      series={[
+        { dataKey: 'london', label: 'London', valueFormatter },
+        { dataKey: 'paris', label: 'Paris', valueFormatter },
+        { dataKey: 'newYork', label: 'New York', valueFormatter },
+        { dataKey: 'seoul', label: 'Seoul', valueFormatter },
+      ]}
       {...chartSetting}
-    />
-   </div>
+      width={500}
+      height={400}/>
   );
 }
+
 
