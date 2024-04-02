@@ -94,7 +94,17 @@ export class PostService {
             attachment: true,
           },
         },
-        comments: true,
+        comments: {
+          include: {
+            user: {
+              select: {
+                username: true,
+                avatarUrl: true,
+                reputation: true,
+              },
+            },
+          },
+        },
       },
     });
 
@@ -104,6 +114,12 @@ export class PostService {
         attachments: post.attachments.map(
           (attachment) => attachment.attachment,
         ),
+        comments: post.comments.map(({ user, ...comment }) => ({
+          ...comment,
+          username: user.username,
+          avatarUrl: user.avatarUrl,
+          reputation: user.reputation,
+        })),
       };
     }
 
