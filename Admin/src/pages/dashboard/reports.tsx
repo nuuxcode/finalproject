@@ -2,7 +2,7 @@ import { Typography } from "@mui/material";
 import Card from "@mui/material/Card";
 import { PieChart } from "@mui/x-charts";
 
-const Repports = () => {
+const Reports = () => {
   return (
     <div>
       <Typography sx={{ color: "#FFCA28" }}>
@@ -30,4 +30,4 @@ const Repports = () => {
     </div>
   );
 };
-export default Repports;
+export default Reports;
