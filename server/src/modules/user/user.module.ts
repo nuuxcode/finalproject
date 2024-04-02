@@ -7,9 +7,10 @@ import { UserService } from './user.service';
 import { UserController } from './user.controller';
 import { UserListener } from './user.listener';
 import { ForumService } from '../forum/forum.service';
+import { FollowModule } from '../follow/follow.module';
 
 @Module({
-  imports: [PrismaModule],
+  imports: [PrismaModule, FollowModule],
   controllers: [UserController],
   providers: [UserService, PrismaService, UserListener, ForumService],
   exports: [UserService],
