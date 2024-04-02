@@ -17,14 +17,15 @@ import {
   ApiCookieAuth,
 } from '@nestjs/swagger';
 import { UseGuards, Req } from '@nestjs/common';
-import { AuthGuard } from '@nestjs/passport';
+//import { AuthGuard } from '@nestjs/passport';
 import { PostService } from './post.service';
 import { CreatePostDTO } from './post.dto';
 import { Roles } from '../roles/roles.decorator';
 import { RolesGuard } from '../roles/roles.guard';
 import { HttpException, HttpStatus } from '@nestjs/common';
 //import { JwtAuthGuard } from '../auth/auth.jwt.guard';
-
+//import { JwtOrClerkGuard } from '../auth/jwt-or-clerk.guard';
+import { ClerkRequiredGuard } from '../clerk/clerk.module';
 @ApiTags('posts')
 @Controller('/posts')
 export class PostController {
@@ -64,7 +65,9 @@ export class PostController {
   @ApiCookieAuth()
   @Post('post')
   @ApiBody({ type: CreatePostDTO })
-  @UseGuards(AuthGuard('jwt'))
+  //@UseGuards(AuthGuard('jwt'))
+  //@UseGuards(JwtOrClerkGuard)
+  @UseGuards(ClerkRequiredGuard)
   @ApiOperation({ summary: 'Create a new post' })
   @ApiResponse({
     status: 201,
@@ -75,21 +78,21 @@ export class PostController {
     @Req() request: any,
     @Body() postData: CreatePostDTO,
   ): Promise<PostModel> {
+    console.log(' ------------------------------ request');
+    console.log(request.user);
     const userId = request.user.id;
     try {
-      return this.postService.create(userId, postData);
+      return await this.postService.create(userId, postData);
     } catch (error) {
-      throw new HttpException(
-        'Error creating post',
-        HttpStatus.INTERNAL_SERVER_ERROR,
-      );
+      throw new HttpException(error.message, HttpStatus.BAD_REQUEST);
     }
   }
 
   @ApiCookieAuth()
   @Roles('admin', 'moderator')
   @UseGuards(RolesGuard)
-  @UseGuards(AuthGuard('jwt'))
+  //@UseGuards(AuthGuard('jwt'))
+  @UseGuards(ClerkRequiredGuard)
   @Delete('post/:id')
   async deletePost(@Param('id') id: string): Promise<PostModel> {
     return await this.postService.delete({ id: id });

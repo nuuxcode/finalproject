@@ -2,7 +2,7 @@ import { Controller, Get, Post, Query, Body, Param, Put } from '@nestjs/common';
 import { ReportService } from './report.service';
 import { ReportDto, UpdateReportDto } from './report.dto';
 import { UseGuards, Req } from '@nestjs/common';
-import { AuthGuard } from '@nestjs/passport';
+//import { AuthGuard } from '@nestjs/passport';
 import {
   ApiBearerAuth,
   ApiOperation,
@@ -13,6 +13,7 @@ import {
   ApiParam,
 } from '@nestjs/swagger';
 import { HttpException, HttpStatus } from '@nestjs/common';
+import { ClerkRequiredGuard } from '../clerk/clerk.module';
 
 @ApiTags('reports')
 @Controller('reports')
@@ -37,7 +38,8 @@ export class ReportController {
 
   @Post()
   @ApiBearerAuth()
-  @UseGuards(AuthGuard('jwt'))
+  //@UseGuards(AuthGuard('jwt'))
+  @UseGuards(ClerkRequiredGuard)
   @ApiOperation({ summary: 'Report a post or comment' })
   @ApiBody({ type: ReportDto, description: 'Report details' })
   @ApiResponse({ status: 201, description: 'Report has been created' })
@@ -64,7 +66,8 @@ export class ReportController {
 
   @Put('/:id')
   @ApiBearerAuth()
-  @UseGuards(AuthGuard('jwt')) // todo : only admin/moderator can access this route
+  //@UseGuards(AuthGuard('jwt'))
+  @UseGuards(ClerkRequiredGuard) // todo : only admin/moderator can access this route
   @ApiOperation({ summary: 'Update a report' })
   @ApiParam({
     name: 'id',

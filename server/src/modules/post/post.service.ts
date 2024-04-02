@@ -16,6 +16,15 @@ export class PostService {
       0,
       100,
     );
+
+    // Check if the forum exists
+    const forum = await this.prisma.forum.findUnique({
+      where: { id: forumId },
+    });
+    if (!forum) {
+      throw new Error('Forum not found');
+    }
+
     return this.prisma.post.create({
       data: {
         title,

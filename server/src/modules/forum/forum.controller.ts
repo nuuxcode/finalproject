@@ -13,7 +13,9 @@ import { Forum as ForumModel } from '@prisma/client';
 import { CreateForumDTO } from './forum.dto';
 import { HttpException, HttpStatus } from '@nestjs/common';
 import { UseGuards, Req } from '@nestjs/common';
-import { AuthGuard } from '@nestjs/passport';
+//import { AuthGuard } from '@nestjs/passport';
+import { ClerkRequiredGuard } from '../clerk/clerk.module';
+
 @ApiTags('forums')
 @Controller('forums')
 export class ForumController {
@@ -40,7 +42,8 @@ export class ForumController {
   @ApiCookieAuth()
   @Post()
   @ApiBody({ type: CreateForumDTO })
-  @UseGuards(AuthGuard('jwt'))
+  //@UseGuards(AuthGuard('jwt'))
+  @UseGuards(ClerkRequiredGuard)
   @ApiOperation({ summary: 'Create a new forum' })
   @ApiResponse({
     status: 201,
@@ -69,7 +72,8 @@ export class ForumController {
   @ApiCookieAuth()
   @Put(':idOrSlug')
   @ApiBody({ type: CreateForumDTO })
-  @UseGuards(AuthGuard('jwt'))
+  //@UseGuards(AuthGuard('jwt'))
+  @UseGuards(ClerkRequiredGuard)
   @ApiOperation({ summary: 'Update a forum' })
   @ApiParam({ name: 'idOrSlug', description: 'Forum ID or slug' })
   @ApiResponse({

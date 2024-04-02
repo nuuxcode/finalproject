@@ -9,10 +9,11 @@ import {
   ApiOkResponse,
   ApiUnauthorizedResponse,
 } from '@nestjs/swagger';
-import { AuthGuard } from '@nestjs/passport';
+//import { AuthGuard } from '@nestjs/passport';
 import { Req } from '@nestjs/common';
 import { Forum } from '@prisma/client';
 //import { JwtAuthGuard } from '../auth/auth.jwt.guard';
+import { ClerkRequiredGuard } from '../clerk/clerk.module';
 
 import { UserService } from './user.service';
 import { ForumService } from '../forum/forum.service';
@@ -54,7 +55,8 @@ export class UserController {
 
   @Get('me')
   @ApiCookieAuth()
-  @UseGuards(AuthGuard('jwt'))
+  //@UseGuards(AuthGuard('jwt'))
+  @UseGuards(ClerkRequiredGuard)
   @ApiOperation({ summary: 'Get the currently logged in user' })
   @ApiOkResponse({ description: 'Returns the currently logged in user' })
   @ApiUnauthorizedResponse({

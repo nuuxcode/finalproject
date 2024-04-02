@@ -9,7 +9,7 @@ export class SvixMiddleware implements NestMiddleware {
     const wh = new Webhook(process.env.SVIX_WEBHOOK_SECRET);
     try {
       const payload = req.rawBody.toString();
-      console.log(payload);
+      //console.log(payload);
       const signature = Array.isArray(req.headers['svix-signature'])
         ? req.headers['svix-signature'][0]
         : req.headers['svix-signature'];
@@ -19,17 +19,18 @@ export class SvixMiddleware implements NestMiddleware {
       const id = Array.isArray(req.headers['svix-id'])
         ? req.headers['svix-id'][0]
         : req.headers['svix-id'];
-      console.log(signature, timestamp, id);
+      //console.log(signature, timestamp, id);
       const msg = wh.verify(payload, {
         'svix-signature': signature,
         'svix-timestamp': timestamp,
         'svix-id': id,
       });
+      //console.log("x", msg);
       req.body = msg;
       next();
     } catch (err) {
       if (err instanceof WebhookVerificationError) {
-        console.error(err);
+        //console.error(err);
         res.status(403).send();
       } else {
         throw err;
