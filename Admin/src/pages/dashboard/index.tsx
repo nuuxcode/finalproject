@@ -1,5 +1,6 @@
 import { Typography } from "@mui/material";
 import Comments from "./comments";
+import Repports from "./repports";
 
 export default function DashboardPage() {
   return (
@@ -13,7 +14,7 @@ export default function DashboardPage() {
               <Comments />
             </div>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4  md:w-4/6">
-              <Comments />
+              <Repports />
             </div>
           </div>
           <div className="flex flex-rown flex-wrap md:flex-nowrap gap-4">
