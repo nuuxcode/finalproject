@@ -6,9 +6,9 @@ import { PieChart } from '@mui/x-charts';
  const Pie = () => {
   return (    
  <div>
-     <Typography align="center" sx={{ fontSize: "30PX", color: "#FFFF00", }}>
-     Reported and liked posts
-      </Typography>
+     <Typography sx={{  color: "#FFFF00", }}>
+     <h1>liked and repported posts</h1>
+      </Typography >
 <Card variant="outlined">
 <PieChart
   colors={['red', 'yellow', 'green']}
