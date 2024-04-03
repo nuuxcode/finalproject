@@ -150,10 +150,10 @@ export class CommentService {
     CommentData: {
       content: string;
       postId: string;
-      parentId: string;
+      parentId?: string;
     },
   ): Promise<CommentModel> {
-    const { content, postId } = CommentData;
+    const { content, postId, parentId } = CommentData;
     try {
       const comment = await this.prisma.comment.create({
         data: {
@@ -164,6 +164,11 @@ export class CommentService {
           post: {
             connect: { id: postId },
           },
+          parent: parentId
+            ? {
+                connect: { id: parentId },
+              }
+            : null,
         },
       });
       return comment;
@@ -388,6 +393,7 @@ export class CommentService {
 
     comments = comments.map((comment) => ({
       ...comment,
+      ...comment.user,
       attachments: comment.attachments.map((attachment) => ({
         id: attachment.id,
         commentId: attachment.commentId,
