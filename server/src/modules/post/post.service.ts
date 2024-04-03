@@ -3,6 +3,7 @@ import { Post, Prisma } from '@prisma/client';
 
 import { PrismaService } from '../prisma/prisma.service';
 import { Post as PostModel } from '@prisma/client';
+import { Comment as CommentModel } from '@prisma/client';
 import { CreatePostDTO } from './post.dto';
 import slugify from 'slugify';
 
@@ -111,6 +112,7 @@ export class PostService {
     if (post) {
       post = {
         ...post,
+        ...post.user,
         attachments: post.attachments.map(
           (attachment) => attachment.attachment,
         ),
@@ -167,6 +169,7 @@ export class PostService {
 
     posts = posts.map((post) => ({
       ...post,
+      ...post.user,
       attachments: post.attachments.map((attachment) => attachment.attachment),
     })) as any;
 
@@ -194,5 +197,37 @@ export class PostService {
     return this.prisma.post.delete({
       where,
     });
+  }
+
+  async findCommentsByPostId(postId: string): Promise<CommentModel[]> {
+    let comments = await this.prisma.comment.findMany({
+      where: {
+        postId: postId,
+      },
+      include: {
+        user: {
+          select: {
+            username: true,
+            avatarUrl: true,
+            reputation: true,
+          },
+        },
+        attachments: {
+          include: {
+            attachment: true,
+          },
+        },
+      },
+    });
+
+    comments = comments.map((comment) => ({
+      ...comment,
+      ...comment.user,
+      attachments: comment.attachments.map(
+        (attachment) => attachment.attachment,
+      ),
+    })) as any;
+
+    return comments;
   }
 }

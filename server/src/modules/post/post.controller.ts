@@ -26,6 +26,7 @@ import { HttpException, HttpStatus } from '@nestjs/common';
 //import { JwtAuthGuard } from '../auth/auth.jwt.guard';
 //import { JwtOrClerkGuard } from '../auth/jwt-or-clerk.guard';
 import { ClerkRequiredGuard } from '../clerk/clerk.module';
+import { Comment as CommentModel } from '@prisma/client';
 
 @ApiTags('posts')
 @Controller('/posts')
@@ -104,6 +105,17 @@ export class PostController {
   @ApiResponse({ status: 500, description: 'Internal server error.' })
   async deletePost(@Param('id') id: string): Promise<PostModel> {
     return await this.postService.delete({ id: id });
+  }
+
+  @Get('post/:id/comments')
+  @ApiOperation({ summary: 'Get all comments of a post by its ID' })
+  @ApiResponse({
+    status: 200,
+    description: 'Return all comments of the post with the given ID',
+  })
+  @ApiResponse({ status: 404, description: 'Post not found' })
+  async getCommentsByPostId(@Param('id') id: string): Promise<CommentModel[]> {
+    return this.postService.findCommentsByPostId(id);
   }
 
   // @Get('feed')
