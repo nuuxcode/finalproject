@@ -18,12 +18,14 @@ import {
 } from '@willsoto/nestjs-prometheus';
 import { CommentModule } from '../comment/comment.module';
 import { WebhookModule } from '../webhook/webhook.module';
+import { AnalyticsModule } from '../analytics/analytics.module';
 
 @Module({
   imports: [
     PrometheusModule.register({
       path: '/app-metrics',
     }),
+    AnalyticsModule,
     PrismaModule,
     AuthModule,
     UserModule,
