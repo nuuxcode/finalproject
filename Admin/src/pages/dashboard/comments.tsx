@@ -5,7 +5,7 @@ import Card from "@mui/material/Card";
 
 export default function Comments() {
   return (
-    <div>
+    <div >
       <Typography sx={{ color: "#FFCA28" }}>
         <h1>Number of Comments by month</h1>
       </Typography>

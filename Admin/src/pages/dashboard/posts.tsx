@@ -1,7 +1,5 @@
 import { Typography } from "@mui/material";
-import React from "react";
-
-
+import Card from "@mui/material/Card";
 import { BarChart } from '@mui/x-charts/BarChart';
 import { axisClasses } from '@mui/x-charts';
 
@@ -97,9 +95,11 @@ const valueFormatter: (value: number | null) => string = (value) => {
 export default function Posts() {
   return (
     <main>
+      
     <Typography sx={{ color: "#FFCA28" }}>
     <h1>Number of Posts by month</h1>
     </Typography>
+    <Card variant="outlined">
     <BarChart
       dataset={dataset}
       xAxis={[{ scaleType: 'band', dataKey: 'month' }]}
@@ -109,6 +109,7 @@ export default function Posts() {
       ]}
       {...chartSetting}
     />
+    </Card>
     </main>
   );
 }
