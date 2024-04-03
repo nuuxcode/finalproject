@@ -172,6 +172,7 @@ export class ForumService {
     // Flatten the user object with the comment object
     posts = posts.map((post) => ({
       ...post,
+      ...post.user,
       attachments: post.attachments.map((attachment) => attachment.attachment),
       comments: post.comments.map(({ user, ...comment }) => ({
         ...comment,
@@ -212,6 +213,7 @@ export class ForumService {
 
     posts = posts.map((post) => ({
       ...post,
+      ...post.user,
       attachments: post.attachments.map((attachment) => attachment.attachment),
     })) as any;
 
