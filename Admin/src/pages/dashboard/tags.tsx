@@ -1,6 +1,7 @@
 import Card from "@mui/material/Card";
-import { LineChart } from '@mui/x-charts/LineChart';
 import { Typography } from '@mui/material';
+import { LineChart } from '@mui/x-charts/LineChart';
+
 export default function Tags() {
   return (
     <main>

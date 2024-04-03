@@ -3,6 +3,7 @@ import Comments from "./comments";
 import Reports from "./reports";
 import Posts from "./posts";
 import Tags from "./tags";
+import Votes from "./votes";
 
 export default function DashboardPage() {
   return (
@@ -14,6 +15,7 @@ export default function DashboardPage() {
        <div> <Posts /></div>
           <Reports />
           <Tags/>
+          <Votes/>
         </div>
       
     </main>
