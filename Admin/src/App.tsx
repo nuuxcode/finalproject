@@ -26,18 +26,22 @@ import { Header } from "./components/header";
 import { ColorModeContextProvider } from "./contexts/color-mode";
 import { PostCreate, PostEdit, PostList, PostShow } from "./pages/posts";
 import { UsersCreate, UsersEdit, UsersShow, UsersList } from "./pages/users";
-
 import { ForgotPassword } from "./pages/forgotPassword";
 import { Login } from "./pages/login";
 import { Register } from "./pages/register";
+import CommentIcon from '@mui/icons-material/Comment';
+import FilterIcon from '@mui/icons-material/Filter';
+
+
 import {
   CommentList,
   CommentCreate,
   CommentEdit,
   CommentShow,
 } from "./pages/comments";
+import {Forum, Person } from "@mui/icons-material"; // Import icons from Material-UI
+
 import { ForumList, ForumCreate, ForumEdit, ForumShow } from "./pages/forums";
-import { DashboardOutlined } from "@mui/icons-material";
 // import { Dashboard } from "./pages/dashboard";
 // import { ReportList, ReportCreate, ReportEdit, ReportShow } from "./pages/reports";
 import jsonServerDataProvider from "@refinedev/simple-rest";
@@ -88,6 +92,8 @@ function App() {
                     show: PostShow,
                     meta: {
                       canDelete: true,
+                      icon: <FilterIcon/>
+
                     },
                     // showPath: (id: string) => `/posts/post/${id}`,
                   },
@@ -99,7 +105,9 @@ function App() {
                     show: "/users/show/:id",
                     meta: {
                       canDelete: true,
+                      icon: <Person />,
                     },
+                    
                   },
                   {
                     name: "comments",
@@ -109,6 +117,7 @@ function App() {
                     show: "/comments/show/:id",
                     meta: {
                       canDelete: true,
+                      icon:<CommentIcon/>
                     },
                   },
                   {
@@ -119,6 +128,7 @@ function App() {
                     show: "/forums/show/:id",
                     meta: {
                       canDelete: true,
+                      icon:<Forum/>
                     },
                   },
                   // {
