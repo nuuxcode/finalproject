@@ -1,9 +1,10 @@
 'use client'
 
-import {axios} from "~/lib/axios";
+import { axios } from "~/lib/axios";
 import { Forum, ForumPost } from "~/types/Forum";
+import { mutate } from 'swr';
 
-export const useFetcher = (filter= 'hot') => {
+export const useFetcher = (filter = 'hot') => {
     const allPosts = async (): Promise<ForumPost[]> => {
         try {
             const response = await axios.get('/posts');
@@ -17,6 +18,7 @@ export const useFetcher = (filter= 'hot') => {
     const allForums = async (): Promise<Forum[]> => {
         try {
             const response = await axios.get('/forums?limit=25');
+
             return response.data;
         } catch (error) {
             // @ts-ignore
@@ -52,8 +54,50 @@ export const useFetcher = (filter= 'hot') => {
                 headers: {
                     Authorization: `Bearer ${token}`
                 }
-            
+
             });
+            return response.data;
+        } catch (error) {
+            // @ts-ignore
+            throw new Error(error);
+        }
+    }
+
+    const getPost = async (key: string): Promise<ForumPost> => {
+        const postId = key.replace('getPost/', '');
+        try {
+            const response = await axios.get(`/posts/post/${postId}`);
+            return response.data;
+        } catch (error) {
+            // @ts-ignore
+            throw new Error(error);
+        }
+    }
+
+    const postComment = async (key: string, content: string, parentId: string) => {
+        const postId = key.replace('postComment/', '');
+        try {
+            const response = await axios.post('/comments/comment', {
+                content,
+                postId,
+                parentId
+            }, {
+                withCredentials: true
+            });
+            console.log(response.data.message);
+            mutate(`getComments/${postId}`);
+            return response.data;
+        } catch (error) {
+            // @ts-ignore
+            throw new Error(error);
+        }
+    }
+
+    const getComments = async (key: string) => {
+        const postId = key.replace('getComments/', '');
+        try {
+            const response = await axios.get(`/posts/post/${postId}/comments`);
+            //console.log("response", response.data)
             return response.data;
         } catch (error) {
             // @ts-ignore
@@ -66,6 +110,9 @@ export const useFetcher = (filter= 'hot') => {
         allForums,
         getForumPosts,
         getForum,
-        createPost
+        createPost,
+        getPost,
+        postComment,
+        getComments
     }
 }

@@ -6,7 +6,6 @@ import { BiRepost } from "react-icons/bi";
 import { PiArrowFatLineUp, PiArrowFatLineDown } from "react-icons/pi";
 import { FaEllipsisH } from "react-icons/fa";
 import { useUser, useClerk } from "@clerk/clerk-react";
-
 import Image from "next/image";
 import {
   Popover,
@@ -20,7 +19,7 @@ interface PostProps {
   post: ForumPost
 }
 
-export default function Post({ post }: PostProps) {
+export default function FullPost({ post }: PostProps) {
   const { isSignedIn } = useUser();
   const { openSignIn } = useClerk()
 
@@ -64,12 +63,9 @@ export default function Post({ post }: PostProps) {
       <p className="py-2 leading-6 text-sm font-bold">
         {post.title}
       </p>
-      <p className="py-2 leading-6 text-sm line-clamp-2">
+      <p className="py-2 leading-6 text-sm">
         {post.content}
       </p>
-      <Link href={`/post/${post.id}`} className="text-blue-500 hover:underline">
-        Read more
-      </Link>
       {post.attachments.map((attachment) => (
         <div key={attachment.id} className="h-[300px] md:h-[500px] w-full">
           <Image

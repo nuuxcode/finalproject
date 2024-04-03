@@ -48,7 +48,7 @@ export default function Header() {
     setOpen(!open);
   };
 
-
+  //console.log(theme);
   return (
     <nav
       className={
@@ -58,9 +58,9 @@ export default function Header() {
       <div className={"flex items-center py-2 gap-3 justify-between w-full"}>
         <Image
           className={""}
-          src={theme === "dark" ? LogoDark : LogoLight}
-          width={80}
-          height={80}
+          src={theme === "light" ? LogoLight : LogoDark}
+          width={120}
+          height={120}
           alt="logo"
         />
         <label className={"relative block md:min-w-[600px]"}>

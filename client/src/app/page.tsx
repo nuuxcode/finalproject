@@ -48,14 +48,18 @@ export default function Home() {
   const {isSignedIn, getToken} = useAuth()
 
   async function onSubmit(data: z.infer<typeof formSchema>) {
-    console.log(await getToken())
+    const token = await getToken();
+    if (token === null) {
+      console.error('Token is null');
+      return;
+    }
+    console.log(token);
     const res = await createPost({
       title: value.slice(0, 10),
       content: value,
       forumId: forums?.find((forum) => forum.slug === form.getValues('forum'))
         ?.id,
-    }, await getToken());
-    // console.log(quill?.getText());
+    }, token);
   }
 
   useEffect(() => {
@@ -108,7 +112,7 @@ export default function Home() {
               variant={"default"}
               className="place-self-end font-bold"
               type="button"
-              onClick={onSubmit}
+              onClick={form.handleSubmit(onSubmit)}
             >
               Post
             </Button>
