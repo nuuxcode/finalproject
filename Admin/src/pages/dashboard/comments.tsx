@@ -12,6 +12,7 @@ export default function Comments() {
 
       <Card variant="outlined">
         <LineChart
+       
           xAxis={[{ data: [1, 2, 3, 5, 6, 7, 8, 9, 10, 11, 12] }]}
           series={[
             {

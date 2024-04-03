@@ -4,6 +4,7 @@ import Reports from "./reports";
 import Posts from "./posts";
 import Tags from "./tags";
 import Votes from "./votes";
+import Forums from "./forums";
 
 export default function DashboardPage() {
   return (
@@ -16,6 +17,7 @@ export default function DashboardPage() {
           <Reports />
           <Tags/>
           <Votes/>
+          <Forums/>
         </div>
       
     </main>

@@ -10,7 +10,7 @@ const Votes = () => {
     </Typography>
     <Card variant="outlined">
     <PieChart
-     colors={[ "yellow", "#FFCA28"]}
+     colors={[ "#20B2AA", "yellow"]}
         
           series={[
             {

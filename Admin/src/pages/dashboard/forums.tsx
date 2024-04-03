@@ -1,20 +1,16 @@
+
 import * as React from 'react';
 import { BarChart } from '@mui/x-charts/BarChart';
-import { axisClasses } from '@mui/x-charts';
-
+import Card from "@mui/material/Card";
+import { Typography } from '@mui/material';
 const chartSetting = {
-  yAxis: [
+  xAxis: [
     {
       label: 'rainfall (mm)',
     },
   ],
   width: 500,
-  height: 300,
-  sx: {
-    [`.${axisClasses.left} .${axisClasses.label}`]: {
-      transform: 'translate(-20px, 0)',
-    },
-  },
+  height: 400,
 };
 const dataset = [
   {
@@ -103,23 +99,30 @@ const dataset = [
   },
 ];
 
-const valueFormatter = (value) => `${value}mm`;
+const valueFormatter: (value: number | null) => string = (value) => {
+    if (value === null) {
+      return "N/A"; 
+    }
+    return value.toString(); 
+  };
+  
 
-export default function BarsDataset() {
+export default function Forums() {
   return (
+    <main>
+
+    <Typography sx={{ color: "#FFCA28" }}>
+    <h1>Number of Formus created by month</h1>
+    </Typography>
+    <Card variant="outlined">
     <BarChart
       dataset={dataset}
-      xAxis={[{ scaleType: 'band', dataKey: 'month' }]}
-      series={[
-        { dataKey: 'london', label: 'London', valueFormatter },
-        { dataKey: 'paris', label: 'Paris', valueFormatter },
-        { dataKey: 'newYork', label: 'New York', valueFormatter },
-        { dataKey: 'forums', label: 'forums', valueFormatter },
-      ]}
+      yAxis={[{ scaleType: 'band', dataKey: 'month' }]}
+      series={[{ dataKey: 'forums', label: 'Forums created', valueFormatter }]}
+      layout="horizontal"
       {...chartSetting}
-      width={900}
-      height={400}/>
+    />
+    </Card>
+    </main>
   );
 }
-
-
