@@ -15,13 +15,11 @@ export default function DashboardPage() {
       <Typography sx={{ color: "#FFCA28" }}>
         <h1>Our dashboard</h1></Typography>
         <div className="flex flex-col gap-4">
-        {/* First row containing three components */}
         <div className="flex gap-4">
           <Comments />
           <Reports />
           <Posts />
         </div>
-        {/* Second row containing two components */}
         <div className="flex gap-4">
           <Tags />
           <Votes />

@@ -131,16 +131,16 @@ function App() {
                   //     canDelete: true,
                   //   },
                   // },
-                  {
-                    name: "tags",
-                    list: "/tags",
-                    create: "/tags/create",
-                    edit: "/tags/edit/:id",
-                    show: "/tags/show/:id",
-                    meta: {
-                      canDelete: true,
-                    },
-                  },
+                  // {
+                  //   name: "tags",
+                  //   list: "/tags",
+                  //   create: "/tags/create",
+                  //   edit: "/tags/edit/:id",
+                  //   show: "/tags/show/:id",
+                  //   meta: {
+                  //     canDelete: true,
+                  //   },
+                  // },
                 ]}
                 options={{
                   syncWithLocation: true,
