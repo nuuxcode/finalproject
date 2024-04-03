@@ -1,4 +1,4 @@
-import * as React from 'react';
+import Card from "@mui/material/Card";
 import { LineChart } from '@mui/x-charts/LineChart';
 import { Typography } from '@mui/material';
 export default function Tags() {
