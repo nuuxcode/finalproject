@@ -74,7 +74,17 @@ export class ForumService {
                 name: true,
               },
             },
-            comments: true,
+            comments: {
+              include: {
+                user: {
+                  select: {
+                    username: true,
+                    avatarUrl: true,
+                    reputation: true,
+                  },
+                },
+              },
+            },
           },
         },
       },
@@ -86,6 +96,12 @@ export class ForumService {
         attachments: post.attachments.map(
           (attachment) => attachment.attachment,
         ),
+        comments: post.comments.map(({ user, ...comment }) => ({
+          ...comment,
+          username: user.username,
+          avatarUrl: user.avatarUrl,
+          reputation: user.reputation,
+        })),
       })) as any;
     }
 
@@ -139,13 +155,31 @@ export class ForumService {
             attachment: true,
           },
         },
-        comments: true,
+        comments: {
+          include: {
+            user: {
+              select: {
+                username: true,
+                avatarUrl: true,
+                reputation: true,
+              },
+            },
+          },
+        },
       },
     });
 
+    // Flatten the user object with the comment object
     posts = posts.map((post) => ({
       ...post,
+      ...post.user,
       attachments: post.attachments.map((attachment) => attachment.attachment),
+      comments: post.comments.map(({ user, ...comment }) => ({
+        ...comment,
+        username: user.username,
+        avatarUrl: user.avatarUrl,
+        reputation: user.reputation,
+      })),
     })) as any;
 
     return posts;
@@ -179,6 +213,7 @@ export class ForumService {
 
     posts = posts.map((post) => ({
       ...post,
+      ...post.user,
       attachments: post.attachments.map((attachment) => attachment.attachment),
     })) as any;
 

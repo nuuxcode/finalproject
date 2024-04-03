@@ -100,10 +100,17 @@ export class CommentController {
       postId: string;
       parentId: string;
     },
-  ): Promise<CommentModel> {
+  ): Promise<{ comment: CommentModel; message: string }> {
     const userId = request.user.id;
     try {
-      return this.commentService.createNewComment(userId, CommentData);
+      const comment = await this.commentService.createNewComment(
+        userId,
+        CommentData,
+      );
+      return {
+        comment,
+        message: 'Comment created successfully',
+      };
     } catch (error) {
       throw new HttpException(
         'Error creating comment',

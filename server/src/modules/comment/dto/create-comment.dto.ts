@@ -16,8 +16,5 @@ export class CreateCommentDto {
   postId: string;
 
   @ApiProperty()
-  userId: string;
-
-  @ApiProperty()
   parentId?: string;
 }

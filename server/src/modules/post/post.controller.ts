@@ -26,6 +26,8 @@ import { HttpException, HttpStatus } from '@nestjs/common';
 //import { JwtAuthGuard } from '../auth/auth.jwt.guard';
 //import { JwtOrClerkGuard } from '../auth/jwt-or-clerk.guard';
 import { ClerkRequiredGuard } from '../clerk/clerk.module';
+import { Comment as CommentModel } from '@prisma/client';
+
 @ApiTags('posts')
 @Controller('/posts')
 export class PostController {
@@ -45,12 +47,11 @@ export class PostController {
     description: 'Number of posts per page (default is 10)',
   })
   @ApiResponse({ status: 200, description: 'Return all posts with pagination' })
+  @ApiOperation({ summary: 'Get all posts with pagination' })
   async getAllPosts(
     @Query('page') page: string,
     @Query('take') take: string,
   ): Promise<PostModel[]> {
-    console.log('//console log type of take and take value');
-    console.log(typeof take, take);
     const pageNumber = parseInt(page, 10) || 0;
     const takeNumber = parseInt(take, 10) || 10;
 
@@ -58,6 +59,12 @@ export class PostController {
   }
 
   @Get('post/:id')
+  @ApiOperation({ summary: 'Get a post by its ID' })
+  @ApiResponse({
+    status: 200,
+    description: 'Return the post with the given ID',
+  })
+  @ApiResponse({ status: 404, description: 'Post not found' })
   async getPostById(@Param('id') id: string): Promise<any> {
     return this.postService.findOne({ id: id });
   }
@@ -65,8 +72,6 @@ export class PostController {
   @ApiCookieAuth()
   @Post('post')
   @ApiBody({ type: CreatePostDTO })
-  //@UseGuards(AuthGuard('jwt'))
-  //@UseGuards(JwtOrClerkGuard)
   @UseGuards(ClerkRequiredGuard)
   @ApiOperation({ summary: 'Create a new post' })
   @ApiResponse({
@@ -78,8 +83,6 @@ export class PostController {
     @Req() request: any,
     @Body() postData: CreatePostDTO,
   ): Promise<PostModel> {
-    console.log(' ------------------------------ request');
-    console.log(request.user);
     const userId = request.user.id;
     try {
       return await this.postService.create(userId, postData);
@@ -91,11 +94,28 @@ export class PostController {
   @ApiCookieAuth()
   @Roles('admin', 'moderator')
   @UseGuards(RolesGuard)
-  //@UseGuards(AuthGuard('jwt'))
   @UseGuards(ClerkRequiredGuard)
   @Delete('post/:id')
+  @ApiOperation({ summary: 'Delete a post by its ID' })
+  @ApiResponse({
+    status: 200,
+    description: 'The post has been successfully deleted.',
+  })
+  @ApiResponse({ status: 404, description: 'Post not found' })
+  @ApiResponse({ status: 500, description: 'Internal server error.' })
   async deletePost(@Param('id') id: string): Promise<PostModel> {
     return await this.postService.delete({ id: id });
+  }
+
+  @Get('post/:id/comments')
+  @ApiOperation({ summary: 'Get all comments of a post by its ID' })
+  @ApiResponse({
+    status: 200,
+    description: 'Return all comments of the post with the given ID',
+  })
+  @ApiResponse({ status: 404, description: 'Post not found' })
+  async getCommentsByPostId(@Param('id') id: string): Promise<CommentModel[]> {
+    return this.postService.findCommentsByPostId(id);
   }
 
   // @Get('feed')
