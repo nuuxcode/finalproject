@@ -21,7 +21,7 @@ export default function SideBar() {
   const { isSignedIn } = useUser();
   const { allForums } = useFetcher();
   const { data, error } = useSWR("/forums", allForums);
-
+  //console.log("forrrrrum", data, error)
   return (
     <div
       className={
@@ -68,33 +68,34 @@ export default function SideBar() {
             <CollapsibleContent className={"py-2"}>
               <div className="flex flex-col gap-4 py-4">
                 {data &&
-                  data.map((forum) => (
-                    <div key={forum.id} className="flex gap-4 items-center">
-                      <Image
-                        src={
-                          forum.logo ??
-                          "https://placehold.co/150/EEE/31343C?font=montserrat&text=No+image"
-                        }
-                        alt={forum.name}
-                        width={32}
-                        height={32}
-                        className="rounded-full w-8 h-8"
-                      />
-                      <div className="w-[80%]">
-                        <Link
-                          href={`/forum/${forum.slug}`}
-                          className={
-                            "text-muted-foreground text-sm hover:text-primary hover:underline truncate font-bold"
-                          }
-                        >
-                          <p className="truncate">{forum.name}</p>
-                        </Link>
-                        <p className={"text-muted-foreground text-xs"}>
-                          {forum.postsCount} posts
-                        </p>
+                  data.map((forum) => {
+                    //console.log(forum); // Log the entire forum object
+                    return (
+                      <div key={forum.id} className="flex gap-4 items-center">
+                        <Image
+                          key={forum.id}
+                         src={forum.logo ? `${forum.logo}&id=${forum.id}` : "https://placehold.co/150/EEE/31343C?font=montserrat&text=No+image"}
+                          alt={forum.name}
+                          width={32}
+                          height={32}
+                          className="rounded-full w-8 h-8"
+                        />
+                        <div className="w-[80%]">
+                          <Link
+                            href={`/forum/${forum.slug}`}
+                            className={
+                              "text-muted-foreground text-sm hover:text-primary hover:underline truncate font-bold"
+                            }
+                          >
+                            <p className="truncate">{forum.name}</p>
+                          </Link>
+                          <p className={"text-muted-foreground text-xs"}>
+                            {forum.postsCount} posts
+                          </p>
+                        </div>
                       </div>
-                    </div>
-                  ))}
+                    );
+                  })}
               </div>
             </CollapsibleContent>
           </Collapsible>

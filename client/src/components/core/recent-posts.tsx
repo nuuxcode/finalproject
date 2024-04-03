@@ -23,7 +23,7 @@ export default function RecentPosts() {
                 <div className={"flex gap-2 items-center"}>
                   <Link href={`/${post.user.username}`}>
                     <Image
-                      src={post.user.avatarUrl}
+                      src={post?.user?.avatarUrl || `https://eu.ui-avatars.com/api/?name=${encodeURIComponent(post?.user?.username)}&size=250`}
                       alt="avatar"
                       className={"rounded-full w-8 h-8"}
                       width={32}
