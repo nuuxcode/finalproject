@@ -161,7 +161,13 @@ function App() {
                         key="authenticated-routes"
                         fallback={<CatchAllNavigate to="/login" />}
                       >
-                        <ThemedLayoutV2 Header={() => <Header sticky />}>
+                        <ThemedLayoutV2
+                          // Title={() => <p>rbrbrbrbt</p>}
+                          Title={() => (
+                            <img src="./logo.png" width={130} height={45} />
+                          )}
+                          Header={() => <Header sticky />}
+                        >
                           <Outlet />
                         </ThemedLayoutV2>
                       </Authenticated>
