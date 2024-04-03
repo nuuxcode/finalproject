@@ -27,6 +27,13 @@ export class RolesGuard implements CanActivate {
         'You must be logged in to perform this action',
       );
     }
+
+    // Fetch user roles from the database
+    const userRoles = await this.prisma.user.findUnique({
+      where: { id: user.id },
+      select: { role: true },
+    });
+    request.user.role = userRoles.role;
     //can recove id and tweak everything to use excplicit id
     const id =
       request.params.id ||
@@ -45,6 +52,7 @@ export class RolesGuard implements CanActivate {
 
     console.log('isModerator', isModerator);
     if (roles.includes('admin')) {
+      console.log(user);
       isAdmin = user.role === 'admin';
     }
 
