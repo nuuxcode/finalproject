@@ -12,7 +12,7 @@ import "tailwindcss/utilities.css";
 export default function DashboardPage() {
   return (
     <main>
-      <Typography sx={{ color: "#FFCA28" }}>
+      <Typography align="center" sx={{ color: "#FFCA28" }}>
         <h1>Our dashboard</h1>
       </Typography>
       <Stack direction="row" justifyContent="space-between">
