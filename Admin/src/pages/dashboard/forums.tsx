@@ -1,102 +1,91 @@
-
-import * as React from 'react';
-import { BarChart } from '@mui/x-charts/BarChart';
+import * as React from "react";
+import { BarChart } from "@mui/x-charts/BarChart";
 import Card from "@mui/material/Card";
-import { Typography } from '@mui/material';
+import { Typography } from "@mui/material";
 const chartSetting = {
   xAxis: [
     {
-      label: 'months',
+      label: "months",
     },
   ],
-  width: 500,
-  height: 400,
+  width: 700,
+  height: 450,
 };
 const dataset = [
   {
-    
     forums: 21,
-    month: 'Jan',
+    month: "Jan",
   },
   {
-   
     forums: 28,
-    month: 'Fev',
+    month: "Fev",
   },
   {
-    
     forums: 41,
-    month: 'Mar',
+    month: "Mar",
   },
   {
-    
     forums: 73,
-    month: 'Apr',
+    month: "Apr",
   },
- {
+  {
     forums: 99,
-    month: 'May',
+    month: "May",
   },
   {
-   
     forums: 144,
-    month: 'June',
+    month: "June",
   },
   {
- 
     forums: 319,
-    month: 'July',
+    month: "July",
   },
   {
     forums: 249,
-    month: 'Aug',
+    month: "Aug",
   },
   {
-    
     forums: 131,
-    month: 'Sept',
+    month: "Sept",
   },
   {
-  
     forums: 55,
-    month: 'Oct',
+    month: "Oct",
   },
   {
-  
     forums: 48,
-    month: 'Nov',
+    month: "Nov",
   },
   {
-   
     forums: 25,
-    month: 'Dec',
+    month: "Dec",
   },
 ];
 
 const valueFormatter: (value: number | null) => string = (value) => {
-    if (value === null) {
-      return "N/A"; 
-    }
-    return value.toString(); 
-  };
-  
+  if (value === null) {
+    return "N/A";
+  }
+  return value.toString();
+};
 
 export default function Forums() {
   return (
     <main>
-
-    <Typography sx={{ color: "#FFCA28" }}>
-    <h1>Number of Formus created by month</h1>
-    </Typography>
-    <Card variant="outlined">
-    <BarChart
-      dataset={dataset}
-      yAxis={[{ scaleType: 'band', dataKey: 'month' }]}
-      series={[{ dataKey: 'forums', label: 'Forums created', valueFormatter }]}
-      layout="horizontal"
-      {...chartSetting}
-    />
-    </Card>
+      <Typography sx={{ color: "#FFCA28" }}>
+        <h1>Number of Formus created by month</h1>
+      </Typography>
+      <Card variant="outlined">
+        <BarChart
+          dataset={dataset}
+          yAxis={[{ scaleType: "band", dataKey: "month" }]}
+          series={[
+            { dataKey: "forums", label: "Forums created", valueFormatter },
+          ]}
+          layout="horizontal"
+          {...chartSetting}
+        />
+      </Card>
     </main>
   );
 }

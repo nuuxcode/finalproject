@@ -6,12 +6,11 @@ const Votes = () => {
   return (
     <div>
       <Typography sx={{ color: "#FFCA28" }}>
-    <h1>Upvotes and Downvotes percentage</h1>
-    </Typography>
-    <Card variant="outlined">
-    <PieChart
-     colors={[ "#20B2AA", "yellow"]}
-        
+        <h1>Upvotes and Downvotes percentage</h1>
+      </Typography>
+      <Card variant="outlined">
+        <PieChart
+          colors={["#20B2AA", "yellow"]}
           series={[
             {
               data: [

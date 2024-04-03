@@ -1,115 +1,107 @@
 import { Typography } from "@mui/material";
 import Card from "@mui/material/Card";
-import { BarChart } from '@mui/x-charts/BarChart';
-import { axisClasses } from '@mui/x-charts';
+import { BarChart } from "@mui/x-charts/BarChart";
+import { axisClasses } from "@mui/x-charts";
 
 const chartSetting = {
-
   yAxis: [
     {
-      label: 'rainfall (mm)',
+      label: "rainfall (mm)",
     },
   ],
-  colors:["yellow"],
-  width: 500,
-  height: 300,
+  colors: ["yellow"],
+  width: 600,
+  height: 400,
   sx: {
-  
     [`.${axisClasses.left} .${axisClasses.label}`]: {
-      transform: 'translate(-20px, 0)',
+      transform: "translate(-20px, 0)",
     },
-    
   },
 };
 const dataset = [
   {
     posts: 59,
-   
-    month: 'Jan',
+
+    month: "Jan",
   },
   {
     posts: 50,
-    
-    month: 'Fev',
+
+    month: "Fev",
   },
   {
     posts: 47,
-  
-    month: 'Mar',
+
+    month: "Mar",
   },
   {
     posts: 54,
-   
-    month: 'Apr',
+
+    month: "Apr",
   },
   {
     posts: 57,
- 
-    month: 'May',
+
+    month: "May",
   },
   {
     posts: 60,
-   
-    month: 'June',
+
+    month: "June",
   },
   {
     posts: 59,
-   
-    month: 'July',
+
+    month: "July",
   },
   {
     posts: 65,
-  
-    month: 'Aug',
+
+    month: "Aug",
   },
   {
     posts: 51,
-   
-    month: 'Sept',
+
+    month: "Sept",
   },
   {
     posts: 60,
-  
-    month: 'Oct',
+
+    month: "Oct",
   },
   {
     posts: 67,
-  
-    month: 'Nov',
+
+    month: "Nov",
   },
   {
     posts: 61,
-    
-    month: 'Dec',
+
+    month: "Dec",
   },
 ];
 
-
 const valueFormatter: (value: number | null) => string = (value) => {
   if (value === null) {
-    return "N/A"; 
+    return "N/A";
   }
-  return value.toString(); 
+  return value.toString();
 };
 
 export default function Posts() {
   return (
     <main>
-      
-    <Typography sx={{ color: "#FFCA28" }}>
-    <h1>Number of Posts by month</h1>
-    </Typography>
-    <Card variant="outlined">
-    <BarChart
-      dataset={dataset}
-      xAxis={[{ scaleType: 'band', dataKey: 'month' }]}
-      series={[
-        { dataKey: 'posts', label: 'posts', valueFormatter},
-       
-      ]}
-      {...chartSetting}
-    />
-    </Card>
+      <Typography sx={{ color: "#FFCA28" }}>
+        <h1>Number of Posts by month</h1>
+      </Typography>
+      <Card variant="outlined">
+        <BarChart
+          dataset={dataset}
+          xAxis={[{ scaleType: "band", dataKey: "month" }]}
+          series={[{ dataKey: "posts", label: "posts", valueFormatter }]}
+          {...chartSetting}
+        />
+      </Card>
     </main>
   );
 }

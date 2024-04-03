@@ -24,7 +24,7 @@ const Reports = () => {
             },
           ]}
           width={500}
-          height={400}
+          height={450}
         />{" "}
       </Card>
     </div>

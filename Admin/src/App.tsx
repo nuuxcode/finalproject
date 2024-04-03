@@ -29,9 +29,8 @@ import { UsersCreate, UsersEdit, UsersShow, UsersList } from "./pages/users";
 import { ForgotPassword } from "./pages/forgotPassword";
 import { Login } from "./pages/login";
 import { Register } from "./pages/register";
-import CommentIcon from '@mui/icons-material/Comment';
-import FilterIcon from '@mui/icons-material/Filter';
-
+import CommentIcon from "@mui/icons-material/Comment";
+import FilterIcon from "@mui/icons-material/Filter";
 
 import {
   CommentList,
@@ -39,7 +38,7 @@ import {
   CommentEdit,
   CommentShow,
 } from "./pages/comments";
-import {Forum, Person } from "@mui/icons-material"; // Import icons from Material-UI
+import { Forum, Person } from "@mui/icons-material"; // Import icons from Material-UI
 
 import { ForumList, ForumCreate, ForumEdit, ForumShow } from "./pages/forums";
 // import { Dashboard } from "./pages/dashboard";
@@ -92,8 +91,7 @@ function App() {
                     show: PostShow,
                     meta: {
                       canDelete: true,
-                      icon: <FilterIcon/>
-
+                      icon: <FilterIcon />,
                     },
                     // showPath: (id: string) => `/posts/post/${id}`,
                   },
@@ -107,7 +105,6 @@ function App() {
                       canDelete: true,
                       icon: <Person />,
                     },
-                    
                   },
                   {
                     name: "comments",
@@ -117,7 +114,7 @@ function App() {
                     show: "/comments/show/:id",
                     meta: {
                       canDelete: true,
-                      icon:<CommentIcon/>
+                      icon: <CommentIcon />,
                     },
                   },
                   {
@@ -128,7 +125,7 @@ function App() {
                     show: "/forums/show/:id",
                     meta: {
                       canDelete: true,
-                      icon:<Forum/>
+                      icon: <Forum />,
                     },
                   },
                   // {
@@ -186,12 +183,6 @@ function App() {
                       <Route path="edit/:id" element={<UsersEdit />} />
                       <Route path="show/:id" element={<UsersShow />} />
                     </Route>
-                    {/* <Route path="/reports">
-                    <Route index element={< ReportList />} />
-                    <Route path="create" element={< ReportCreate />} />
-                    <Route path="edit/:id" element={< ReportEdit />} />
-                    <Route path="show/:id" element={< ReportShow />} />
-                  </Route> */}
 
                     <Route path="/comments">
                       <Route index element={<CommentList />} />
