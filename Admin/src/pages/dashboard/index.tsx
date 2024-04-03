@@ -1,6 +1,7 @@
 import { Typography } from "@mui/material";
 import Comments from "./comments";
 import Reports from "./reports";
+import Posts from "./posts";
 
 export default function DashboardPage() {
   return (
@@ -9,8 +10,7 @@ export default function DashboardPage() {
         <h1>Our dashboard</h1>
         <Comments />
         <div className="flex flex-col gap-4">
-          <Comments />
-
+        <Posts />
           <Reports />
         </div>
       </Typography>

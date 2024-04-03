@@ -10,7 +10,7 @@ const Reports = () => {
       </Typography>
       <Card variant="outlined">
         <PieChart
-          colors={["red", "yellow", "green"]}
+          colors={["red", "yellow"]}
           series={[
             {
               data: [

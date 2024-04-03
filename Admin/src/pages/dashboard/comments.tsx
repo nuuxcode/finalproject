@@ -7,7 +7,7 @@ export default function Comments() {
   return (
     <div>
       <Typography sx={{ color: "#FFCA28" }}>
-        <h1>Number of posts by month</h1>
+        <h1>Number of Comments by month</h1>
       </Typography>
 
       <Card variant="outlined">
