@@ -1,6 +1,5 @@
-import { Authenticated, GitHubBanner, Refine } from "@refinedev/core";
+import { Authenticated, Refine } from "@refinedev/core";
 import { RefineKbar, RefineKbarProvider } from "@refinedev/kbar";
-
 import {
   ErrorComponent,
   useNotificationProvider,
@@ -17,7 +16,6 @@ import routerBindings, {
   NavigateToResource,
   UnsavedChangesNotifier,
 } from "@refinedev/react-router-v6";
-import dataProvider from "@refinedev/simple-rest";
 import Dashboard from "@mui/icons-material/Dashboard";
 import { useTranslation } from "react-i18next";
 import { BrowserRouter, Outlet, Route, Routes } from "react-router-dom";
@@ -38,15 +36,12 @@ import {
   CommentEdit,
   CommentShow,
 } from "./pages/comments";
-import { Forum, Person } from "@mui/icons-material"; // Import icons from Material-UI
+import { Forum, Person } from "@mui/icons-material";
 
 import { ForumList, ForumCreate, ForumEdit, ForumShow } from "./pages/forums";
-// import { Dashboard } from "./pages/dashboard";
-// import { ReportList, ReportCreate, ReportEdit, ReportShow } from "./pages/reports";
 import jsonServerDataProvider from "@refinedev/simple-rest";
 import DashboardPage from "./pages/dashboard";
 function App() {
-  // const API_URL = "https://api.finefoods.refine.dev";
   // const API_URL = "http://104.248.142.226:4000/api/v1";
   const API_URL = "http://localhost:4000/api/v1";
   const dataProvider = jsonServerDataProvider(API_URL);
@@ -60,7 +55,6 @@ function App() {
 
   return (
     <BrowserRouter>
-      <GitHubBanner />
       <RefineKbarProvider>
         <ColorModeContextProvider>
           <CssBaseline />
@@ -83,18 +77,6 @@ function App() {
                     },
                   },
                   {
-                    name: "posts",
-                    list: "/posts",
-                    create: "/posts/create",
-                    edit: "/posts/edit/:id",
-                    show: PostShow,
-                    meta: {
-                      canDelete: true,
-                      icon: <FilterIcon />,
-                    },
-                    // showPath: (id: string) => `/posts/post/${id}`,
-                  },
-                  {
                     name: "users",
                     list: "/users",
                     create: "/users/create",
@@ -103,6 +85,17 @@ function App() {
                     meta: {
                       canDelete: true,
                       icon: <Person />,
+                    },
+                  },
+                  {
+                    name: "posts",
+                    list: "/posts",
+                    create: "/posts/create",
+                    edit: "/posts/edit/:id",
+                    show:"/posts/show/:id",
+                    meta: {
+                      canDelete: true,
+                      icon: <FilterIcon />,
                     },
                   },
                   {
@@ -161,7 +154,6 @@ function App() {
                         fallback={<CatchAllNavigate to="/login" />}
                       >
                         <ThemedLayoutV2
-                          // Title={() => <p>rbrbrbrbt</p>}
                           Title={() => (
                             <img src="./logo.png" width={130} height={45} />
                           )}
@@ -193,7 +185,7 @@ function App() {
                       <Route index element={<CommentList />} />
                       <Route path="create" element={<CommentCreate />} />
                       <Route path="edit/:id" element={<CommentEdit />} />
-                      <Route path="post/:id" element={<CommentShow />} />
+                      <Route path="show/:id" element={<CommentShow />} />
                     </Route>
                     <Route path="/forums">
                       <Route index element={<ForumList />} />
@@ -218,7 +210,6 @@ function App() {
                     />
                   </Route>
                 </Routes>
-
                 <RefineKbar />
                 <UnsavedChangesNotifier />
                 <DocumentTitleHandler />
