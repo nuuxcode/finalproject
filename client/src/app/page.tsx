@@ -15,11 +15,9 @@ import {
 import {
   Form,
   FormControl,
-  FormDescription,
   FormField,
   FormItem,
   FormLabel,
-  FormMessage,
 } from "~/components/ui/form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -27,10 +25,9 @@ import useSWR from "swr";
 import { useFetcher } from "~/hooks/fetcher";
 import { useAuth } from "@clerk/clerk-react";
 import { Input } from "~/components/ui/input";
-import { useToast } from "~/components/ui/use-toast"
+import { useToast } from "~/components/ui/use-toast";
 import { ToastAction } from "~/components/ui/toast";
 import Link from "next/link";
-
 
 const formSchema = z.object({
   forum: z.string({
@@ -40,13 +37,11 @@ const formSchema = z.object({
 });
 
 export default function Home() {
-  const {toast} = useToast();
+  const { toast } = useToast();
   const [value, setValue] = useState("");
   const { quill, quillRef } = useQuill();
-  const [forum, setForum] = useState("");
-  // const [imageUrl, setImageUrl] = useState("");
   const { allForums, createPost } = useFetcher();
-  const { data: forums, error, mutate } = useSWR("/forums", allForums);
+  const { data: forums, error } = useSWR("/forums", allForums);
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
   });
@@ -64,27 +59,26 @@ export default function Home() {
         {
           title: value.slice(0, 10),
           content: value,
-          forumId: forums?.find((forum) => forum.slug === form.getValues("forum"))
-            ?.id,
+          forumId: forums?.find(
+            (forum) => forum.slug === form.getValues("forum")
+          )?.id,
           imageUrl: form.getValues("imageUrl"),
         },
         token
       );
-      console.log(res);
       toast({
         title: "Post created sucessfully",
         description: "Your post has been created",
-        action: <ToastAction altText="View post">
-          <Link href={`/post/${res.id}`}>
-            View post
-          </Link>
-          </ToastAction>,
+        action: (
+          <ToastAction altText="View post">
+            <Link href={`/post/${res.id}`}>View post</Link>
+          </ToastAction>
+        ),
       });
       form.reset();
+
       quill?.setText("");
-      mutate();
-    }
-    catch (e) {
+    } catch (e) {
       console.error(e);
       toast({
         title: "Error creating post",
@@ -100,10 +94,6 @@ export default function Home() {
       });
     }
   }, [quill]);
-
-  // const handleChange = (event) => {
-  //   setForum(event.target.value);
-  // }
 
   return (
     <div className="">
