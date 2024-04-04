@@ -54,7 +54,7 @@ export const PostCreate: React.FC<IResourceComponentsProps> = () => {
                     fullWidth
                     InputLabelProps={{ shrink: true }}
                     type="text"
-                    label={translate("posts.fields.title")}
+                    label={translate("title")}
                     name="title"
                 />
                 <TextField
@@ -67,7 +67,7 @@ export const PostCreate: React.FC<IResourceComponentsProps> = () => {
                     fullWidth
                     InputLabelProps={{ shrink: true }}
                     multiline
-                    label={translate("posts.fields.content")}
+                    label={translate("content")}
                     name="content"
                 />
                 <Controller
@@ -99,7 +99,7 @@ export const PostCreate: React.FC<IResourceComponentsProps> = () => {
                             renderInput={(params) => (
                                 <TextField
                                     {...params}
-                                    label={translate("posts.fields.userId")}
+                                    label={translate("userId")}
                                     margin="normal"
                                     variant="outlined"
                                     error={!!(errors as any)?.userId}
@@ -141,7 +141,7 @@ export const PostCreate: React.FC<IResourceComponentsProps> = () => {
                             renderInput={(params) => (
                                 <TextField
                                     {...params}
-                                    label={translate("posts.fields.forumId")}
+                                    label={translate("forumId")}
                                     margin="normal"
                                     variant="outlined"
                                     error={!!(errors as any)?.forumId}
@@ -160,7 +160,7 @@ export const PostCreate: React.FC<IResourceComponentsProps> = () => {
                     defaultValue={null as any}
                     render={({ field }) => (
                         <FormControlLabel
-                            label={translate("posts.fields.isPinned")}
+                            label={translate("isPinned")}
                             control={
                                 <Checkbox
                                     {...field}
@@ -180,7 +180,7 @@ export const PostCreate: React.FC<IResourceComponentsProps> = () => {
                     defaultValue={null as any}
                     render={({ field }) => (
                         <FormControlLabel
-                            label={translate("posts.fields.isVisible")}
+                            label={translate("isVisible")}
                             control={
                                 <Checkbox
                                     {...field}
@@ -194,44 +194,6 @@ export const PostCreate: React.FC<IResourceComponentsProps> = () => {
                     )}
                 />
                 <TextField
-                    {...register("slug", {
-                        required: "This field is required",
-                    })}
-                    error={!!(errors as any)?.slug}
-                    helperText={(errors as any)?.slug?.message}
-                    margin="normal"
-                    fullWidth
-                    InputLabelProps={{ shrink: true }}
-                    type="text"
-                    label={translate("posts.fields.slug")}
-                    name="slug"
-                />
-
-                <TextField
-                    {...register("createdAt", {
-                        required: "This field is required",
-                    })}
-                    error={!!(errors as any)?.createdAt}
-                    helperText={(errors as any)?.createdAt?.message}
-                    margin="normal"
-                    fullWidth
-                    InputLabelProps={{ shrink: true }}
-                    label={translate("posts.fields.createdAt")}
-                    name="createdAt"
-                />
-                <TextField
-                    {...register("updatedAt", {
-                        required: "This field is required",
-                    })}
-                    error={!!(errors as any)?.updatedAt}
-                    helperText={(errors as any)?.updatedAt?.message}
-                    margin="normal"
-                    fullWidth
-                    InputLabelProps={{ shrink: true }}
-                    label={translate("posts.fields.updatedAt")}
-                    name="updatedAt"
-                />
-                <TextField
                     {...register("commentsCount", {
                         required: "This field is required",
                         valueAsNumber: true,
@@ -242,7 +204,7 @@ export const PostCreate: React.FC<IResourceComponentsProps> = () => {
                     fullWidth
                     InputLabelProps={{ shrink: true }}
                     type="number"
-                    label={translate("posts.fields.commentsCount")}
+                    label={translate("commentsCount")}
                     name="commentsCount"
                 />
                 <TextField
@@ -256,22 +218,8 @@ export const PostCreate: React.FC<IResourceComponentsProps> = () => {
                     fullWidth
                     InputLabelProps={{ shrink: true }}
                     type="number"
-                    label={translate("posts.fields.viewsCount")}
+                    label={translate("viewsCount")}
                     name="viewsCount"
-                />
-                <TextField
-                    {...register("votesCount", {
-                        required: "This field is required",
-                        valueAsNumber: true,
-                    })}
-                    error={!!(errors as any)?.votesCount}
-                    helperText={(errors as any)?.votesCount?.message}
-                    margin="normal"
-                    fullWidth
-                    InputLabelProps={{ shrink: true }}
-                    type="number"
-                    label={translate("posts.fields.votesCount")}
-                    name="votesCount"
                 />
                 <TextField
                     {...register("upvotesCount", {
@@ -284,7 +232,7 @@ export const PostCreate: React.FC<IResourceComponentsProps> = () => {
                     fullWidth
                     InputLabelProps={{ shrink: true }}
                     type="number"
-                    label={translate("posts.fields.upvotesCount")}
+                    label={translate("upvotesCount")}
                     name="upvotesCount"
                 />
                 <TextField
@@ -298,7 +246,7 @@ export const PostCreate: React.FC<IResourceComponentsProps> = () => {
                     fullWidth
                     InputLabelProps={{ shrink: true }}
                     type="number"
-                    label={translate("posts.fields.downvotesCount")}
+                    label={translate("downvotesCount")}
                     name="downvotesCount"
                 />
                 <Controller
@@ -331,9 +279,11 @@ export const PostCreate: React.FC<IResourceComponentsProps> = () => {
                             renderInput={(params) => (
                                 <TextField
                                     {...params}
-                                    label={translate("posts.fields.comments")}
+                                    label={translate("comments")}
                                     margin="normal"
                                     variant="outlined"
+                                    fullWidth
+                                    multiline
                                     error={!!(errors as any)?.comments?.id}
                                     helperText={
                                         (errors as any)?.comments?.id?.message
