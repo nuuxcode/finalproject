@@ -21,12 +21,10 @@ export default function Comments() {
       'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun',
       'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'
     ];
-    console.log("=============comments data ready=========")
-    console.log(commentsByMonth)
   return (
     <div>
       <Typography sx={{ color: "#FFCA28" }}>
-        <h1>New Comments by month</h1>
+        <h1>New Comments by Month</h1>
       </Typography>
 
       <Card variant="outlined">
@@ -35,11 +33,10 @@ export default function Comments() {
           series={[
             {
               data: commentsByMonth.map(item => item.count),
-              // data: [2, 5.5, 2, 8.5, 1.5, 5, 12, 9, 7, 2, 4],
               area: true,
             },
           ]}
-          width={700}
+          width={600}
           height={400}
         />
       </Card>
