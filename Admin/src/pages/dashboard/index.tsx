@@ -15,12 +15,12 @@ export default function DashboardPage() {
       <Typography align="center" sx={{ color: "#FFCA28" }}>
         <h1>Dashboard</h1>
       </Typography>
-      <Stack direction="row" justifyContent="space-between">
+      <Stack direction="row" justifyContent="space-around">
         <Users />
         <Forums />
         <Verifications />
       </Stack>
-      <Stack direction="row" justifyContent="space-between">
+      <Stack direction="row" justifyContent="space-around">
         <Comments />
         <PostEngagement />
         <Posts />

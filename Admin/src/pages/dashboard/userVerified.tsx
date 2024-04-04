@@ -25,19 +25,16 @@ const [verificationCounts, setVerificationCounts] = useState({ verified: 0, pend
           series={[
             {
               data: [
-              //   { id: 0, value: 10, label: "Verified" },
-              //   { id: 1, value: 15, label: "Pending" },
-              // ],
               { id: 0, value: verificationCounts.verified, label: "Verified" },
               { id: 1, value: verificationCounts.pending, label: "Pending" },
             ],
-              innerRadius: 30,
-              outerRadius: 77,
+              innerRadius: 40,
+              outerRadius: 88,
               paddingAngle: 4,
               cornerRadius: -3,
             },
           ]}
-          width={500}
+          width={600}
           height={450}
         />{" "}
       </Card>

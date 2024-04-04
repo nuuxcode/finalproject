@@ -3,24 +3,17 @@ import Card from "@mui/material/Card";
 import { PieChart } from "@mui/x-charts";
 import { useEffect, useState } from 'react';
 import { useApiUrl } from "@refinedev/core";
-import { TableData } from './types'; 
 
 const PostEngagement = () => {
-  const API_URL = useApiUrl();
-  const [postsReplied, setPostsReplied] = useState(0);
+    const API_URL = useApiUrl();
+    const [postsReplied, setPostsReplied] = useState<{ postsReplied: number }>({ postsReplied: 0 });
 
-// Response body
-// {
-//   "postsReplied": 55.55555555555556
-// }
-
-  useEffect(() => {
-    fetch(`${API_URL}/analytics/posts/percentReplied`)
-      .then((response) => response.json())
-      .then((data) => setPostsReplied(data));
-  }, []);
-  console.log("=========postsReplied data ready=========")
-  const postsNotReplied = 100 - postsReplied.postsReplied;
+    useEffect(() => {
+      fetch(`${API_URL}/analytics/posts/percentReplied`)
+        .then((response) => response.json())
+        .then((data) => setPostsReplied(data));
+    }, []);
+    const postsNotReplied = 100 - postsReplied.postsReplied;
   return (
     <div>
       <Typography sx={{ color: "#FFCA28" }}>
@@ -35,13 +28,13 @@ const PostEngagement = () => {
                 { id: 0, value: postsReplied.postsReplied, label: "Replied" },
                 { id: 1, value: postsNotReplied, label: "Not Replied" },
               ],
-              innerRadius: 30,
-              outerRadius: 77,
+              innerRadius: 40,
+              outerRadius: 88,
               paddingAngle: 4,
               cornerRadius: -3,
             },
           ]}
-          width={500}
+          width={600}
           height={400}
         />{" "}
       </Card>

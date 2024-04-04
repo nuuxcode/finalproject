@@ -21,8 +21,6 @@ export default function Users() {
       'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun',
       'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'
     ];
-    console.log("=============user data ready=========")
-    // console.log(usersByMonth)
 
   return (
     <main>
@@ -35,12 +33,11 @@ export default function Users() {
           series={[
             {
               color: "#FFCA28",
-              // data: [2, 3, 5.5, 8.5, 1.5, 5, 1, 4, 3, 8],
               data: usersByMonth.map(item => item.count),
               showMark: ({ index }) => index % 2 === 0,
             },
           ]}
-          width={700}
+          width={600}
           height={450}
         />
       </Card>
