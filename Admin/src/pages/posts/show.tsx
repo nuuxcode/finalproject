@@ -1,61 +1,13 @@
 // import { MuiShowInferencer } from "@refinedev/inferencer/mui";
 
 // export const PostShow = () => {
+//   // return <MuiShowInferencer />;
 //   return <MuiShowInferencer />;
 // };
 
-// import { MuiShowInferencer } from "@refinedev/inferencer/mui";
-// import { useShow, useParsed } from "@refinedev/core";  
-
-
-// type MyParams = {
-//   post: string;
-// };
-
-// export const PostShow = () => {
-//   const { id } = useParsed();
-
-//   useShow({  
-//     resource: "posts/post",  
-//     id,  
-//   });  
-
-//   return <MuiShowInferencer />;
-// };
-
-// import { useShow, useParsed } from "@refinedev/core";
-// import { MuiShowInferencer } from "@refinedev/inferencer/mui";
-
-// export const PostShow = () => {
-//   const { data, isLoading } = useParsed<MyParams>();
-//   const id = data?.post;
-
-//   useShow({
-//     resource: "posts",
-//     id,
-//   });
-
-//   if (isLoading) return <div>Loading...</div>;
-
-//   return <MuiShowInferencer />;
-// };
-
-// type MyParams = {
-//   post: string;
-// };
-
-
-
-// import { MuiShowInferencer } from "@refinedev/inferencer/mui";
-
-// export const UsersShow = () => {
-//   return <MuiShowInferencer />;
-// };
-// import {
-//   useShow,
-//   IResourceComponentsProps,
-//   useTranslate,
-// } from "@refinedev/core";
+// import { useParsed, useShow, useTranslate } from "@refinedev/core";
+// // import { Show } from "@refinedev/mui";
+// import { Typography, Stack } from "@mui/material";
 // import {
 //   Show,
 //   TextFieldComponent as TextField,
@@ -65,77 +17,190 @@
 //   BooleanField,
 //   MarkdownField,
 // } from "@refinedev/mui";
-// import { Typography, Stack } from "@mui/material";
+// export const PostShow = () => {
+//     const translate = useTranslate();
+//     // const { queryResult } = useShow({ resource: "posts/post" });
+//     const { id } = useParsed(); // Extract the id parameter from the URL
+//     const { queryResult } = useShow({ resource: `posts/post`, id }); // Use the extracted id parameter in the resource
+//     const { data, isLoading } = queryResult;
 
-// export const PostShow: React.FC<IResourceComponentsProps> = () => {
-//   const translate = useTranslate();
+//     const record = data?.data;
+//     console.log(record)
 
-//   useShow({
-//     resource: "posts",
-//     id,
-//   });
-//   const { queryResult } = useShow();
-//   const { data, isLoading } = queryResult;
-
-//   const record = data?.data;
-
-//   return (
-//       <Show isLoading={isLoading}>
-//           <Stack gap={1}>
-//               <DateField value={record?.createdAt} />
-//               <Typography variant="body1" fontWeight="bold">
-//                   {translate("users.fields.updatedAt")}
-//               </Typography>
-//               <DateField value={record?.updatedAt} />
-//               <Typography variant="body1" fontWeight="bold">
-//                   {translate("users.fields.PostCount")}
-//               </Typography>
-
-//           </Stack>
-//       </Show>
-//   );
+//     return (
+//         <Show isLoading={isLoading}>
+//             <Stack gap={1}>
+//                 <Typography variant="body1" fontWeight="bold">
+//                     {translate("createdAt")}
+//                 </Typography>
+//                 <DateField value={record?.createdAt} />
+    
+//                 <Typography variant="body1" fontWeight="bold">
+//                     {translate("updatedAt")}
+//                 </Typography>
+//                 <DateField value={record?.updatedAt} />
+    
+//                 <Typography variant="body1" fontWeight="bold">
+//                     {translate("title")}
+//                 </Typography>
+//                 <TextField value={record?.title} />
+    
+//                 <Typography variant="body1" fontWeight="bold">
+//                     {translate("body")}
+//                 </Typography>
+//                 <TextField value={record?.body} />
+    
+//                 <Typography variant="body1" fontWeight="bold">
+//                     {translate("Author")}
+//                 </Typography>
+//                 <TextField value={record?.userId} />
+    
+//                 <Typography variant="body1" fontWeight="bold">
+//                     {translate("Forum")}
+//                 </Typography>
+//                 <TextField value={record?.forumId} />
+    
+//                 <Typography variant="body1" fontWeight="bold">
+//                     {translate("isPinned")}
+//                 </Typography>
+//                 <BooleanField value={record?.isPinned} />
+//                 {/* <Checkbox checked={!!record?.isPinned} /> */}
+//             </Stack>
+//         </Show>
+//     );
 // };
 
-// import { useShow, useParsed } from "@refinedev/core";
-// import { MuiShowInferencer } from "@refinedev/inferencer/mui";
+import { useShow, useTranslate, useParsed,  useOne } from "@refinedev/core";
+import {
+    Show,
+    TextFieldComponent as TextField,
+    MarkdownField,
+    BooleanField,
+    DateField,
+    NumberField,
+    TagField,
+} from "@refinedev/mui";
+import { Typography, Stack } from "@mui/material";
 
-// type MyParams = {
-//   id: string;
-// };
+export const PostShow = () => {
+    const translate = useTranslate();
+    // const { queryResult } = useShow();
+    const { id } = useParsed();
+    const { queryResult } = useShow({ resource: `posts/post`, id });
+    const { data, isLoading } = queryResult;
 
-// export const PostShow: React.FC = () => {
-//   const { id } = useParsed<MyParams>();
+    const record = data?.data;
 
-//   useParse({
-//     resource: "posts/post",
-//     id,
-//   });
+    const { data: userData, isLoading: userIsLoading } = useOne({
+        resource: "users",
+        id: record?.userId || "",
+        queryOptions: {
+            enabled: !!record,
+        },
+    });
 
-//   return <MuiShowInferencer />;
-// };
+    const { data: forumData, isLoading: forumIsLoading } = useOne({
+        resource: "forums",
+        id: record?.forumId || "",
+        queryOptions: {
+            enabled: !!record,
+        },
+    });
 
-// export default PostShow;
-import React from "react";
-import { useParsed } from "@refinedev/core";
-import { useShow, useParse } from "@refinedev/core";
-import { MuiShowInferencer } from "@refinedev/inferencer/mui";
+    return (
+      <Show isLoading={isLoading}>
+        <Stack gap={1}>
+          <Typography variant="body1" fontWeight="bold">
+            {translate("id")}
+          </Typography>
+          <TextField value={record?.id} sx={{ margin: '0.5rem' }} />
+          <Typography variant="body1" fontWeight="bold">
+            {translate("title")}
+          </Typography>
+          <TextField value={record?.title} sx={{ margin: '0.5rem' }} />
+          <Typography variant="body1" fontWeight="bold">
+            {translate("content")}
+          </Typography>
+          <MarkdownField value={record?.content} />
+          <Typography variant="body1" fontWeight="bold">
+            {translate("userId")}
+          </Typography>
 
-type MyParams = {
-  id: string;
+          {userIsLoading ? (
+            <>Loading...</>
+          ) : (
+            <>{userData?.data?.username}</>
+          )}
+          <Typography variant="body1" fontWeight="bold">
+            {translate("forumId")}
+          </Typography>
+
+          {forumIsLoading ? (
+            <>Loading...</>
+          ) : (
+            <>{forumData?.data?.name}</>
+          )}
+          <Typography variant="body1" fontWeight="bold">
+            {translate("isPinned")}
+          </Typography>
+          <BooleanField value={record?.isPinned} sx={{ margin: '0.5rem' }} />
+          <Typography variant="body1" fontWeight="bold">
+            {translate("isVisible")}
+          </Typography>
+          <BooleanField value={record?.isVisible} sx={{ margin: '0.5rem' }} />
+          <Typography variant="body1" fontWeight="bold">
+            {translate("slug")}
+          </Typography>
+          <TextField value={record?.slug} sx={{ margin: '0.5rem' }} />
+          <Typography variant="body1" fontWeight="bold">
+            {translate("createdAt")}
+          </Typography>
+          <DateField value={record?.createdAt} sx={{ margin: '0.5rem' }} />
+          <Typography variant="body1" fontWeight="bold">
+            {translate("updatedAt")}
+          </Typography>
+          <DateField value={record?.updatedAt} sx={{ margin: '0.5rem' }} />
+          <Typography variant="body1" fontWeight="bold">
+            {translate("commentsCount")}
+          </Typography>
+          <NumberField value={record?.commentsCount ?? ""} sx={{ margin: '0.5rem' }} />
+          <Typography variant="body1" fontWeight="bold">
+            {translate("viewsCount")}
+          </Typography>
+          <NumberField value={record?.viewsCount ?? ""} sx={{ margin: '0.5rem' }} />
+          <Typography variant="body1" fontWeight="bold">
+            {translate("votesCount")}
+          </Typography>
+          <NumberField value={record?.votesCount ?? ""} sx={{ margin: '0.5rem' }} />
+          <Typography variant="body1" fontWeight="bold">
+            {translate("upvotesCount")}
+          </Typography>
+          <NumberField value={record?.upvotesCount ?? ""} sx={{ margin: '0.5rem' }} />
+          <Typography variant="body1" fontWeight="bold">
+            {translate("downvotesCount")}
+          </Typography>
+          <NumberField value={record?.downvotesCount ?? ""} sx={{ margin: '0.5rem' }} />
+          <Typography variant="body1" fontWeight="bold">
+            {translate("attachments")}
+          </Typography>
+          <Stack direction="row" spacing={1}>
+            {record?.attachments?.map((item: any) => (
+              <img
+                style={{
+                  maxWidth: 200,
+                  width: "100%",
+                  height: 200,
+                }}
+                src={item?.name}
+                key={item?.name}
+              />
+            ))}
+          </Stack>
+          <Typography variant="body1" fontWeight="bold">
+            {translate("comments")}
+          </Typography>
+
+        </Stack>
+      </Show>
+    );
 };
-
-export const PostShow: React.FC = () => {
-  const {
-    id,
-  } = useParsed<MyParams>();
-
-  // Use useParse to fetch data from the desired API endpoint
-  useShow({
-    resource: "posts/post", // Specify the resource endpoint
-    id, // Pass the extracted id
-  });
-
-  return <MuiShowInferencer />; // Render your component with fetched data
-};
-
-// export default PostShow;
