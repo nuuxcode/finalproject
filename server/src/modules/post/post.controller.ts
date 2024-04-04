@@ -127,8 +127,17 @@ export class PostController {
     description: 'Return all comments of the post with the given ID',
   })
   @ApiResponse({ status: 404, description: 'Post not found' })
-  async getCommentsByPostId(@Param('id') id: string): Promise<CommentModel[]> {
-    return this.postService.findCommentsByPostId(id);
+  @ApiQuery({
+    name: 'order',
+    required: false,
+    type: String,
+    description: 'Order of the comments (default is "desc")',
+  })
+  async getCommentsByPostId(
+    @Param('id') id: string,
+    @Query('order') order: 'asc' | 'desc',
+  ): Promise<CommentModel[]> {
+    return this.postService.findCommentsByPostId(id, order || 'desc');
   }
 
   // @Get('feed')
