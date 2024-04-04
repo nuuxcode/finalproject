@@ -1,8 +1,3 @@
-// import { MuiCreateInferencer } from "@refinedev/inferencer/mui";
-
-// export const UsersCreate = () => {
-//   return <MuiCreateInferencer />;
-// };
 import { Create } from "@refinedev/mui";
 import { Box, TextField, Checkbox, FormControlLabel } from "@mui/material";
 import { useForm } from "@refinedev/react-hook-form";
@@ -36,7 +31,7 @@ export const UsersCreate: React.FC<IResourceComponentsProps> = () => {
                     fullWidth
                     InputLabelProps={{ shrink: true }}
                     type="text"
-                    label={translate("users.fields.username")}
+                    label={translate("username")}
                     name="username"
                 />
                 <TextField
@@ -49,7 +44,7 @@ export const UsersCreate: React.FC<IResourceComponentsProps> = () => {
                     fullWidth
                     InputLabelProps={{ shrink: true }}
                     type="text"
-                    label={translate("users.fields.password")}
+                    label={translate("password")}
                     name="password"
                 />
                 <TextField
@@ -63,7 +58,7 @@ export const UsersCreate: React.FC<IResourceComponentsProps> = () => {
                     fullWidth
                     InputLabelProps={{ shrink: true }}
                     type="number"
-                    label={translate("users.fields.reputation")}
+                    label={translate("reputation")}
                     name="reputation"
                 />
                 <TextField
@@ -76,7 +71,7 @@ export const UsersCreate: React.FC<IResourceComponentsProps> = () => {
                     fullWidth
                     InputLabelProps={{ shrink: true }}
                     type="text"
-                    label={translate("users.fields.role")}
+                    label={translate("role")}
                     name="role"
                 />
                 {/*
@@ -94,7 +89,7 @@ export const UsersCreate: React.FC<IResourceComponentsProps> = () => {
                     margin="normal"
                     fullWidth
                     InputLabelProps={{ shrink: true }}
-                    label={translate("users.fields.lastLogin")}
+                    label={translate("lastLogin")}
                     name="lastLogin"
                 />
                 <TextField
@@ -107,7 +102,7 @@ export const UsersCreate: React.FC<IResourceComponentsProps> = () => {
                     fullWidth
                     InputLabelProps={{ shrink: true }}
                     type="email"
-                    label={translate("users.fields.email")}
+                    label={translate("email")}
                     name="email"
                 />
                 <Controller
@@ -117,7 +112,7 @@ export const UsersCreate: React.FC<IResourceComponentsProps> = () => {
                     defaultValue={null as any}
                     render={({ field }) => (
                         <FormControlLabel
-                            label={translate("users.fields.emailVerified")}
+                            label={translate("emailVerified")}
                             control={
                                 <Checkbox
                                     {...field}
@@ -140,7 +135,7 @@ export const UsersCreate: React.FC<IResourceComponentsProps> = () => {
                     fullWidth
                     InputLabelProps={{ shrink: true }}
                     type="text"
-                    label={translate("users.fields.country")}
+                    label={translate("country")}
                     name="country"
                 />
                 <TextField
@@ -153,7 +148,7 @@ export const UsersCreate: React.FC<IResourceComponentsProps> = () => {
                     fullWidth
                     InputLabelProps={{ shrink: true }}
                     type="text"
-                    label={translate("users.fields.city")}
+                    label={translate("city")}
                     name="city"
                 />
                 <TextField
@@ -166,7 +161,7 @@ export const UsersCreate: React.FC<IResourceComponentsProps> = () => {
                     fullWidth
                     InputLabelProps={{ shrink: true }}
                     type="text"
-                    label={translate("users.fields.phone")}
+                    label={translate("phone")}
                     name="phone"
                 />
                 <TextField
@@ -179,7 +174,7 @@ export const UsersCreate: React.FC<IResourceComponentsProps> = () => {
                     fullWidth
                     InputLabelProps={{ shrink: true }}
                     type="text"
-                    label={translate("users.fields.website")}
+                    label={translate("website")}
                     name="website"
                 />
                 <TextField
@@ -192,7 +187,7 @@ export const UsersCreate: React.FC<IResourceComponentsProps> = () => {
                     fullWidth
                     InputLabelProps={{ shrink: true }}
                     multiline
-                    label={translate("users.fields.aboutMe")}
+                    label={translate("aboutMe")}
                     name="aboutMe"
                 />
                 {/*
@@ -210,7 +205,7 @@ export const UsersCreate: React.FC<IResourceComponentsProps> = () => {
                     margin="normal"
                     fullWidth
                     InputLabelProps={{ shrink: true }}
-                    label={translate("users.fields.createdAt")}
+                    label={translate("createdAt")}
                     name="createdAt"
                 />
 
@@ -229,7 +224,7 @@ export const UsersCreate: React.FC<IResourceComponentsProps> = () => {
                     margin="normal"
                     fullWidth
                     InputLabelProps={{ shrink: true }}
-                    label={translate("users.fields.updatedAt")}
+                    label={translate("updatedAt")}
                     name="updatedAt"
                 />
                 <TextField
@@ -243,7 +238,7 @@ export const UsersCreate: React.FC<IResourceComponentsProps> = () => {
                     fullWidth
                     InputLabelProps={{ shrink: true }}
                     type="number"
-                    label={translate("users.fields.PostCount")}
+                    label={translate("PostCount")}
                     name="PostCount"
                 />
                 <TextField
@@ -257,7 +252,7 @@ export const UsersCreate: React.FC<IResourceComponentsProps> = () => {
                     fullWidth
                     InputLabelProps={{ shrink: true }}
                     type="number"
-                    label={translate("users.fields.CommentCount")}
+                    label={translate("CommentCount")}
                     name="CommentCount"
                 />
                 <TextField
@@ -271,7 +266,7 @@ export const UsersCreate: React.FC<IResourceComponentsProps> = () => {
                     fullWidth
                     InputLabelProps={{ shrink: true }}
                     type="number"
-                    label={translate("users.fields.followersCount")}
+                    label={translate("followersCount")}
                     name="followersCount"
                 />
                 <TextField
@@ -285,7 +280,7 @@ export const UsersCreate: React.FC<IResourceComponentsProps> = () => {
                     fullWidth
                     InputLabelProps={{ shrink: true }}
                     type="number"
-                    label={translate("users.fields.followingCount")}
+                    label={translate("followingCount")}
                     name="followingCount"
                 />
                 <TextField
@@ -299,7 +294,7 @@ export const UsersCreate: React.FC<IResourceComponentsProps> = () => {
                     fullWidth
                     InputLabelProps={{ shrink: true }}
                     type="number"
-                    label={translate("users.fields.subscribedForumsCount")}
+                    label={translate("subscribedForumsCount")}
                     name="subscribedForumsCount"
                 />
                 <TextField
@@ -313,7 +308,7 @@ export const UsersCreate: React.FC<IResourceComponentsProps> = () => {
                     fullWidth
                     InputLabelProps={{ shrink: true }}
                     type="number"
-                    label={translate("users.fields.ownedForumsCount")}
+                    label={translate("ownedForumsCount")}
                     name="ownedForumsCount"
                 />
             </Box>
