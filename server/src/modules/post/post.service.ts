@@ -12,7 +12,7 @@ export class PostService {
   constructor(private prisma: PrismaService) {}
 
   async create(userId: string, postData: CreatePostDTO): Promise<PostModel> {
-    const { title, content, forumId } = postData;
+    const { title, content, forumId, imageUrl } = postData;
     const slug = slugify(title, { lower: true, strict: true }).substring(
       0,
       100,
@@ -26,19 +26,37 @@ export class PostService {
       throw new Error('Forum not found');
     }
 
-    return this.prisma.post.create({
+    // Create the post
+    const post = await this.prisma.post.create({
       data: {
         title,
         content,
         slug,
-        user: {
-          connect: { id: userId },
-        },
-        forum: {
-          connect: { id: forumId },
-        },
+        userId,
+        forumId,
       },
     });
+
+    // Create the attachment
+    if (imageUrl) {
+      const attachment = await this.prisma.attachment.create({
+        data: {
+          name: 'Image for post ' + title,
+          type: 'image',
+          url: imageUrl,
+        },
+      });
+
+      // Connect the post and the attachment
+      await this.prisma.postAttachment.create({
+        data: {
+          postId: post.id,
+          attachmentId: attachment.id,
+        },
+      });
+    }
+
+    return post;
   }
 
   async searchPosts(searchTerm: string): Promise<PostModel[]> {
