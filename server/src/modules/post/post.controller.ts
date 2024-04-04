@@ -53,7 +53,7 @@ export class PostController {
     @Query('take') take: string,
   ): Promise<PostModel[]> {
     const pageNumber = parseInt(page, 10) || 0;
-    const takeNumber = parseInt(take, 10) || 10;
+    const takeNumber = parseInt(take, 10) || 99999; //for now testing
 
     return this.postService.findAll({ page: pageNumber, take: takeNumber });
   }
