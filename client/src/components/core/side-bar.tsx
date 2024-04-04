@@ -74,7 +74,7 @@ export default function SideBar() {
                       <div key={forum.id} className="flex gap-4 items-center">
                         <Image
                           key={forum.id}
-                         src={forum.logo ? `${forum.logo}&id=${forum.id}` : "https://placehold.co/150/EEE/31343C?font=montserrat&text=No+image"}
+                          src={forum.logo ? `${forum.logo}?t=${Date.now()}` : "https://placehold.co/150/EEE/31343C?font=montserrat&text=No+image"}
                           alt={forum.name}
                           width={32}
                           height={32}
