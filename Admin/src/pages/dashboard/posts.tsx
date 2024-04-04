@@ -3,11 +3,8 @@ import Card from "@mui/material/Card";
 import { BarChart } from "@mui/x-charts/BarChart";
 import { axisClasses } from "@mui/x-charts";
 import { useApiUrl } from "@refinedev/core";
-import React, { useState, useEffect } from 'react';
-import {
-  ResponsiveContainer,
-} from "recharts";
-import { PostData } from './types'; 
+import { useState, useEffect } from 'react';
+
 const chartSetting = {
   yAxis: [
     {
@@ -23,68 +20,6 @@ const chartSetting = {
     },
   },
 };
-// const dataset = [
-//   {
-//     posts: 59,
-
-//     month: "Jan",
-//   },
-//   {
-//     posts: 50,
-
-//     month: "Fev",
-//   },
-//   {
-//     posts: 47,
-
-//     month: "Mar",
-//   },
-//   {
-//     posts: 54,
-
-//     month: "Apr",
-//   },
-//   {
-//     posts: 57,
-
-//     month: "May",
-//   },
-//   {
-//     posts: 60,
-
-//     month: "June",
-//   },
-//   {
-//     posts: 59,
-
-//     month: "July",
-//   },
-//   {
-//     posts: 65,
-
-//     month: "Aug",
-//   },
-//   {
-//     posts: 51,
-
-//     month: "Sept",
-//   },
-//   {
-//     posts: 60,
-
-//     month: "Oct",
-//   },
-//   {
-//     posts: 67,
-
-//     month: "Nov",
-//   },
-//   {
-//     posts: 61,
-
-//     month: "Dec",
-//   },
-// ];
 
 const monthMapping: { [key: number]: string } = {
   1: 'Jan', 2: 'Feb', 3: 'Mar', 4: 'Apr', 5: 'May', 6: 'Jun',
