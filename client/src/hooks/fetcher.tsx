@@ -74,7 +74,7 @@ export const useFetcher = (filter = 'hot') => {
         }
     }
 
-    const postComment = async (key: string, content: string, parentId: string) => {
+    const postComment = async (key: string, content: string, parentId: string | null) => {
         const postId = key.replace('postComment/', '');
         try {
             const response = await axios.post('/comments/comment', {
@@ -105,6 +105,18 @@ export const useFetcher = (filter = 'hot') => {
         }
     }
 
+    const getUser = async () => {
+        try {
+          const response = await axios.get('/users/me', {
+            withCredentials: true
+          });
+          return response.data;
+        } catch (error) {
+          // @ts-ignore
+          throw new Error(error);
+        }
+      }
+
     return {
         allPosts,
         allForums,
@@ -113,6 +125,7 @@ export const useFetcher = (filter = 'hot') => {
         createPost,
         getPost,
         postComment,
-        getComments
+        getComments,
+        getUser,
     }
 }
