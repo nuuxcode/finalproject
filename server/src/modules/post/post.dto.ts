@@ -17,6 +17,10 @@ export class CreatePostDTO {
   @IsString()
   forumId: string;
 
+  @ApiProperty({ description: 'The image URL of the post', required: false })
+  @IsString()
+  imageUrl?: string;
+
   // @ApiProperty({ description: 'The ID of the user creating the post' })
   // @IsNotEmpty()
   // @IsString()
