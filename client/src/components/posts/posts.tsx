@@ -12,7 +12,7 @@ export default function Posts() {
   const { allPosts } = useFetcher();
   const { isSignedIn } = useUser();
 
-  const { data, error } = useSWR("/posts", allPosts);
+  const { data, error } = useSWR("desc", allPosts);
 
 
     return (
