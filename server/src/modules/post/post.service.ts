@@ -6,6 +6,7 @@ import { Post as PostModel } from '@prisma/client';
 import { Comment as CommentModel } from '@prisma/client';
 import { CreatePostDTO } from './post.dto';
 import slugify from 'slugify';
+//import { fa } from '@faker-js/faker';
 
 @Injectable()
 export class PostService {
@@ -181,7 +182,7 @@ export class PostService {
             slug: true,
           },
         },
-        comments: true,
+        comments: false,
       },
     });
 
