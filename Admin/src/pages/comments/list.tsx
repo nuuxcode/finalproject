@@ -1,8 +1,3 @@
-// import { MuiListInferencer } from "@refinedev/inferencer/mui";
-
-// export const CommentList = () => {
-//   return <MuiListInferencer />;
-// };
 import React from "react";
 import {
     useDataGrid,
@@ -44,20 +39,24 @@ export const CommentList: React.FC<IResourceComponentsProps> = () => {
         () => [
             {
                 field: "id",
-                headerName: translate("comments.fields.id"),
+                headerName: translate("ID"),
                 minWidth: 50,
+                align: "center",
+                headerAlign: "center",
             },
             {
                 field: "content",
                 flex: 1,
-                headerName: translate("comments.fields.content"),
-                minWidth: 200,
+                headerName: translate("Content"),
+                minWidth: 250,
             },
             {
                 field: "userId",
                 flex: 1,
-                headerName: translate("comments.fields.userId"),
-                minWidth: 300,
+                headerName: translate("User"),
+                minWidth: 20,
+                align: "center",
+                headerAlign: "center",
                 renderCell: function render({ value }) {
                     return userIsLoading ? (
                         <>Loading...</>
@@ -70,13 +69,17 @@ export const CommentList: React.FC<IResourceComponentsProps> = () => {
             {
                 field: "postId",
                 flex: 1,
-                headerName: translate("comments.fields.postId"),
-                minWidth: 300,
+                headerName: translate("PostId"),
+                minWidth: 100,
+                align: "center",
+                headerAlign: "center",
             },
             {
                 field: "isVisible",
-                headerName: translate("comments.fields.isVisible"),
+                headerName: translate("isVisible"),
                 minWidth: 100,
+                align: "center",
+                headerAlign: "center",
                 renderCell: function render({ value }) {
                     return <Checkbox checked={!!value} />;
                 },
@@ -84,8 +87,10 @@ export const CommentList: React.FC<IResourceComponentsProps> = () => {
             {
                 field: "createdAt",
                 flex: 1,
-                headerName: translate("comments.fields.createdAt"),
-                minWidth: 250,
+                headerName: translate("CreatedAt"),
+                minWidth: 100,
+                align: "center",
+                headerAlign: "center",
                 renderCell: function render({ value }) {
                     return <DateField value={value} />;
                 },
@@ -93,41 +98,48 @@ export const CommentList: React.FC<IResourceComponentsProps> = () => {
             {
                 field: "updatedAt",
                 flex: 1,
-                headerName: translate("comments.fields.updatedAt"),
-                minWidth: 250,
+                headerName: translate("UpdatedAt"),
+                minWidth: 100,
+                align: "center",
+                headerAlign: "center",
                 renderCell: function render({ value }) {
                     return <DateField value={value} />;
                 },
+
             },
-            {
-                field: "votesCount",
-                flex: 1,
-                headerName: translate("comments.fields.votesCount"),
-                type: "number",
-                minWidth: 200,
-            },
+            // {
+            //     field: "votesCount",
+            //     flex: 1,
+            //     headerName: translate("comments.fields.votesCount"),
+            //     type: "number",
+            //     minWidth: 80,
+            // },
             {
                 field: "upvotesCount",
                 flex: 1,
-                headerName: translate("comments.fields.upvotesCount"),
+                headerName: translate("Upvotes"),
                 type: "number",
-                minWidth: 200,
+                minWidth: 40,
+                align: "center",
+                headerAlign: "center",
             },
             {
                 field: "downvotesCount",
                 flex: 1,
-                headerName: translate("comments.fields.downvotesCount"),
+                headerName: translate("Downvotes"),
                 type: "number",
-                minWidth: 200,
+                minWidth: 40,
+                align: "center",
+                headerAlign: "center",
             },
-            {
-                field: "isAccepted",
-                headerName: translate("comments.fields.isAccepted"),
-                minWidth: 100,
-                renderCell: function render({ value }) {
-                    return <Checkbox checked={!!value} />;
-                },
-            },
+            // {
+            //     field: "isAccepted",
+            //     headerName: translate("comments.fields.isAccepted"),
+            //     minWidth: 100,
+            //     renderCell: function render({ value }) {
+            //         return <Checkbox checked={!!value} />;
+            //     },
+            // },
             {
                 field: "actions",
                 headerName: translate("table.actions"),
