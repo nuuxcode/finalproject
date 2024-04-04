@@ -263,7 +263,7 @@ export class ForumService {
   }
 
   async create(userId: string, forumData: CreateForumDTO): Promise<ForumModel> {
-    const { name, description, slug } = forumData;
+    const { name, description, slug, logo, banner } = forumData;
     const existingForum = await this.prisma.forum.findUnique({
       where: { slug },
     });
@@ -276,6 +276,8 @@ export class ForumService {
         name,
         description,
         slug,
+        logo,
+        banner,
         owner: {
           connect: { id: userId },
         },
