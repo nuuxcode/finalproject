@@ -39,7 +39,7 @@ export const UsersEdit: React.FC<IResourceComponentsProps> = () => {
                     fullWidth
                     InputLabelProps={{ shrink: true }}
                     type="text"
-                    label={translate("users.fields.id")}
+                    label={translate("id")}
                     name="id"
                     disabled
                 />
@@ -53,7 +53,7 @@ export const UsersEdit: React.FC<IResourceComponentsProps> = () => {
                     fullWidth
                     InputLabelProps={{ shrink: true }}
                     type="text"
-                    label={translate("users.fields.username")}
+                    label={translate("username")}
                     name="username"
                 />
                 <TextField
@@ -66,7 +66,7 @@ export const UsersEdit: React.FC<IResourceComponentsProps> = () => {
                     fullWidth
                     InputLabelProps={{ shrink: true }}
                     type="text"
-                    label={translate("users.fields.password")}
+                    label={translate("password")}
                     name="password"
                 />
                 <TextField
@@ -80,7 +80,7 @@ export const UsersEdit: React.FC<IResourceComponentsProps> = () => {
                     fullWidth
                     InputLabelProps={{ shrink: true }}
                     type="number"
-                    label={translate("users.fields.reputation")}
+                    label={translate("reputation")}
                     name="reputation"
                 />
                 <TextField
@@ -93,15 +93,9 @@ export const UsersEdit: React.FC<IResourceComponentsProps> = () => {
                     fullWidth
                     InputLabelProps={{ shrink: true }}
                     type="text"
-                    label={translate("users.fields.role")}
+                    label={translate("role")}
                     name="role"
                 />
-                {/*
-                    DatePicker component is not included in "@refinedev/mui" package.
-                    To use a <DatePicker> component, you can follow the official documentation for Material UI.
-
-                    Docs: https://mui.com/x/react-date-pickers/date-picker/#basic-usage
-                */}
                 <TextField
                     {...register("lastLogin", {
                         required: "This field is required",
@@ -111,7 +105,7 @@ export const UsersEdit: React.FC<IResourceComponentsProps> = () => {
                     margin="normal"
                     fullWidth
                     InputLabelProps={{ shrink: true }}
-                    label={translate("users.fields.lastLogin")}
+                    label={translate("lastLogin")}
                     name="lastLogin"
                 />
                 <TextField
@@ -124,7 +118,7 @@ export const UsersEdit: React.FC<IResourceComponentsProps> = () => {
                     fullWidth
                     InputLabelProps={{ shrink: true }}
                     type="email"
-                    label={translate("users.fields.email")}
+                    label={translate("email")}
                     name="email"
                 />
                 <Controller
@@ -134,7 +128,7 @@ export const UsersEdit: React.FC<IResourceComponentsProps> = () => {
                     defaultValue={null as any}
                     render={({ field }) => (
                         <FormControlLabel
-                            label={translate("users.fields.emailVerified")}
+                            label={translate("emailVerified")}
                             control={
                                 <Checkbox
                                     {...field}
@@ -157,7 +151,7 @@ export const UsersEdit: React.FC<IResourceComponentsProps> = () => {
                     fullWidth
                     InputLabelProps={{ shrink: true }}
                     type="text"
-                    label={translate("users.fields.country")}
+                    label={translate("country")}
                     name="country"
                 />
                 <TextField
@@ -170,7 +164,7 @@ export const UsersEdit: React.FC<IResourceComponentsProps> = () => {
                     fullWidth
                     InputLabelProps={{ shrink: true }}
                     type="text"
-                    label={translate("users.fields.city")}
+                    label={translate("city")}
                     name="city"
                 />
                 <TextField
@@ -183,7 +177,7 @@ export const UsersEdit: React.FC<IResourceComponentsProps> = () => {
                     fullWidth
                     InputLabelProps={{ shrink: true }}
                     type="text"
-                    label={translate("users.fields.phone")}
+                    label={translate("phone")}
                     name="phone"
                 />
                 <TextField
@@ -196,7 +190,7 @@ export const UsersEdit: React.FC<IResourceComponentsProps> = () => {
                     fullWidth
                     InputLabelProps={{ shrink: true }}
                     type="text"
-                    label={translate("users.fields.website")}
+                    label={translate("website")}
                     name="website"
                 />
                 <TextField
@@ -209,15 +203,10 @@ export const UsersEdit: React.FC<IResourceComponentsProps> = () => {
                     fullWidth
                     InputLabelProps={{ shrink: true }}
                     multiline
-                    label={translate("users.fields.aboutMe")}
+                    label={translate("aboutMe")}
                     name="aboutMe"
                 />
-                {/*
-                    DatePicker component is not included in "@refinedev/mui" package.
-                    To use a <DatePicker> component, you can follow the official documentation for Material UI.
-
-                    Docs: https://mui.com/x/react-date-pickers/date-picker/#basic-usage
-                */}
+ 
                 <TextField
                     {...register("createdAt", {
                         required: "This field is required",
@@ -227,16 +216,10 @@ export const UsersEdit: React.FC<IResourceComponentsProps> = () => {
                     margin="normal"
                     fullWidth
                     InputLabelProps={{ shrink: true }}
-                    label={translate("users.fields.createdAt")}
+                    label={translate("createdAt")}
                     name="createdAt"
                 />
 
-                {/*
-                    DatePicker component is not included in "@refinedev/mui" package.
-                    To use a <DatePicker> component, you can follow the official documentation for Material UI.
-
-                    Docs: https://mui.com/x/react-date-pickers/date-picker/#basic-usage
-                */}
                 <TextField
                     {...register("updatedAt", {
                         required: "This field is required",
@@ -246,7 +229,7 @@ export const UsersEdit: React.FC<IResourceComponentsProps> = () => {
                     margin="normal"
                     fullWidth
                     InputLabelProps={{ shrink: true }}
-                    label={translate("users.fields.updatedAt")}
+                    label={translate("updatedAt")}
                     name="updatedAt"
                 />
                 <TextField
@@ -260,7 +243,7 @@ export const UsersEdit: React.FC<IResourceComponentsProps> = () => {
                     fullWidth
                     InputLabelProps={{ shrink: true }}
                     type="number"
-                    label={translate("users.fields.PostCount")}
+                    label={translate("PostCount")}
                     name="PostCount"
                 />
                 <TextField
@@ -274,7 +257,7 @@ export const UsersEdit: React.FC<IResourceComponentsProps> = () => {
                     fullWidth
                     InputLabelProps={{ shrink: true }}
                     type="number"
-                    label={translate("users.fields.CommentCount")}
+                    label={translate("CommentCount")}
                     name="CommentCount"
                 />
                 <TextField
@@ -288,7 +271,7 @@ export const UsersEdit: React.FC<IResourceComponentsProps> = () => {
                     fullWidth
                     InputLabelProps={{ shrink: true }}
                     type="number"
-                    label={translate("users.fields.followersCount")}
+                    label={translate("followersCount")}
                     name="followersCount"
                 />
                 <TextField
@@ -302,7 +285,7 @@ export const UsersEdit: React.FC<IResourceComponentsProps> = () => {
                     fullWidth
                     InputLabelProps={{ shrink: true }}
                     type="number"
-                    label={translate("users.fields.followingCount")}
+                    label={translate("followingCount")}
                     name="followingCount"
                 />
                 <TextField
@@ -316,7 +299,7 @@ export const UsersEdit: React.FC<IResourceComponentsProps> = () => {
                     fullWidth
                     InputLabelProps={{ shrink: true }}
                     type="number"
-                    label={translate("users.fields.subscribedForumsCount")}
+                    label={translate("subscribedForumsCount")}
                     name="subscribedForumsCount"
                 />
                 <TextField
@@ -330,7 +313,7 @@ export const UsersEdit: React.FC<IResourceComponentsProps> = () => {
                     fullWidth
                     InputLabelProps={{ shrink: true }}
                     type="number"
-                    label={translate("users.fields.ownedForumsCount")}
+                    label={translate("ownedForumsCount")}
                     name="ownedForumsCount"
                 />
             </Box>

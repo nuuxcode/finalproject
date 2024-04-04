@@ -30,7 +30,7 @@ export const ForumEdit: React.FC<IResourceComponentsProps> = () => {
         <Edit saveButtonProps={saveButtonProps}>
             <Box
                 component="form"
-                sx={{ display: "flex", flexDirection: "column" }}
+                sx={{ display: "flex", flexDirection: "column", justifyItems:"space-around" }}
                 autoComplete="off"
             >
                 <TextField
@@ -43,7 +43,7 @@ export const ForumEdit: React.FC<IResourceComponentsProps> = () => {
                     fullWidth
                     InputLabelProps={{ shrink: true }}
                     type="text"
-                    label={translate("forums.fields.id")}
+                    label={translate("Id")}
                     name="id"
                     disabled
                 />
@@ -57,7 +57,7 @@ export const ForumEdit: React.FC<IResourceComponentsProps> = () => {
                     fullWidth
                     InputLabelProps={{ shrink: true }}
                     type="text"
-                    label={translate("forums.fields.name")}
+                    label={translate("Name")}
                     name="name"
                 />
                 <TextField
@@ -70,7 +70,7 @@ export const ForumEdit: React.FC<IResourceComponentsProps> = () => {
                     fullWidth
                     InputLabelProps={{ shrink: true }}
                     type="text"
-                    label={translate("forums.fields.slug")}
+                    label={translate("Slug")}
                     name="slug"
                 />
                 <TextField
@@ -83,7 +83,7 @@ export const ForumEdit: React.FC<IResourceComponentsProps> = () => {
                     fullWidth
                     InputLabelProps={{ shrink: true }}
                     type="text"
-                    label={translate("forums.fields.description")}
+                    label={translate("description")}
                     name="description"
                 />
                 <TextField
@@ -96,7 +96,7 @@ export const ForumEdit: React.FC<IResourceComponentsProps> = () => {
                     fullWidth
                     InputLabelProps={{ shrink: true }}
                     type="url"
-                    label={translate("forums.fields.logo")}
+                    label={translate("logo")}
                     name="logo"
                 />
                 <TextField
@@ -109,15 +109,10 @@ export const ForumEdit: React.FC<IResourceComponentsProps> = () => {
                     fullWidth
                     InputLabelProps={{ shrink: true }}
                     type="url"
-                    label={translate("forums.fields.banner")}
+                    label={translate("banner")}
                     name="banner"
                 />
-                {/*
-                    DatePicker component is not included in "@refinedev/mui" package.
-                    To use a <DatePicker> component, you can follow the official documentation for Material UI.
 
-                    Docs: https://mui.com/x/react-date-pickers/date-picker/#basic-usage
-                */}
                 <TextField
                     {...register("createdAt", {
                         required: "This field is required",
@@ -127,16 +122,9 @@ export const ForumEdit: React.FC<IResourceComponentsProps> = () => {
                     margin="normal"
                     fullWidth
                     InputLabelProps={{ shrink: true }}
-                    label={translate("forums.fields.createdAt")}
+                    label={translate("createdAt")}
                     name="createdAt"
                 />
-
-                {/*
-                    DatePicker component is not included in "@refinedev/mui" package.
-                    To use a <DatePicker> component, you can follow the official documentation for Material UI.
-
-                    Docs: https://mui.com/x/react-date-pickers/date-picker/#basic-usage
-                */}
                 <TextField
                     {...register("updatedAt", {
                         required: "This field is required",
@@ -146,7 +134,7 @@ export const ForumEdit: React.FC<IResourceComponentsProps> = () => {
                     margin="normal"
                     fullWidth
                     InputLabelProps={{ shrink: true }}
-                    label={translate("forums.fields.updatedAt")}
+                    label={translate("updatedAt")}
                     name="updatedAt"
                 />
                 <TextField
@@ -160,7 +148,7 @@ export const ForumEdit: React.FC<IResourceComponentsProps> = () => {
                     fullWidth
                     InputLabelProps={{ shrink: true }}
                     type="number"
-                    label={translate("forums.fields.postsCount")}
+                    label={translate("postsCount")}
                     name="postsCount"
                 />
                 <TextField
@@ -174,7 +162,7 @@ export const ForumEdit: React.FC<IResourceComponentsProps> = () => {
                     fullWidth
                     InputLabelProps={{ shrink: true }}
                     type="number"
-                    label={translate("forums.fields.viewsCount")}
+                    label={translate("viewsCount")}
                     name="viewsCount"
                 />
                 <TextField
@@ -188,10 +176,10 @@ export const ForumEdit: React.FC<IResourceComponentsProps> = () => {
                     fullWidth
                     InputLabelProps={{ shrink: true }}
                     type="number"
-                    label={translate("forums.fields.subscribersCount")}
+                    label={translate("subscribersCount")}
                     name="subscribersCount"
                 />
-                <Controller
+                {/* <Controller
                     control={control}
                     name="posts"
                     rules={{ required: "This field is required" }}
@@ -221,7 +209,7 @@ export const ForumEdit: React.FC<IResourceComponentsProps> = () => {
                             renderInput={(params) => (
                                 <TextField
                                     {...params}
-                                    label={translate("forums.fields.posts")}
+                                    label={translate("posts")}
                                     margin="normal"
                                     variant="outlined"
                                     error={!!(errors as any)?.posts?.id}
@@ -233,7 +221,7 @@ export const ForumEdit: React.FC<IResourceComponentsProps> = () => {
                             )}
                         />
                     )}
-                />
+                /> */}
             </Box>
         </Edit>
     );
