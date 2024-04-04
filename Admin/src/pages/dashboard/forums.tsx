@@ -4,63 +4,6 @@ import Card from "@mui/material/Card";
 import { Typography } from "@mui/material";
 import { useApiUrl } from "@refinedev/core";
 
-const dataset = [
-  {
-    forums: 21,
-    month: "Jan",
-  },
-  {
-    forums: 28,
-    month: "Fev",
-  },
-  {
-    forums: 41,
-    month: "Mar",
-  },
-  {
-    forums: 73,
-    month: "Apr",
-  },
-  {
-    forums: 99,
-    month: "May",
-  },
-  {
-    forums: 144,
-    month: "June",
-  },
-  {
-    forums: 319,
-    month: "July",
-  },
-  {
-    forums: 249,
-    month: "Aug",
-  },
-  {
-    forums: 131,
-    month: "Sept",
-  },
-  {
-    forums: 55,
-    month: "Oct",
-  },
-  {
-    forums: 48,
-    month: "Nov",
-  },
-  {
-    forums: 25,
-    month: "Dec",
-  },
-];
-
-const valueFormatter: (value: number | null) => string = (value) => {
-  if (value === null) {
-    return "N/A";
-  }
-  return value.toString();
-};
 
 const monthMapping: { [key: number]: string } = {
   1: 'Jan', 2: 'Feb', 3: 'Mar', 4: 'Apr', 5: 'May', 6: 'Jun',
@@ -78,7 +21,7 @@ export default function Forums() {
         label: "months",
       },
     ],
-    width: 700,
+    width: 600,
     height: 450,
   };
 
@@ -95,8 +38,6 @@ export default function Forums() {
       .catch(error => console.error('Error fetching forum data:', error));
     }, [API_URL]);
     
-    console.log("-------forum data----------")
-    console.log(forumData)
   return (
     <main>
       <Typography sx={{ color: "#FFCA28" }}>
@@ -108,18 +49,15 @@ export default function Forums() {
             <Typography>Loading...</Typography>
             <BarChart
               dataset={[]}
-              xAxis={[]}
               series={[]} 
               {...chartSetting}
             />
             </div>
         ) : (
         <BarChart
-            // dataset={dataset}
           dataset={forumData}
           yAxis={[{ scaleType: 'band', dataKey: 'month' }]}
           series={[
-            // { dataKey: "forums", label: "Forums created", valueFormatter },
             { dataKey: 'forums', label: 'Forums created' }
           ]}
           layout="horizontal"
