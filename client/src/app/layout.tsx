@@ -10,6 +10,7 @@ import { Separator } from "~/components/ui/separator";
 import { ClerkProvider } from "@clerk/nextjs";
 import ThemeToggle from "~/components/core/dark-mode-toggle";
 import { dark } from "@clerk/themes";
+import { Toaster } from "~/components/ui/toaster"
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -52,6 +53,7 @@ export default function RootLayout({
                 <RecentPosts />
               </div>
             </div>
+            <Toaster />
             <ThemeToggle />
           </ThemeProvider>
         </body>
