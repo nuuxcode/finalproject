@@ -1,9 +1,3 @@
-// import { MuiCreateInferencer } from "@refinedev/inferencer/mui";
-
-// export const CommentCreate = () => {
-//   return <MuiCreateInferencer />;
-// };
-
 import { Create, useAutocomplete } from "@refinedev/mui";
 import {
     Box,
