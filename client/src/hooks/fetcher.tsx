@@ -107,15 +107,26 @@ export const useFetcher = (filter = 'hot') => {
 
     const getUser = async () => {
         try {
-          const response = await axios.get('/users/me', {
-            withCredentials: true
-          });
-          return response.data;
+            const response = await axios.get('/users/me', {
+                withCredentials: true
+            });
+            return response.data;
         } catch (error) {
-          // @ts-ignore
-          throw new Error(error);
+            // @ts-ignore
+            throw new Error(error);
         }
-      }
+    }
+
+    const searchPosts = async (key: string): Promise<Post[]> => {
+        const query = key.replace('searchPosts/', '');
+        try {
+            const response = await axios.get(`/posts/filtered-posts/${query}`);
+            return response.data;
+        } catch (error) {
+            // @ts-ignore
+            throw new Error(error);
+        }
+    }
 
     return {
         allPosts,
@@ -127,5 +138,6 @@ export const useFetcher = (filter = 'hot') => {
         postComment,
         getComments,
         getUser,
+        searchPosts,
     }
 }
