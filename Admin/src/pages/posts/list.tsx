@@ -1,10 +1,3 @@
-// import { MuiListInferencer } from "@refinedev/inferencer/mui";
-
-// export const BlogPostList = () => {
-//   return <MuiListInferencer />;
-// };
-
-
 import React from "react";
 import {
     useDataGrid,
@@ -74,7 +67,7 @@ export const PostList: React.FC<IResourceComponentsProps> = () => {
                 field: "userId",
                 flex: 1,
                 headerName: translate("Author"),
-                minWidth: 20,
+                minWidth: 100,
                 renderCell: function render({ value }) {
                     return userIsLoading ? (
                         <>Loading...</>

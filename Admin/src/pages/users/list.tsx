@@ -1,9 +1,3 @@
-// import { MuiListInferencer } from "@refinedev/inferencer/mui";
-
-// export const UsersList = () => {
-//   return <MuiListInferencer />;
-// };
-
 import React from "react";
 import {
     useDataGrid,
@@ -100,13 +94,13 @@ export const UsersList: React.FC<IResourceComponentsProps> = () => {
                 field: "country",
                 flex: 1,
                 headerName: translate("Country"),
-                minWidth: 200,
+                minWidth: 100,
             },
             {
                 field: "city",
                 flex: 1,
                 headerName: translate("City"),
-                minWidth: 200,
+                minWidth: 100,
             },
             {
                 field: "phone",
@@ -137,7 +131,7 @@ export const UsersList: React.FC<IResourceComponentsProps> = () => {
                 field: "createdAt",
                 flex: 1,
                 headerName: translate("createdAt"),
-                minWidth: 250,
+                minWidth: 100,
                 renderCell: function render({ value }) {
                     return <DateField value={value} />;
                 },
@@ -146,7 +140,7 @@ export const UsersList: React.FC<IResourceComponentsProps> = () => {
                 field: "updatedAt",
                 flex: 1,
                 headerName: translate("updatedAt"),
-                minWidth: 250,
+                minWidth: 100,
                 renderCell: function render({ value }) {
                     return <DateField value={value} />;
                 },
@@ -213,7 +207,7 @@ export const UsersList: React.FC<IResourceComponentsProps> = () => {
         ],
         [translate],
     );
-
+    
     return (
         <List>
             <DataGrid {...dataGridProps} columns={columns} autoHeight />

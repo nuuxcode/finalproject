@@ -24,50 +24,62 @@ export const ForumList: React.FC<IResourceComponentsProps> = () => {
         () => [
             {
                 field: "id",
-                headerName: translate("forums.fields.id"),
+                headerName: translate("ID"),
                 minWidth: 50,
+                align: "center",
+                headerAlign: "center",
             },
             {
                 field: "name",
                 flex: 1,
-                headerName: translate("forums.fields.name"),
-                minWidth: 200,
+                headerName: translate("Name"),
+                minWidth: 100,
+                align: "center",
+                headerAlign: "center",
             },
             {
                 field: "slug",
                 flex: 1,
-                headerName: translate("forums.fields.slug"),
-                minWidth: 200,
+                headerName: translate("Slug"),
+                minWidth: 100,
+                align: "center",
+                headerAlign: "center",
             },
             {
                 field: "description",
                 flex: 1,
-                headerName: translate("forums.fields.description"),
-                minWidth: 200,
+                headerName: translate("Description"),
+                minWidth: 300,
+                align: "center",
+                headerAlign: "center",
             },
             {
                 field: "logo",
                 flex: 1,
-                headerName: translate("forums.fields.logo"),
-                minWidth: 250,
-                renderCell: function render({ value }) {
-                    return <UrlField value={value} />;
-                },
+                headerName: translate("Logo"),
+                minWidth: 150,
+                align: "center",
+                headerAlign: "center",
+                // renderCell: function render({ value }) {
+                //     return <UrlField value={value} />;
+                // },
                 // to show image
-              //   renderCell: function render({ value }) {
-              //     return (
-              //         <img
-              //             src={value}
-              //             style={{ height: "50px", maxWidth: "100px" }}
-              //         />
-              //     );
-              // },
+                renderCell: function render({ value }) {
+                  return (
+                      <img
+                          src={value}
+                          style={{ height: "50px", maxWidth: "100px" }}
+                      />
+                  );
+              },
             },
             {
                 field: "banner",
                 flex: 1,
-                headerName: translate("forums.fields.banner"),
-                minWidth: 250,
+                headerName: translate("Banner"),
+                minWidth: 100,
+                align: "center",
+                headerAlign: "center",
                 renderCell: function render({ value }) {
                     return <UrlField value={value} />;
                 },
@@ -75,8 +87,8 @@ export const ForumList: React.FC<IResourceComponentsProps> = () => {
             {
                 field: "createdAt",
                 flex: 1,
-                headerName: translate("forums.fields.createdAt"),
-                minWidth: 250,
+                headerName: translate("Created"),
+                minWidth: 100,
                 renderCell: function render({ value }) {
                     return <DateField value={value} />;
                 },
@@ -84,8 +96,10 @@ export const ForumList: React.FC<IResourceComponentsProps> = () => {
             {
                 field: "updatedAt",
                 flex: 1,
-                headerName: translate("forums.fields.updatedAt"),
-                minWidth: 250,
+                headerName: translate("Updated"),
+                minWidth: 100,
+                align: "center",
+                headerAlign: "center",
                 renderCell: function render({ value }) {
                     return <DateField value={value} />;
                 },
@@ -93,23 +107,29 @@ export const ForumList: React.FC<IResourceComponentsProps> = () => {
             {
                 field: "postsCount",
                 flex: 1,
-                headerName: translate("forums.fields.postsCount"),
+                headerName: translate("PostsCount"),
                 type: "number",
-                minWidth: 200,
+                minWidth: 40,
+                align: "center",
+                headerAlign: "center",
             },
             {
                 field: "viewsCount",
                 flex: 1,
-                headerName: translate("forums.fields.viewsCount"),
+                headerName: translate("ViewsCount"),
                 type: "number",
-                minWidth: 200,
+                minWidth: 40,
+                align: "center",
+                headerAlign: "center",
             },
             {
                 field: "subscribersCount",
                 flex: 1,
-                headerName: translate("forums.fields.subscribersCount"),
+                headerName: translate("SubscribersCount"),
                 type: "number",
-                minWidth: 200,
+                minWidth: 40,
+                align: "center",
+                headerAlign: "center",
             },
             {
                 field: "actions",
