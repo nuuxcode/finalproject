@@ -17,6 +17,14 @@ export class CreateForumDTO {
   @IsString()
   description: string;
 
+  @ApiProperty({ description: 'The logo URL of the forum', required: false })
+  @IsString()
+  logo?: string;
+
+  @ApiProperty({ description: 'The banner URL of the forum', required: false })
+  @IsString()
+  banner?: string;
+
   // @ApiProperty({ description: 'The ID of the user who owns the forum' })
   // @IsString()
   // ownerUserId: string;
