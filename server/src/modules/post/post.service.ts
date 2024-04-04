@@ -217,10 +217,16 @@ export class PostService {
     });
   }
 
-  async findCommentsByPostId(postId: string): Promise<CommentModel[]> {
+  async findCommentsByPostId(
+    postId: string,
+    order: 'asc' | 'desc',
+  ): Promise<CommentModel[]> {
     let comments = await this.prisma.comment.findMany({
       where: {
         postId: postId,
+      },
+      orderBy: {
+        createdAt: order,
       },
       include: {
         user: {
