@@ -154,22 +154,24 @@ export class CommentService {
     },
   ): Promise<CommentModel> {
     const { content, postId, parentId } = CommentData;
+    console.log('CommentData', CommentData);
     try {
-      const comment = await this.prisma.comment.create({
-        data: {
-          content,
-          user: {
-            connect: { id: userId },
-          },
-          post: {
-            connect: { id: postId },
-          },
-          parent: parentId
-            ? {
-                connect: { id: parentId },
-              }
-            : null,
+      const data: any = {
+        content,
+        user: {
+          connect: { id: userId },
         },
+        post: {
+          connect: { id: postId },
+        },
+      };
+      if (parentId) {
+        data.parent = {
+          connect: { id: parentId },
+        };
+      }
+      const comment = await this.prisma.comment.create({
+        data,
       });
       return comment;
     } catch (error) {
