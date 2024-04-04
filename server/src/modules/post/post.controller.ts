@@ -46,16 +46,29 @@ export class PostController {
     type: Number,
     description: 'Number of posts per page (default is 10)',
   })
+  @ApiQuery({
+    name: 'order',
+    required: false,
+    type: String,
+    description:
+      "Order of posts ('asc' for oldest first, 'desc' for latest first, default is 'desc')",
+  })
   @ApiResponse({ status: 200, description: 'Return all posts with pagination' })
   @ApiOperation({ summary: 'Get all posts with pagination' })
   async getAllPosts(
     @Query('page') page: string,
     @Query('take') take: string,
+    @Query('order') order: 'asc' | 'desc',
   ): Promise<PostModel[]> {
     const pageNumber = parseInt(page, 10) || 0;
-    const takeNumber = parseInt(take, 10) || 99999; //for now testing
+    const takeNumber = parseInt(take, 10) || 10;
+    const orderDirection = order || 'desc';
 
-    return this.postService.findAll({ page: pageNumber, take: takeNumber });
+    return this.postService.findAll({
+      page: pageNumber,
+      take: takeNumber,
+      orderBy: { createdAt: orderDirection },
+    });
   }
 
   @Get('post/:id')
