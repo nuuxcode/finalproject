@@ -16,7 +16,7 @@ export default function Posts() {
 
 
     return (
-        <main className="flex min-h-screen flex-col items-center justify-between px-4 md:px-8 py-10 gap-8">
+        <main className="flex min-h-screen flex-col items-center justify-between px-4 md:px-8 py-6 gap-8">
             {data && data.map((post) => (
                 <>
                     <Post post={post} />
