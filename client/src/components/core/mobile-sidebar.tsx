@@ -1,4 +1,4 @@
-
+import { useState } from 'react';
 import { FaHome, FaRocket, FaPlus, FaArrowDown } from 'react-icons/fa';
 import { Sheet, SheetContent } from "~/components/ui/sheet";
 import Link from 'next/link';
@@ -11,6 +11,8 @@ import {
 } from "~/components/ui/collapsible";
 import { Separator } from "~/components/ui/separator";
 import { Button } from "~/components/ui/button";
+import CreatePostModal from "~/components/posts/create-post-modal";
+
 
 interface Forum {
   id: string;
@@ -21,8 +23,15 @@ interface Forum {
 }
 
 const MobileSidebar = ({ open, handleShow, user, data }: { open: boolean, handleShow: () => void, user: any, data?: Forum[] }) => {
+  const [openPost, setOpenPost] = useState(false);
+
+  const handleModalOpen = () => {
+    setOpenPost(!openPost);
+    if (open) handleShow()
+  }
   return (
 <Sheet open={open} onOpenChange={handleShow}>
+  <CreatePostModal open={openPost} setOpen={handleModalOpen} />
         <SheetContent
           className={"w-[250px] bg-zinc-950 border-0 overflow-y-scroll"}
         >
@@ -59,7 +68,7 @@ const MobileSidebar = ({ open, handleShow, user, data }: { open: boolean, handle
             <Separator className={"bg-secondary"} />
 
             <div className={"py-2 place-self-center"}>
-              <Button className={"bg-primary"} variant={"ghost"}>
+              <Button className={"bg-primary"} variant={"ghost"} onClick={handleModalOpen}>
                 <FaPlus className={"mr-2"} /> Create post
               </Button>
             </div>
