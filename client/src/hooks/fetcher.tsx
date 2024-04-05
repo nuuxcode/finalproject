@@ -117,7 +117,7 @@ export const useFetcher = (filter = 'hot') => {
         }
     }
 
-    const searchPosts = async (key: string): Promise<Post[]> => {
+    const searchPosts = async (key: string): Promise<ForumPost[]> => {
         const query = key.replace('searchPosts/', '');
         try {
             const response = await axios.get(`/posts/filtered-posts/${query}`);
