@@ -1,4 +1,13 @@
-import { Controller, Get, Post, Param, Query, Body, Put } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Param,
+  Query,
+  Body,
+  Put,
+  Delete,
+} from '@nestjs/common';
 import { ForumService } from './forum.service';
 import {
   ApiTags,
@@ -115,10 +124,52 @@ export class ForumController {
     return this.forumService.getPostsForForumByIdOrSlug(idOrSlug, page, limit);
   }
 
-  @Get(':id/subscribers')
+  @Get(':idOrSlug/subscribers')
   @ApiOperation({ summary: 'Get subscribers for a specific forum' })
-  @ApiParam({ name: 'id', description: 'Forum ID' })
-  getSubscribersForForum(@Param('id') forumId: string) {
-    return this.forumService.getSubscribersForForum(forumId);
+  @ApiParam({ name: 'idOrSlug', description: 'Forum ID or slug' })
+  getSubscribersForForum(@Param('idOrSlug') idOrSlug: string) {
+    return this.forumService.getSubscribersForForumByIdOrSlug(idOrSlug);
+  }
+
+  @ApiCookieAuth()
+  @Post(':idOrSlug/subscribe')
+  @UseGuards(ClerkRequiredGuard)
+  @ApiOperation({ summary: 'Subscribe to a specific forum' })
+  @ApiResponse({
+    status: 200,
+    description: 'Successfully subscribed to the forum.',
+  })
+  @ApiResponse({ status: 500, description: 'Internal server error.' })
+  async subscribeToForum(
+    @Req() request: any,
+    @Param('idOrSlug') idOrSlug: string,
+  ) {
+    const userId = request.user.id;
+    try {
+      return await this.forumService.subscribeToForum(userId, idOrSlug);
+    } catch (error) {
+      throw new HttpException(error.message, HttpStatus.BAD_REQUEST);
+    }
+  }
+
+  @ApiCookieAuth()
+  @Delete(':idOrSlug/subscribe')
+  @UseGuards(ClerkRequiredGuard)
+  @ApiOperation({ summary: 'Unsubscribe from a specific forum' })
+  @ApiResponse({
+    status: 200,
+    description: 'Successfully unsubscribed from the forum.',
+  })
+  @ApiResponse({ status: 500, description: 'Internal server error.' })
+  async unsubscribeFromForum(
+    @Req() request: any,
+    @Param('idOrSlug') idOrSlug: string,
+  ) {
+    const userId = request.user.id;
+    try {
+      return await this.forumService.unsubscribeFromForum(userId, idOrSlug);
+    } catch (error) {
+      throw new HttpException(error.message, HttpStatus.BAD_REQUEST);
+    }
   }
 }
