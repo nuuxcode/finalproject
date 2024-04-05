@@ -6,6 +6,9 @@ export class VoteService {
   constructor(private prisma: PrismaService) {}
 
   async votePost(userId: string, postId: string, voteStatus: number) {
+    console.log('userId', userId);
+    console.log('postId', postId);
+    console.log('voteStatus', voteStatus);
     const previousVote = await this.prisma.postVotes.findUnique({
       where: {
         userId_postId: {
@@ -14,7 +17,7 @@ export class VoteService {
         },
       },
     });
-    if (voteStatus === previousVote.voteStatus) {
+    if (previousVote && voteStatus === previousVote.voteStatus) {
       throw new Error(
         'New vote status is the same as the current vote status.',
       );
@@ -67,7 +70,7 @@ export class VoteService {
         },
       },
     });
-    if (voteStatus === previousVote.voteStatus) {
+    if (previousVote && voteStatus === previousVote.voteStatus) {
       throw new Error(
         'New vote status is the same as the current vote status.',
       );

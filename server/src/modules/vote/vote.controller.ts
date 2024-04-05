@@ -30,6 +30,8 @@ export class VoteController {
     @Body() voteDto: VoteDto,
   ) {
     console.log('userId', request.user.id);
+    console.log('postId', postId);
+    console.log('voteDto', voteDto);
     const userId = request.user.id;
     try {
       return await this.voteService.votePost(
