@@ -95,6 +95,49 @@ export class UserController {
     return this.forumService.getModeratorForumsByUserIdOrUsername(idOrUsername);
   }
 
+  @Get(':idOrUsername/posts')
+  @ApiOperation({ summary: 'Get posts by a specific user by ID or username' })
+  @ApiParam({ name: 'idOrUsername', description: 'User ID or username' })
+  getUserPosts(@Param('idOrUsername') idOrUsername: string) {
+    return this.userService.getUserPosts(idOrUsername);
+  }
+
+  @Get(':idOrUsername/comments')
+  @ApiOperation({
+    summary: 'Get comments by a specific user by ID or username',
+  })
+  @ApiParam({ name: 'idOrUsername', description: 'User ID or username' })
+  getUserComments(@Param('idOrUsername') idOrUsername: string) {
+    return this.userService.getUserComments(idOrUsername);
+  }
+
+  @Get(':idOrUsername/posts-vote')
+  @ApiOperation({
+    summary: 'Get post votes by a specific user by ID or username',
+  })
+  @ApiParam({ name: 'idOrUsername', description: 'User ID or username' })
+  getUserPostVotes(@Param('idOrUsername') idOrUsername: string) {
+    return this.userService.getUserPostVotes(idOrUsername);
+  }
+
+  @Get(':idOrUsername/comments-vote')
+  @ApiOperation({
+    summary: 'Get comment votes by a specific user by ID or username',
+  })
+  @ApiParam({ name: 'idOrUsername', description: 'User ID or username' })
+  getUserCommentVotes(@Param('idOrUsername') idOrUsername: string) {
+    return this.userService.getUserCommentVotes(idOrUsername);
+  }
+
+  @Get(':idOrUsername/subs')
+  @ApiOperation({
+    summary: 'Get subscriptions by a specific user by ID or username',
+  })
+  @ApiParam({ name: 'idOrUsername', description: 'User ID or username' })
+  getUserSubscriptions(@Param('idOrUsername') idOrUsername: string) {
+    return this.userService.getUserSubscriptions(idOrUsername);
+  }
+
   // @Post('user')
   // async signupUser(
   //   @Body() userData: { username: string; email: string; password: string },
