@@ -46,16 +46,29 @@ export class PostController {
     type: Number,
     description: 'Number of posts per page (default is 10)',
   })
+  @ApiQuery({
+    name: 'order',
+    required: false,
+    type: String,
+    description:
+      "Order of posts ('asc' for oldest first, 'desc' for latest first, default is 'desc')",
+  })
   @ApiResponse({ status: 200, description: 'Return all posts with pagination' })
   @ApiOperation({ summary: 'Get all posts with pagination' })
   async getAllPosts(
     @Query('page') page: string,
     @Query('take') take: string,
+    @Query('order') order: 'asc' | 'desc',
   ): Promise<PostModel[]> {
     const pageNumber = parseInt(page, 10) || 0;
     const takeNumber = parseInt(take, 10) || 10;
+    const orderDirection = order || 'desc';
 
-    return this.postService.findAll({ page: pageNumber, take: takeNumber });
+    return this.postService.findAll({
+      page: pageNumber,
+      take: takeNumber,
+      orderBy: { createdAt: orderDirection },
+    });
   }
 
   @Get('post/:id')
@@ -114,8 +127,17 @@ export class PostController {
     description: 'Return all comments of the post with the given ID',
   })
   @ApiResponse({ status: 404, description: 'Post not found' })
-  async getCommentsByPostId(@Param('id') id: string): Promise<CommentModel[]> {
-    return this.postService.findCommentsByPostId(id);
+  @ApiQuery({
+    name: 'order',
+    required: false,
+    type: String,
+    description: 'Order of the comments (default is "desc")',
+  })
+  async getCommentsByPostId(
+    @Param('id') id: string,
+    @Query('order') order: 'asc' | 'desc',
+  ): Promise<CommentModel[]> {
+    return this.postService.findCommentsByPostId(id, order || 'desc');
   }
 
   // @Get('feed')
@@ -146,30 +168,30 @@ export class PostController {
   //   });
   // }
 
-  // @Get('full-text-search/:searchString')
-  // async getFullTextSearchPosts(
-  //   @Param('searchString') searchString: string,
-  // ): Promise<PostModel[]> {
-  //   return this.postService.searchPosts(searchString);
-  // }
+  @Get('full-text-search/:searchString')
+  async getFullTextSearchPosts(
+    @Param('searchString') searchString: string,
+  ): Promise<PostModel[]> {
+    return this.postService.searchPosts(searchString);
+  }
 
-  // @Get('filtered-posts/:searchString')
-  // async getFilteredSearchPosts(
-  //   @Param('searchString') searchString: string,
-  // ): Promise<PostModel[]> {
-  //   return this.postService.findAll({
-  //     where: {
-  //       OR: [
-  //         {
-  //           title: { contains: searchString, mode: 'insensitive' },
-  //         },
-  //         {
-  //           content: { contains: searchString, mode: 'insensitive' },
-  //         },
-  //       ],
-  //     },
-  //   });
-  // }
+  @Get('filtered-posts/:searchString')
+  async getFilteredSearchPosts(
+    @Param('searchString') searchString: string,
+  ): Promise<PostModel[]> {
+    return this.postService.findAll({
+      where: {
+        OR: [
+          {
+            title: { contains: searchString, mode: 'insensitive' },
+          },
+          {
+            content: { contains: searchString, mode: 'insensitive' },
+          },
+        ],
+      },
+    });
+  }
 
   // @Post('post')
   // @ApiBody({ type: CreatePostDTO })

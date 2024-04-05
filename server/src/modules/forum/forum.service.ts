@@ -220,12 +220,6 @@ export class ForumService {
     return posts;
   }
 
-  getSubscribersForForum(forumId: string) {
-    return this.prisma.forumSubscription.findMany({
-      where: { forumId: forumId },
-    });
-  }
-
   async updateForum(
     idOrSlug: string,
     forumData: CreateForumDTO,
@@ -263,7 +257,7 @@ export class ForumService {
   }
 
   async create(userId: string, forumData: CreateForumDTO): Promise<ForumModel> {
-    const { name, description, slug } = forumData;
+    const { name, description, slug, logo, banner } = forumData;
     const existingForum = await this.prisma.forum.findUnique({
       where: { slug },
     });
@@ -276,6 +270,8 @@ export class ForumService {
         name,
         description,
         slug,
+        logo,
+        banner,
         owner: {
           connect: { id: userId },
         },
@@ -350,5 +346,90 @@ export class ForumService {
     });
 
     return forumModerators.map((moderator) => moderator.forum);
+  }
+
+  async getSubscribersForForumByIdOrSlug(idOrSlug: string) {
+    // Try to get the forum by ID first
+    let forum = await this.prisma.forum.findUnique({ where: { id: idOrSlug } });
+
+    // If no forum is found, try to get it by slug
+    if (!forum) {
+      forum = await this.prisma.forum.findUnique({ where: { slug: idOrSlug } });
+    }
+
+    // If still no forum is found, return an empty array
+    if (!forum) {
+      return [];
+    }
+
+    // If a forum is found, get its subscribers
+    return this.prisma.forumSubscription.findMany({
+      where: { forumId: forum.id },
+    });
+  }
+
+  async subscribeToForum(userId: string, idOrSlug: string) {
+    // Try to get the forum by ID first
+    let forum = await this.prisma.forum.findUnique({ where: { id: idOrSlug } });
+
+    // If no forum is found, try to get it by slug
+    if (!forum) {
+      forum = await this.prisma.forum.findUnique({ where: { slug: idOrSlug } });
+    }
+
+    // If still no forum is found, throw an error
+    if (!forum) {
+      throw new Error('Forum not found.');
+    }
+
+    // Check if the user is already subscribed
+    const existingSubscription = await this.prisma.forumSubscription.findUnique(
+      {
+        where: { userId_forumId: { userId, forumId: forum.id } },
+      },
+    );
+
+    if (existingSubscription) {
+      throw new Error('User is already subscribed to this forum.');
+    }
+
+    // Create a new subscription
+    return this.prisma.forumSubscription.create({
+      data: {
+        user: { connect: { id: userId } },
+        forum: { connect: { id: forum.id } },
+      },
+    });
+  }
+
+  async unsubscribeFromForum(userId: string, idOrSlug: string) {
+    // Try to get the forum by ID first
+    let forum = await this.prisma.forum.findUnique({ where: { id: idOrSlug } });
+
+    // If no forum is found, try to get it by slug
+    if (!forum) {
+      forum = await this.prisma.forum.findUnique({ where: { slug: idOrSlug } });
+    }
+
+    // If still no forum is found, throw an error
+    if (!forum) {
+      throw new Error('Forum not found.');
+    }
+
+    // Check if the user is subscribed
+    const existingSubscription = await this.prisma.forumSubscription.findUnique(
+      {
+        where: { userId_forumId: { userId, forumId: forum.id } },
+      },
+    );
+
+    if (!existingSubscription) {
+      throw new Error('User is not subscribed to this forum.');
+    }
+
+    // Delete the subscription
+    return this.prisma.forumSubscription.delete({
+      where: { userId_forumId: { userId, forumId: forum.id } },
+    });
   }
 }

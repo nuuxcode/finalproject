@@ -6,13 +6,14 @@ import { Post as PostModel } from '@prisma/client';
 import { Comment as CommentModel } from '@prisma/client';
 import { CreatePostDTO } from './post.dto';
 import slugify from 'slugify';
+//import { fa } from '@faker-js/faker';
 
 @Injectable()
 export class PostService {
   constructor(private prisma: PrismaService) {}
 
   async create(userId: string, postData: CreatePostDTO): Promise<PostModel> {
-    const { title, content, forumId } = postData;
+    const { title, content, forumId, imageUrl } = postData;
     const slug = slugify(title, { lower: true, strict: true }).substring(
       0,
       100,
@@ -26,19 +27,37 @@ export class PostService {
       throw new Error('Forum not found');
     }
 
-    return this.prisma.post.create({
+    // Create the post
+    const post = await this.prisma.post.create({
       data: {
         title,
         content,
         slug,
-        user: {
-          connect: { id: userId },
-        },
-        forum: {
-          connect: { id: forumId },
-        },
+        userId,
+        forumId,
       },
     });
+
+    // Create the attachment
+    if (imageUrl) {
+      const attachment = await this.prisma.attachment.create({
+        data: {
+          name: 'Image for post ' + title,
+          type: 'image',
+          url: imageUrl,
+        },
+      });
+
+      // Connect the post and the attachment
+      await this.prisma.postAttachment.create({
+        data: {
+          postId: post.id,
+          attachmentId: attachment.id,
+        },
+      });
+    }
+
+    return post;
   }
 
   async searchPosts(searchTerm: string): Promise<PostModel[]> {
@@ -163,7 +182,7 @@ export class PostService {
             slug: true,
           },
         },
-        comments: true,
+        comments: false,
       },
     });
 
@@ -199,10 +218,16 @@ export class PostService {
     });
   }
 
-  async findCommentsByPostId(postId: string): Promise<CommentModel[]> {
+  async findCommentsByPostId(
+    postId: string,
+    order: 'asc' | 'desc',
+  ): Promise<CommentModel[]> {
     let comments = await this.prisma.comment.findMany({
       where: {
         postId: postId,
+      },
+      orderBy: {
+        createdAt: order,
       },
       include: {
         user: {
