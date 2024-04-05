@@ -14,7 +14,7 @@ function UserProfile({ params }: { params: { username: string } }) {
     const { user } = useUser();
     const currentUsername = user?.username;
     const { data: currentfollowings } = useSWR(`getUserFollowing/${currentUsername}`, getUserFollowing);
-    const followingUsernames = currentfollowings?.followings?.map(following => following.username) || [];
+    const followingUsernames = currentfollowings?.followings?.map((following: any) => following.username) || [];
     console.log("currentfollowings", followingUsernames);
     const { data: userProfile, error } = useSWR(`getUser/${params.username}`, getUser);
 
@@ -61,7 +61,13 @@ function UserProfile({ params }: { params: { username: string } }) {
                         <Button
                             size={"sm"}
                             className="text-sm mt-2"
-                            onClick={() => followingUsernames.includes(userProfile.username) ? unfollowUser(currentUsername, userProfile.username) : followUser(currentUsername, userProfile.username)}
+                            onClick={() => {
+                                if (!currentUsername) {
+                                    console.error('currentUsername is null or undefined');
+                                    return;
+                                }
+                                followingUsernames.includes(userProfile.username) ? unfollowUser(currentUsername, userProfile.username) : followUser(currentUsername, userProfile.username)
+                            }}
                         >
                             {followingUsernames.includes(userProfile.username) ? <FaMinus className="mr-2" /> : <FaPlus className="mr-2" />}
                             {followingUsernames.includes(userProfile.username) ? 'Unfollow' : 'Follow'}
