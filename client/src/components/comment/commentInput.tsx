@@ -22,7 +22,7 @@ const CommentInput: React.FC<CommentInputProps> = ({ postId }) => {
         };
 
         fetchUser();
-    }, [getMe]);
+    }, []);
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
