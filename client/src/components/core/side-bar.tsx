@@ -14,6 +14,7 @@ import {
   CollapsibleTrigger,
 } from "~/components/ui/collapsible";
 import CreatePostModal from "~/components/posts/create-post-modal";
+import  CreateForumModal from "~/components/posts/create-forum-modal";
 import { useUser } from "@clerk/clerk-react";
 import { useFetcher } from "~/hooks/fetcher";
 import useSWR from "swr";
@@ -21,11 +22,16 @@ import useSWR from "swr";
 export default function SideBar() {
   const { isSignedIn } = useUser();
   const [open, setOpen] = React.useState(false);
-  const { allForums } = useFetcher();
+  const [forumOpen, setForumOpen] = React.useState(false);
+  const { allForums, createForum } = useFetcher();
   const { data, error } = useSWR("/forums", allForums);
 
   const handleModalOpen = () => {
     setOpen(!open);
+  }
+
+  const handleForumModalOpen = () => {
+    setForumOpen(!forumOpen);
   }
   return (
     <div
@@ -59,7 +65,7 @@ export default function SideBar() {
           <Button onClick={handleModalOpen} className={"hover:bg-primary"} variant={"ghost"}>
             <FaPlus className={"mr-2"} /> Create Post
           </Button>
-          <Button className={"hover:bg-primary"} variant={"ghost"}>
+          <Button className={"hover:bg-primary"} variant={"ghost"} onClick={handleForumModalOpen}>
             <FaPlus className={"mr-2"} /> Create Forum
           </Button>
         </div>
@@ -109,6 +115,7 @@ export default function SideBar() {
           </Collapsible>
         </div>
         <CreatePostModal open={open} setOpen={handleModalOpen} />
+        <CreateForumModal open={forumOpen} setOpen={handleForumModalOpen} />
       </div>
       <Separator orientation={"vertical"} className={""} />
     </div>

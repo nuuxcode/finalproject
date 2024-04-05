@@ -289,12 +289,13 @@ export const useFetcher = (filter = 'hot') => {
         }
     }
 
-    const createForum = async (forumData: { name: string, slug: string, description: string, logo?: string, banner?: string }) => {
+    const createForum = async (forumData: { name: string, slug: string, description: string, logo?: string, banner?: string }, token: string) => {
         try {
             const response = await axios.post('/forums', forumData, {
                 headers: {
                     'accept': '*/*',
-                    'Content-Type': 'application/json'
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}`,
                 }
             });
             console.log(response.data.message);

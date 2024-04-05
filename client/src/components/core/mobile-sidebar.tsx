@@ -12,6 +12,7 @@ import {
 import { Separator } from "~/components/ui/separator";
 import { Button } from "~/components/ui/button";
 import CreatePostModal from "~/components/posts/create-post-modal";
+import  CreateForumModal from "~/components/posts/create-forum-modal";
 
 
 interface Forum {
@@ -24,14 +25,24 @@ interface Forum {
 
 const MobileSidebar = ({ open, handleShow, user, data }: { open: boolean, handleShow: () => void, user: any, data?: Forum[] }) => {
   const [openPost, setOpenPost] = useState(false);
+  const [forumOpen, setForumOpen] = useState(false);
+
 
   const handleModalOpen = () => {
     setOpenPost(!openPost);
     if (open) handleShow()
   }
+
+  const handleForumModalOpen = () => {
+    setForumOpen(!forumOpen);
+    if (open) handleShow()
+  }
+
+
   return (
 <Sheet open={open} onOpenChange={handleShow}>
   <CreatePostModal open={openPost} setOpen={handleModalOpen} />
+  <CreateForumModal open={forumOpen} setOpen={handleForumModalOpen} />
         <SheetContent
           className={"w-[250px] bg-zinc-950 border-0 overflow-y-scroll"}
         >
@@ -67,9 +78,12 @@ const MobileSidebar = ({ open, handleShow, user, data }: { open: boolean, handle
             </ul>
             <Separator className={"bg-secondary"} />
 
-            <div className={"py-2 place-self-center"}>
-              <Button className={"bg-primary"} variant={"ghost"} onClick={handleModalOpen}>
+            <div className={"flex flex-col gap-4 py-2 place-self-center"}>
+              <Button className={"bg-primary"} variant={"default"} onClick={handleModalOpen}>
                 <FaPlus className={"mr-2"} /> Create post
+              </Button>
+              <Button className={"bg-"} variant={"outline"} onClick={handleForumModalOpen}>
+                <FaPlus className={"mr-2"} /> Create forum
               </Button>
             </div>
             <Separator className={"bg-[#403A3A]"} />
