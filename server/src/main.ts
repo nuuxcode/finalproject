@@ -19,10 +19,10 @@ async function bootstrap() {
   });
 
   app.setGlobalPrefix(API_PREFIX);
-
+  const corsUrls = process.env.CORS_URL?.split(',');
   app.use(
     cors({
-      origin: true, //TODO: process.env.FRONTEND_URL, list of allow origins
+      origin: corsUrls,
       methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
       credentials: true,
     }),
