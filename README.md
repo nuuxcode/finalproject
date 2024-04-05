@@ -33,17 +33,16 @@ Welcome to our community-driven platform project! This platform facilitates disc
 - **Framework:** Next.js
 - **Programming Language:** TypeScript
 - **Styling:** Tailwind CSS
-- **User Management:** NextAuth.js
+- **User Management:** Clerk
 - **ORM:** Prisma
 - **UI Components:** shadcn/ui
 - **File Uploads:** uploadthing
-- **Typesafe APIs:** GraphQL
+- **Typesafe APIs:** RestAPI
 - **Form Handling:** React Hook Form
 - **Data Validation:** Zod
 - **Code Quality:** ESLint, Prettier, Husky
 - **Testing:** Jest, Cypress
 - **CI/CD:** GitHub Actions
-- **GraphQL API Management:** Apollo Studio
 - **Hosting:** Vercel
 
 ## Getting Started
@@ -58,12 +57,17 @@ To get started with the project, follow these steps:
 2. **Install dependencies:**
    ```bash
    cd finalproject
-   npm install
+   pnpm install
    ```
 
-3. **Start the development server:**
+3. **Start the client development server from root:**
    ```bash
-   npm run dev
+   pnpm run client
+   ```
+
+3. **Start the server development server from root:**
+   ```bash
+   pnpm run server
    ```
 
 4. **Open the application:**
