@@ -1,7 +1,15 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  //  Post,
+  //  Body,
+  //  Patch,
+  //  Param,
+  //  Delete,
+} from '@nestjs/common';
 import { AnalyticsService } from './analytics.service';
-import { CreateAnalyticsDto } from './dto/create-analytics.dto';
-import { UpdateAnalyticsDto } from './dto/update-analytics.dto';
+//import { CreateAnalyticsDto } from './dto/create-analytics.dto';
+//import { UpdateAnalyticsDto } from './dto/update-analytics.dto';
 import { ApiTags, ApiResponse, ApiOperation } from '@nestjs/swagger';
 
 @ApiTags('analytics')
@@ -87,5 +95,4 @@ export class AnalyticsController {
   getPostVotesRatio() {
     return this.analyticsService.getPostsCommentsPercentage();
   }
-
 }

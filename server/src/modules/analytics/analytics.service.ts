@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
-import { CreateAnalyticsDto } from './dto/create-analytics.dto';
-import { UpdateAnalyticsDto } from './dto/update-analytics.dto';
+//import { CreateAnalyticsDto } from './dto/create-analytics.dto';
+//import { UpdateAnalyticsDto } from './dto/update-analytics.dto';
 import { PrismaService } from '../prisma/prisma.service';
 
 @Injectable()
@@ -19,8 +19,10 @@ export class AnalyticsService {
     return { users: users, posts: posts, forums: forums, tags: tags };
   }
 
-async getCommentsByMonth() {
-  const commentsByMonth = await this.prisma.$queryRaw<{ month: number; count: number }[]>`
+  async getCommentsByMonth() {
+    const commentsByMonth = await this.prisma.$queryRaw<
+      { month: number; count: number }[]
+    >`
     SELECT EXTRACT(MONTH FROM "createdAt") AS month, COUNT(*) AS count
     FROM "Comment"
     GROUP BY EXTRACT(MONTH FROM "createdAt")
@@ -30,18 +32,20 @@ async getCommentsByMonth() {
     const result: { month: number; count: number }[] = [];
 
     for (let i = 1; i <= 12; i++) {
-      const entry = commentsByMonth.find(item => Number(item.month) === i);
+      const entry = commentsByMonth.find((item) => Number(item.month) === i);
 
       result.push({
         month: i,
-        count: entry ? Number(entry.count) : 0
+        count: entry ? Number(entry.count) : 0,
       });
     }
     return result;
-}
+  }
 
-async getPostsByMonth() {
-  const postsByMonth = await this.prisma.$queryRaw<{ month: number; count: number }[]>`
+  async getPostsByMonth() {
+    const postsByMonth = await this.prisma.$queryRaw<
+      { month: number; count: number }[]
+    >`
     SELECT EXTRACT(MONTH FROM "createdAt") AS month, COUNT(*) AS count
     FROM "Post"
     GROUP BY EXTRACT(MONTH FROM "createdAt")
@@ -51,18 +55,20 @@ async getPostsByMonth() {
     const result: { month: number; count: number }[] = [];
 
     for (let i = 1; i <= 12; i++) {
-      const entry = postsByMonth.find(item => Number(item.month) === i);
+      const entry = postsByMonth.find((item) => Number(item.month) === i);
 
       result.push({
         month: i,
-        count: entry ? Number(entry.count) : 0
+        count: entry ? Number(entry.count) : 0,
       });
     }
     return result;
-}
+  }
 
-async getForumsByMonth() {
-  const forumsByMonth = await this.prisma.$queryRaw<{ month: number; count: number }[]>`
+  async getForumsByMonth() {
+    const forumsByMonth = await this.prisma.$queryRaw<
+      { month: number; count: number }[]
+    >`
     SELECT EXTRACT(MONTH FROM "createdAt") AS month, COUNT(*) AS count
     FROM "Forum"
     GROUP BY EXTRACT(MONTH FROM "createdAt")
@@ -72,18 +78,20 @@ async getForumsByMonth() {
     const result: { month: number; count: number }[] = [];
 
     for (let i = 1; i <= 12; i++) {
-      const entry = forumsByMonth.find(item => Number(item.month) === i);
+      const entry = forumsByMonth.find((item) => Number(item.month) === i);
 
       result.push({
         month: i,
-        count: entry ? Number(entry.count) : 0
+        count: entry ? Number(entry.count) : 0,
       });
     }
     return result;
-}
+  }
 
-async getUsersByMonth() {
-  const usersByMonth = await this.prisma.$queryRaw<{ month: number; count: number }[]>`
+  async getUsersByMonth() {
+    const usersByMonth = await this.prisma.$queryRaw<
+      { month: number; count: number }[]
+    >`
     SELECT EXTRACT(MONTH FROM "createdAt") AS month, COUNT(*) AS count
     FROM "User"
     GROUP BY EXTRACT(MONTH FROM "createdAt")
@@ -93,27 +101,27 @@ async getUsersByMonth() {
     const result: { month: number; count: number }[] = [];
 
     for (let i = 1; i <= 12; i++) {
-      const entry = usersByMonth.find(item => Number(item.month) === i);
+      const entry = usersByMonth.find((item) => Number(item.month) === i);
 
       result.push({
         month: i,
-        count: entry ? Number(entry.count) : 0
+        count: entry ? Number(entry.count) : 0,
       });
     }
     return result;
-}
+  }
 
-async getUserVerificationCounts() {
-  const verifiedUsersCount = await this.prisma.user.count({
-    where: { emailVerified: true },
-  });
+  async getUserVerificationCounts() {
+    const verifiedUsersCount = await this.prisma.user.count({
+      where: { emailVerified: true },
+    });
 
-  const pendingUsersCount = await this.prisma.user.count({
-    where: { emailVerified: false },
-  });
+    const pendingUsersCount = await this.prisma.user.count({
+      where: { emailVerified: false },
+    });
 
-  return { verified: verifiedUsersCount, pending: pendingUsersCount };
-}
+    return { verified: verifiedUsersCount, pending: pendingUsersCount };
+  }
 
   async getPostsCommentsPercentage() {
     const posts = await this.prisma.post.count();
@@ -124,7 +132,7 @@ async getUserVerificationCounts() {
         },
       },
     });
-    return {postsReplied: (postsWithComments / posts) * 100};
+    return { postsReplied: (postsWithComments / posts) * 100 };
   }
 
   // method to find the top ten posts with the most likes
