@@ -34,6 +34,9 @@ const formSchema = z.object({
     required_error: "Forum is required",
   }),
   imageUrl: z.string().default(""),
+  title: z.string({
+    required_error: "Title is required",
+  })
 });
 
 export default function Home() {
