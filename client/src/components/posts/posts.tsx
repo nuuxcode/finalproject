@@ -6,17 +6,16 @@ import { useUser } from "@clerk/clerk-react";
 import Post from "./post";
 import { Separator } from "../ui/separator";
 
-
-
 export default function Posts() {
   const { allPosts } = useFetcher();
   const { isSignedIn } = useUser();
 
-  const { data, error } = useSWR("/posts", allPosts);
-
+  const { data, error, mutate } = useSWR("allPost", () => allPosts("desc"), {
+    refreshInterval: 3000
+  });
 
     return (
-        <main className="flex min-h-screen flex-col items-center justify-between px-4 md:px-8 py-10 gap-8">
+        <main className="flex min-h-screen flex-col items-center justify-between px-4 md:px-8 py-6 gap-8">
             {data && data.map((post) => (
                 <>
                     <Post post={post} />

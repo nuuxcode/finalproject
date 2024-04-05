@@ -8,7 +8,7 @@ import { useFetcher } from "~/hooks/fetcher";
 
 export default function RecentPosts() {
   const { allPosts } = useFetcher();
-  const { data, error } = useSWR("/posts", allPosts);
+  const { data, error } = useSWR("asc", allPosts);
   return (
     <div className={"flex dark:text-[#d8dce0] xl:px-4 w-full font-[500]"}>
       <div className={"p-4 w-full rounded-[12px]"}>

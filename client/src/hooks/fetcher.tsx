@@ -5,9 +5,9 @@ import { Forum, ForumPost } from "~/types/Forum";
 import { mutate } from 'swr';
 
 export const useFetcher = (filter = 'hot') => {
-    const allPosts = async (): Promise<ForumPost[]> => {
+    const allPosts = async (sort: string): Promise<ForumPost[]> => {
         try {
-            const response = await axios.get('/posts');
+            const response = await axios.get(!sort ? '/posts' : `/posts?order=${sort}`);
             return response.data;
         } catch (error) {
             // @ts-ignore
