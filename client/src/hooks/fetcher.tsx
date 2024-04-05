@@ -105,7 +105,7 @@ export const useFetcher = (filter = 'hot') => {
         }
     }
 
-    const getUser = async () => {
+    const getMe = async () => {
         try {
             const response = await axios.get('/users/me', {
                 withCredentials: true
@@ -128,6 +128,135 @@ export const useFetcher = (filter = 'hot') => {
         }
     }
 
+    const getUser = async (username: string) => {
+        const query = username.replace('getUser/', '');
+        try {
+            const response = await axios.get(`/users/${query}`, {
+                withCredentials: true
+            });
+            return response.data;
+        } catch (error) {
+            // @ts-ignore
+            throw new Error(error);
+        }
+    }
+
+    const getUserFollowers = async (username: string) => {
+        const query = username.replace('getUserFollowers/', '');
+        try {
+            const response = await axios.get(`/users/${query}/followers`, {
+                withCredentials: true
+            });
+            return response.data;
+        } catch (error) {
+            // @ts-ignore
+            throw new Error(error);
+        }
+    }
+
+    const getUserFollowing = async (username: string) => {
+        const query = username.replace('getUserFollowing/', '');
+        try {
+            const response = await axios.get(`/users/${query}/followings`, {
+                withCredentials: true
+            });
+            return response.data;
+        } catch (error) {
+            // @ts-ignore
+            throw new Error(error);
+        }
+    }
+
+    const getUserOwnedForum = async (username: string) => {
+        const query = username.replace('getUserOwnedForum/', '');
+        try {
+            const response = await axios.get(`/users/${query}/owned-forums`, {
+                withCredentials: true
+            });
+            return response.data;
+        } catch (error) {
+            // @ts-ignore
+            throw new Error(error);
+        }
+    }
+
+    const getUserModeration = async (username: string) => {
+        const query = username.replace('getUserModeration/', '');
+        try {
+            const response = await axios.get(`/users/${query}/moderator-forums`, {
+                withCredentials: true
+            });
+            return response.data;
+        } catch (error) {
+            // @ts-ignore
+            throw new Error(error);
+        }
+    }
+
+    const getUserPosts = async (username: string) => {
+        const query = username.replace('getUserPosts/', '');
+        try {
+            const response = await axios.get(`/users/${query}/posts`, {
+                withCredentials: true
+            });
+            return response.data;
+        } catch (error) {
+            // @ts-ignore
+            throw new Error(error);
+        }
+    }
+
+    const getUserComments = async (username: string) => {
+        const query = username.replace('getUserComments/', '');
+        try {
+            const response = await axios.get(`/users/${query}/comments`, {
+                withCredentials: true
+            });
+            return response.data;
+        } catch (error) {
+            // @ts-ignore
+            throw new Error(error);
+        }
+    }
+
+    const getUserPostVotes = async (username: string) => {
+        const query = username.replace('getUserPostVotes/', '');
+        try {
+            const response = await axios.get(`/users/${query}/posts-vote`, {
+                withCredentials: true
+            });
+            return response.data;
+        } catch (error) {
+            // @ts-ignore
+            throw new Error(error);
+        }
+    }
+    const getUserCommentVotes = async (username: string) => {
+        const query = username.replace('getUserCommentVotes/', '');
+        try {
+            const response = await axios.get(`/users/${query}/comments-vote`, {
+                withCredentials: true
+            });
+            return response.data;
+        } catch (error) {
+            // @ts-ignore
+            throw new Error(error);
+        }
+    }
+
+    const getUserSubscriptions = async (username: string) => {
+        const query = username.replace('getUserSubscriptions/', '');
+        try {
+            const response = await axios.get(`/users/${query}/subs`, {
+                withCredentials: true
+            });
+            return response.data;
+        } catch (error) {
+            // @ts-ignore
+            throw new Error(error);
+        }
+    }
+
     return {
         allPosts,
         allForums,
@@ -137,7 +266,39 @@ export const useFetcher = (filter = 'hot') => {
         getPost,
         postComment,
         getComments,
-        getUser,
+        getMe,
         searchPosts,
+        getUser,
+        getUserFollowers,
+        getUserFollowing,
+        getUserOwnedForum,
+        getUserModeration,
+        getUserPosts,
+        getUserComments,
+        getUserPostVotes,
+        getUserCommentVotes,
+        getUserSubscriptions,
+
     }
 }
+/*
+
+getUserFollowers, /api/v1/users/:idOrUsername/followers
+
+getUserFollowing, /api/v1/users/:idOrUsername/followings
+
+getUserOwnedForum /api/v1/users/:idOrUsername/owned-forums
+
+getUserModeration /api/v1/users/:idOrUsername/moderator-forums
+
+getUserPosts, /api/v1/users/:idOrUsername/posts
+
+getUserComments, /api/v1/users/:idOrUsername/comments
+
+getUserPostVotes, /api/v1/users/:idOrUsername/posts-vote
+
+getUserCommentVote /api/v1/users/:idOrUsername/comments-vote
+
+getUserSubscriptions, /api/v1/users/:idOrUsername/subs
+
+*/
