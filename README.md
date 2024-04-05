@@ -1,5 +1,7 @@
 # 🚀 WGTCommunity " we got this " 💗
 
+(deploy vercel is down temporarly, soon fixed)
+
 Welcome to our community-driven platform project! This platform facilitates discussions, questions, and collaboration among users on various topics, similar to StackOverflow and Reddit.
 
 ![image](https://github.com/nuuxcode/finalproject/assets/24565896/a58af52c-3bd5-420b-95cd-aeb2c9a1212c)
