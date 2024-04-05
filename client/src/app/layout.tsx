@@ -17,6 +17,9 @@ const inter = Inter({ subsets: ["latin"] });
 export const metadata: Metadata = {
   title: "WeGotThis Community",
   description: "You are not alone. WeGotThis Community is here to help you.",
+  icons: {
+    icon: "./wgt.png",
+  },
 };
 
 export default function RootLayout({
