@@ -121,7 +121,7 @@ model Post {
   slug              String
   createdAt         DateTime         @default(now())
   updatedAt         DateTime         @updatedAt
-  user              User             @relation("UserPosts", fields: [userId], references: [id])
+  user              User             @relation("UserPosts", fields: [userId], references: [id], onDelete: Cascade)
   forum             Forum            @relation("ForumPosts", fields: [forumId], references: [id])
   comments          Comment[]        @relation("PostComments")
   tags              PostTag[]
@@ -150,8 +150,8 @@ model Comment {
   parentId       String?
   createdAt      DateTime            @default(now())
   updatedAt      DateTime            @updatedAt
-  user           User                @relation("UserComments", fields: [userId], references: [id])
-  post           Post                @relation("PostComments", fields: [postId], references: [id])
+  user           User                @relation("UserComments", fields: [userId], references: [id], onDelete: Cascade)
+  post           Post                @relation("PostComments", fields: [postId], references: [id], onDelete: Cascade)
   parent         Comment?            @relation("CommentReplies", fields: [parentId], references: [id])
   replies        Comment[]           @relation("CommentReplies")
   reports        Report[]            @relation("ReportComment")

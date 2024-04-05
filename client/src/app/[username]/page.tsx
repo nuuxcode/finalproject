@@ -8,13 +8,14 @@ import Link from 'next/link';
 import { Button } from "~/components/ui/button";
 import { FaPlus, FaMinus } from "react-icons/fa6";
 import { useUser } from "@clerk/clerk-react";
+import Image from 'next/image'
 
 function UserProfile({ params }: { params: { username: string } }) {
     const { getUser, getUserPosts, getUserComments, getUserFollowers, getUserFollowing, getUserSubscriptions, getUserPostVotes, getUserCommentVotes, followUser, unfollowUser } = useFetcher();
     const { user } = useUser();
     const currentUsername = user?.username;
     const { data: currentfollowings } = useSWR(`getUserFollowing/${currentUsername}`, getUserFollowing);
-    const followingUsernames = currentfollowings?.followings?.map(following => following.username) || [];
+    const followingUsernames = currentfollowings?.followings?.map((following: any) => following.username) || [];
     console.log("currentfollowings", followingUsernames);
     const { data: userProfile, error } = useSWR(`getUser/${params.username}`, getUser);
 
@@ -48,7 +49,8 @@ function UserProfile({ params }: { params: { username: string } }) {
             <div className="flex flex-col md:flex-row lg:flex-row justify-between w-full">
                 <div className="w-full md:w-1/3 p-4">
                     <div className="dark:bg-secondary dark:text-[#d8dce0] bg-white rounded-lg shadow-md p-6">
-                        <img className="w-24 h-24 -mt-12 border-4 border-white rounded-full mx-auto shadow-lg" src={userProfile.avatarUrl} alt={userProfile.username} />
+                        <Image className="w-24 h-24 -mt-12 border-4 border-white rounded-full mx-auto shadow-lg" src={userProfile.avatarUrl} alt={userProfile.username} width={96}
+                            height={96} />
                         <h1 className="mb-2 text-xl font-bold">{userProfile.username}</h1>
                         <p className="mb-2 text-sm text-orange-500 dark:text-[#d8dce0]">{userProfile.email}</p>
                         <p className="mb-2 text-sm dark:text-[#d8dce0]">{userProfile.aboutMe}</p>
@@ -61,7 +63,13 @@ function UserProfile({ params }: { params: { username: string } }) {
                         <Button
                             size={"sm"}
                             className="text-sm mt-2"
-                            onClick={() => followingUsernames.includes(userProfile.username) ? unfollowUser(currentUsername, userProfile.username) : followUser(currentUsername, userProfile.username)}
+                            onClick={() => {
+                                if (!currentUsername) {
+                                    console.error('currentUsername is null or undefined');
+                                    return;
+                                }
+                                followingUsernames.includes(userProfile.username) ? unfollowUser(currentUsername, userProfile.username) : followUser(currentUsername, userProfile.username)
+                            }}
                         >
                             {followingUsernames.includes(userProfile.username) ? <FaMinus className="mr-2" /> : <FaPlus className="mr-2" />}
                             {followingUsernames.includes(userProfile.username) ? 'Unfollow' : 'Follow'}
@@ -169,11 +177,11 @@ function UserProfile({ params }: { params: { username: string } }) {
                                             return (
                                                 <Link href={`/${item.username}`} key={item.id}>
                                                     <div className="bg-white shadow rounded-lg p-4 mb-4 w-32 h-32">
-                                                        <img
+                                                        <Image
                                                             src={item.avatarUrl}
                                                             alt={item.username}
-                                                            className="w-8 h-8 object-cover" // Add these classes
-                                                        />
+                                                            className="w-8 h-8 object-cover"
+                                                            width={96} height={96} />
                                                         <p className="text-orange-700">{item.username}</p>
                                                         <p>Reputation: {item.reputation}</p>
                                                     </div>
@@ -183,7 +191,8 @@ function UserProfile({ params }: { params: { username: string } }) {
                                             return (
                                                 <Link href={`/forum/${item.id}`} key={item.id}>
                                                     <div className="bg-white shadow rounded-lg p-4 mb-4">
-                                                        <img src={item.logo} alt={item.name} />
+                                                        <Image src={item.logo} alt={item.name} width={96} height={96} />
+
                                                         <h2 className="text-orange-700">{item.name}</h2>
                                                         <p className="text-orange-700">{item.description}</p>
                                                     </div>
