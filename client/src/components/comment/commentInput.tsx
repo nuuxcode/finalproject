@@ -13,11 +13,11 @@ interface User {
 const CommentInput: React.FC<CommentInputProps> = ({ postId }) => {
     const [content, setContent] = useState('');
     const [user, setUser] = useState<User | null>(null);
-    const { postComment, getUser } = useFetcher();
+    const { postComment, getMe } = useFetcher();
 
     useEffect(() => {
         const fetchUser = async () => {
-            const userData = await getUser();
+            const userData = await getMe();
             setUser(userData);
         };
 
