@@ -28,7 +28,7 @@ const SearchBox = () => {
   };
 
   return (
-    <div className={"relative block md:min-w-[600px] dark:bg-secondary bg-white"}>
+    <div className={"relative block md:min-w-[600px] dark:bg-secondary bg-white rounded-[20px]"}>
       <label>
         <span className={"sr-only"}>Search</span>
         <span className="absolute inset-y-0 left-2 flex items-center pl-2">
