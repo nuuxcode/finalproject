@@ -257,7 +257,41 @@ export const useFetcher = (filter = 'hot') => {
         }
     }
 
+    const followUser = async (idOrUsername: string, followingIdOrUsername: string) => {
+        try {
+            const response = await axios.post(`/users/${idOrUsername}/followings/${followingIdOrUsername}`, {}, {
+                withCredentials: true
+            });
+            console.log(response.data.message);
+            mutate(`getUserFollowing/${idOrUsername}`);
+            mutate(`getUserFollowers/${followingIdOrUsername}`);
+            mutate(`getUser/${followingIdOrUsername}`);
+            return response.data;
+        } catch (error) {
+            // @ts-ignore
+            throw new Error(error);
+        }
+    }
+
+    const unfollowUser = async (idOrUsername: string, followingIdOrUsername: string) => {
+        try {
+            const response = await axios.delete(`/users/${idOrUsername}/followings/${followingIdOrUsername}`, {
+                withCredentials: true
+            });
+            console.log(response.data.message);
+            mutate(`getUserFollowing/${idOrUsername}`);
+            mutate(`getUserFollowers/${followingIdOrUsername}`);
+            mutate(`getUser/${followingIdOrUsername}`);
+            return response.data;
+        } catch (error) {
+            // @ts-ignore
+            throw new Error(error);
+        }
+    }
+
     return {
+        unfollowUser,
+        followUser,
         allPosts,
         allForums,
         getForumPosts,
