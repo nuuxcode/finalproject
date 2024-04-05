@@ -289,7 +289,24 @@ export const useFetcher = (filter = 'hot') => {
         }
     }
 
+    const createForum = async (forumData: { name: string, slug: string, description: string, logo?: string, banner?: string }) => {
+        try {
+            const response = await axios.post('/forums', forumData, {
+                headers: {
+                    'accept': '*/*',
+                    'Content-Type': 'application/json'
+                }
+            });
+            console.log(response.data.message);
+            return response.data;
+        } catch (error) {
+            // @ts-ignore
+            throw new Error(error);
+        }
+    }
+
     return {
+        createForum,
         unfollowUser,
         followUser,
         allPosts,
