@@ -127,6 +127,7 @@ function UserProfile({ params }: { params: { username: string } }) {
                     <div className="mt-4">
                         {dataToDisplay ? (
                             dataToDisplay.length > 0 ? (
+                                // @ts-ignore
                                 dataToDisplay.map(item => {
                                     switch (selectedTab) {
                                         case 'posts':
