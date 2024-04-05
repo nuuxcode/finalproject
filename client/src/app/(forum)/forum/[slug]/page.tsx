@@ -42,7 +42,7 @@ function Page({ params }: { params: { slug: string } }) {
             </Button>
             <Button size={"sm"} className="text-sm">
               <FaPlus className="mr-2" />
-              Follow
+              Subscribe
             </Button>
           </div>
         </div>

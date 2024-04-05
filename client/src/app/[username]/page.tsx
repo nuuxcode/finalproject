@@ -5,9 +5,17 @@ import React from "react";
 import { useState } from 'react';
 import useSWR from 'swr';
 import Link from 'next/link';
+import { Button } from "~/components/ui/button";
+import { FaPlus, FaMinus } from "react-icons/fa6";
+import { useUser } from "@clerk/clerk-react";
 
 function UserProfile({ params }: { params: { username: string } }) {
-    const { getUser, getUserPosts, getUserComments, getUserFollowers, getUserFollowing, getUserSubscriptions, getUserPostVotes, getUserCommentVotes } = useFetcher();
+    const { getUser, getUserPosts, getUserComments, getUserFollowers, getUserFollowing, getUserSubscriptions, getUserPostVotes, getUserCommentVotes, followUser, unfollowUser } = useFetcher();
+    const { user } = useUser();
+    const currentUsername = user?.username;
+    const { data: currentfollowings } = useSWR(`getUserFollowing/${currentUsername}`, getUserFollowing);
+    const followingUsernames = currentfollowings?.followings?.map(following => following.username) || [];
+    console.log("currentfollowings", followingUsernames);
     const { data: userProfile, error } = useSWR(`getUser/${params.username}`, getUser);
 
     const [selectedTab, setSelectedTab] = useState('posts');
@@ -42,7 +50,7 @@ function UserProfile({ params }: { params: { username: string } }) {
                     <div className="dark:bg-secondary dark:text-[#d8dce0] bg-white rounded-lg shadow-md p-6">
                         <img className="w-24 h-24 -mt-12 border-4 border-white rounded-full mx-auto shadow-lg" src={userProfile.avatarUrl} alt={userProfile.username} />
                         <h1 className="mb-2 text-xl font-bold">{userProfile.username}</h1>
-                        <p className="mb-2 text-sm text-gray-500 dark:text-[#d8dce0]">{userProfile.email}</p>
+                        <p className="mb-2 text-sm text-orange-500 dark:text-[#d8dce0]">{userProfile.email}</p>
                         <p className="mb-2 text-sm dark:text-[#d8dce0]">{userProfile.aboutMe}</p>
                         <h2 className="text-lg font-semibold">Social Media</h2>
                         <div className="flex space-x-2 mt-2">
@@ -50,6 +58,14 @@ function UserProfile({ params }: { params: { username: string } }) {
                             <a href={userProfile.twitter} target="_blank" rel="noopener noreferrer">Twitter</a>
                             <a href={userProfile.linkedin} target="_blank" rel="noopener noreferrer">LinkedIn</a>
                         </div>
+                        <Button
+                            size={"sm"}
+                            className="text-sm mt-2"
+                            onClick={() => followingUsernames.includes(userProfile.username) ? unfollowUser(currentUsername, userProfile.username) : followUser(currentUsername, userProfile.username)}
+                        >
+                            {followingUsernames.includes(userProfile.username) ? <FaMinus className="mr-2" /> : <FaPlus className="mr-2" />}
+                            {followingUsernames.includes(userProfile.username) ? 'Unfollow' : 'Follow'}
+                        </Button>
                     </div>
                 </div>
                 <div className="w-full md:w-1/3 p-4">
@@ -82,43 +98,43 @@ function UserProfile({ params }: { params: { username: string } }) {
                 <div className="dark:bg-secondary dark:text-[#d8dce0] bg-white rounded-lg shadow-md p-6">
                     <div className="flex justify-between">
                         <button
-                            className={`p-2 ${selectedTab === 'posts' ? 'text-orange-500' : 'text-gray-500'}`}
+                            className={`p-2 ${selectedTab === 'posts' ? 'text-orange-100' : 'text-orange-500'}`}
                             onClick={() => setSelectedTab('posts')}
                         >
                             Posts
                         </button>
                         <button
-                            className={`p-2 ${selectedTab === 'comments' ? 'text-orange-500' : 'text-gray-500'}`}
+                            className={`p-2 ${selectedTab === 'comments' ? 'text-orange-100' : 'text-orange-500'}`}
                             onClick={() => setSelectedTab('comments')}
                         >
                             Comments
                         </button>
                         <button
-                            className={`p-2 ${selectedTab === 'followers' ? 'text-orange-500' : 'text-gray-500'}`}
+                            className={`p-2 ${selectedTab === 'followers' ? 'text-orange-100' : 'text-orange-500'}`}
                             onClick={() => setSelectedTab('followers')}
                         >
                             Followers
                         </button>
                         <button
-                            className={`p-2 ${selectedTab === 'following' ? 'text-orange-500' : 'text-gray-500'}`}
+                            className={`p-2 ${selectedTab === 'following' ? 'text-orange-100' : 'text-orange-500'}`}
                             onClick={() => setSelectedTab('following')}
                         >
                             Following
                         </button>
                         <button
-                            className={`p-2 ${selectedTab === 'subscriptions' ? 'text-orange-500' : 'text-gray-500'}`}
+                            className={`p-2 ${selectedTab === 'subscriptions' ? 'text-orange-100' : 'text-orange-500'}`}
                             onClick={() => setSelectedTab('subscriptions')}
                         >
                             Subscriptions
                         </button>
                         <button
-                            className={`p-2 ${selectedTab === 'postVotes' ? 'text-orange-500' : 'text-gray-500'}`}
+                            className={`p-2 ${selectedTab === 'postVotes' ? 'text-orange-100' : 'text-orange-500'}`}
                             onClick={() => setSelectedTab('postVotes')}
                         >
                             Post Votes
                         </button>
                         <button
-                            className={`p-2 ${selectedTab === 'commentVotes' ? 'text-orange-500' : 'text-gray-500'}`}
+                            className={`p-2 ${selectedTab === 'commentVotes' ? 'text-orange-100' : 'text-orange-500'}`}
                             onClick={() => setSelectedTab('commentVotes')}
                         >
                             Comment Votes
@@ -134,8 +150,8 @@ function UserProfile({ params }: { params: { username: string } }) {
                                             return (
                                                 <Link href={`/post/${item.id}`} key={item.id}>
                                                     <div className="bg-white shadow rounded-lg p-4 mb-4">
-                                                        <h2 className="text-gray-700">{item.title}</h2>
-                                                        <p className="text-gray-700">{item.content}</p>
+                                                        <h2 className="text-orange-700">{item.title}</h2>
+                                                        <p className="text-orange-700">{item.content}</p>
                                                     </div>
                                                 </Link>
                                             );
@@ -143,7 +159,7 @@ function UserProfile({ params }: { params: { username: string } }) {
                                             return (
                                                 <Link href={`/post/${item.postId}`} key={item.id}>
                                                     <div className="bg-white shadow rounded-lg p-4 mb-4">
-                                                        <p className="text-gray-700">{item.content}</p>
+                                                        <p className="text-orange-700">{item.content}</p>
                                                         <p>Upvotes: {item.upvotesCount}, Downvotes: {item.downvotesCount}</p>
                                                     </div>
                                                 </Link>
@@ -151,10 +167,14 @@ function UserProfile({ params }: { params: { username: string } }) {
                                         case 'followers':
                                         case 'following':
                                             return (
-                                                <Link href={`/profile/${item.username}`} key={item.id}>
-                                                    <div className="bg-white shadow rounded-lg p-4 mb-4">
-                                                        <img src={item.avatarUrl} alt={item.username} />
-                                                        <p className="text-gray-700">{item.username}</p>
+                                                <Link href={`/${item.username}`} key={item.id}>
+                                                    <div className="bg-white shadow rounded-lg p-4 mb-4 w-32 h-32">
+                                                        <img
+                                                            src={item.avatarUrl}
+                                                            alt={item.username}
+                                                            className="w-8 h-8 object-cover" // Add these classes
+                                                        />
+                                                        <p className="text-orange-700">{item.username}</p>
                                                         <p>Reputation: {item.reputation}</p>
                                                     </div>
                                                 </Link>
@@ -164,8 +184,8 @@ function UserProfile({ params }: { params: { username: string } }) {
                                                 <Link href={`/forum/${item.id}`} key={item.id}>
                                                     <div className="bg-white shadow rounded-lg p-4 mb-4">
                                                         <img src={item.logo} alt={item.name} />
-                                                        <h2 className="text-gray-700">{item.name}</h2>
-                                                        <p className="text-gray-700">{item.description}</p>
+                                                        <h2 className="text-orange-700">{item.name}</h2>
+                                                        <p className="text-orange-700">{item.description}</p>
                                                     </div>
                                                 </Link>
                                             );
@@ -173,7 +193,7 @@ function UserProfile({ params }: { params: { username: string } }) {
                                             return (
                                                 <Link href={`/post/${item.postId}`} key={item.id}>
                                                     <div className="bg-white shadow rounded-lg p-4 mb-4">
-                                                        <p className="text-gray-700">{item.content}</p>
+                                                        <p className="text-orange-700">{item.content}</p>
                                                         <p>Vote status: {item.voteStatus}, Upvotes: {item.upvotesCount}, Downvotes: {item.downvotesCount}</p>
                                                     </div>
                                                 </Link>
@@ -182,7 +202,7 @@ function UserProfile({ params }: { params: { username: string } }) {
                                             return (
                                                 <Link href={`/post/${item.postId}`} key={item.id}>
                                                     <div className="bg-white shadow rounded-lg p-4 mb-4">
-                                                        <p className="text-gray-700">{item.content}</p>
+                                                        <p className="text-orange-700">{item.content}</p>
                                                         <p>Vote status: {item.voteStatus}, Upvotes: {item.upvotesCount}, Downvotes: {item.downvotesCount}</p>
                                                     </div>
                                                 </Link>
@@ -196,7 +216,7 @@ function UserProfile({ params }: { params: { username: string } }) {
                             )
                         ) : (
                             <div className="flex justify-center items-center h-12">
-                                <p className="text-gray-500">Loading...</p>
+                                <p className="text-orange-500">Loading...</p>
                             </div>
                         )}
                     </div>
