@@ -73,7 +73,7 @@ To get started with the project, follow these steps:
    ```
 
 4. **Open the application:**
-   - Open your browser and navigate to www.wgtcommunity.live
+   - Open your browser and navigate to http://localhost:3000
 
 ## Contribution Guidelines
 
