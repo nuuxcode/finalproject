@@ -14,10 +14,10 @@ Welcome to our community-driven platform project! This platform facilitates disc
 
 ## Connect with the Team
 
-- **Mounssif BOUHLAOUI**  [Linkedin](https://www.linkedin.com/in/mounssif-bouhlaoui/)  -  [Github](https://github.com/nuuxcode)
-- **Oumayma MAZOZ:** [Linkedin](https://www.linkedin.com/in/oumayma-mazoz-2b4126228/)  -  [Github](https://github.com/omazoz)
-- **Victor LANGAT:**  [Linkedin](https://www.linkedin.com/in/victor-langat/)  -  [Github](https://github.com/viictoo)
-- **Nicholas SIAW:**  [Linkedin](https://www.linkedin.com/in/siaw/)  -  [Github](https://github.com/ayequill)
+- **Mounssif BOUHLAOUI**  [Linkedin](https://www.linkedin.com/in/mounssif-bouhlaoui/)  -  [Github](https://github.com/nuuxcode)  -  [Twitter](https://twitter.com/nuux_tv)
+- **Oumayma MAZOZ:** [Linkedin](https://www.linkedin.com/in/oumayma-mazoz-2b4126228/)  -  [Github](https://github.com/omazoz)  -  [Twitter](https://twitter.com/oumie201)
+- **Victor LANGAT:**  [Linkedin](https://www.linkedin.com/in/victor-langat/)  -  [Github](https://github.com/viictoo)  -  [Twitter](https://twitter.com/victor_provich)
+- **Nicholas SIAW:**  [Linkedin](https://www.linkedin.com/in/siaw/)  -  [Github](https://github.com/ayequill)  -  [Twitter](https://twitter.com/ayequill)
 
 ## Features
 
