@@ -32,7 +32,7 @@ Welcome to our community-driven platform project! This platform facilitates disc
 
 ## Technologies Used
 
-- **Framework:** Next.js
+- **Framework:** NestJs & Next.js
 - **Programming Language:** TypeScript
 - **Styling:** Tailwind CSS
 - **User Management:** Clerk
