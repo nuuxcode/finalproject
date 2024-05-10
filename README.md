@@ -12,12 +12,12 @@ Welcome to our community-driven platform project! This platform facilitates disc
 ![Example Image]( https://github.com/nuuxcode/finalproject/blob/README.md/TEAM.jpeg)
 
 
-## Github  Accounts
+## Connect with the Team
 
-- **Mounssif BOUHLAOUI** "https://github.com/nuuxcode"
-- **Oumayma MAZOZ:** "https://github.com/omazoz"
-- **Victor LANGAT:** "https://github.com/viictoo"
-- **Nicholas SIAW:** "https://github.com/ayequill"
+- **Mounssif BOUHLAOUI**  [Linkedin](https://www.linkedin.com/in/mounssif-bouhlaoui/)  -  [Github](https://github.com/nuuxcode)
+- **Oumayma MAZOZ:** [Linkedin](https://www.linkedin.com/in/oumayma-mazoz-2b4126228/)  -  [Github](https://github.com/omazoz)
+- **Victor LANGAT:**  [Linkedin](https://www.linkedin.com/in/victor-langat/)  -  [Github](https://github.com/viictoo)
+- **Nicholas SIAW:**  [Linkedin](https://www.linkedin.com/in/siaw/)  -  [Github](https://github.com/ayequill)
 
 ## Features
 
